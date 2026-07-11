@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>hyunwoopf loading transition</title>
+    <title>billyworks loading transition</title>
     <style>
       :root {
         color: #000;
@@ -51,10 +51,31 @@
 
       .loading-title {
         margin: 0;
+        display: flex;
+        gap: 12px;
+        min-height: 36px;
         font-size: 30px;
         font-weight: 400;
         line-height: 1.2;
         text-align: center;
+      }
+
+      .loading-word {
+        position: relative;
+        display: inline-block;
+        min-width: var(--word-width);
+        text-align: left;
+      }
+
+      .loading-word.is-typing::after {
+        display: inline-block;
+        width: 1px;
+        height: 0.9em;
+        margin-left: 3px;
+        background: currentColor;
+        vertical-align: -0.1em;
+        animation: caret-blink 760ms step-end infinite;
+        content: "";
       }
 
       .main-screen {
@@ -98,6 +119,8 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
         border: 1px solid #7b7b7b;
         background: #000;
+        opacity: 0;
+        transform: translateY(140px);
       }
 
       .work-tile {
@@ -155,6 +178,26 @@
         min-height: 100vh;
       }
 
+      body.is-thumbnails-visible .work-grid,
+      body.is-loaded:not(.is-skip-intro):not(.is-thumbnails-visible) .work-grid {
+        animation: thumbnail-rise 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      body.is-skip-intro .work-grid {
+        animation: main-return-rise 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      body.is-skip-intro .main-content {
+        opacity: 0;
+        animation: main-return-fade 720ms ease forwards;
+      }
+
+      @keyframes caret-blink {
+        50% {
+          opacity: 0;
+        }
+      }
+
       @keyframes squashed-reveal {
         0% {
           clip-path: ellipse(0 0 at 50% 52%);
@@ -173,8 +216,47 @@
         }
       }
 
+      @keyframes thumbnail-rise {
+        0% {
+          opacity: 0;
+          transform: translateY(140px);
+        }
+
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes main-return-rise {
+        0% {
+          opacity: 0;
+          transform: translateY(54px);
+        }
+
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes main-return-fade {
+        0% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         body.is-revealing .main-screen {
+          animation-duration: 1ms;
+        }
+
+        body.is-thumbnails-visible .work-grid,
+        body.is-loaded:not(.is-skip-intro):not(.is-thumbnails-visible) .work-grid {
           animation-duration: 1ms;
         }
       }
@@ -221,38 +303,78 @@
   <body>
     <section class="screen loading-screen" aria-label="Loading">
       <div class="design-frame loading-frame">
-        <h1 class="loading-title">BILLY WORK</h1>
+        <h1 class="loading-title" aria-label="BILLY WORKS">
+          <span class="loading-word" data-text="BILLY" style="--word-width: 5ch"></span>
+          <span class="loading-word" data-text="WORKS" style="--word-width: 5.5ch"></span>
+        </h1>
       </div>
     </section>
 
-    <main class="screen main-screen" aria-label="Billy work introduction">
+    <main class="screen main-screen" aria-label="Billyworks introduction">
       <div class="design-frame main-content">
-        <h1 class="hero-title">BILLY WORK</h1>
+        <h1 class="hero-title">BILLY WORKS</h1>
         <p class="intro">
           Silvia Vargas is a Spanish artist and illustrator who brings fantasy and horror
           to life through bold character designs and surreal, emotionally rich landscapes,
           blending reality with imagination through vibrant colors and dynamic storytelling.
         </p>
         <section class="work-grid" aria-label="Featured work">
-          <button class="work-tile" type="button" aria-label="Featured work 1"></button>
-          <button class="work-tile" type="button" aria-label="Featured work 2"></button>
-          <button class="work-tile" type="button" aria-label="Featured work 3"></button>
-          <button class="work-tile" type="button" aria-label="Featured work 4"></button>
-          <button class="work-tile" type="button" aria-label="Featured work 5"></button>
-          <button class="work-tile" type="button" aria-label="Featured work 6"></button>
+          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 1"></a>
+          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 2"></a>
+          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 3"></a>
+          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 4"></a>
+          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 5"></a>
+          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 6"></a>
         </section>
       </div>
     </main>
 
     <script>
-      window.setTimeout(() => {
-        document.body.classList.add("is-revealing");
-      }, 3000);
+      const params = new URLSearchParams(window.location.search);
+      const shouldSkipIntro = params.get("skipIntro") === "1";
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
 
-      window.setTimeout(() => {
-        document.body.classList.add("is-loaded");
-        document.body.classList.remove("is-revealing");
-      }, 6200);
+      const typeLoadingTitle = async () => {
+        if (shouldSkipIntro || prefersReducedMotion) {
+          document.querySelectorAll(".loading-word").forEach((word) => {
+            word.textContent = word.dataset.text;
+          });
+          return;
+        }
+
+        for (const word of document.querySelectorAll(".loading-word")) {
+          const text = word.dataset.text;
+          word.classList.add("is-typing");
+
+          for (let index = 0; index <= text.length; index += 1) {
+            word.textContent = text.slice(0, index);
+            await new Promise((resolve) => window.setTimeout(resolve, 96));
+          }
+
+          await new Promise((resolve) => window.setTimeout(resolve, 180));
+          word.classList.remove("is-typing");
+        }
+      };
+
+      if (shouldSkipIntro) {
+        document.body.classList.add("is-loaded", "is-skip-intro");
+        window.history.replaceState(null, "", window.location.pathname);
+      } else {
+        typeLoadingTitle().then(() => {
+          document.body.classList.add("is-revealing");
+
+          window.setTimeout(() => {
+            document.body.classList.add("is-thumbnails-visible");
+          }, 900);
+
+          window.setTimeout(() => {
+            document.body.classList.add("is-loaded");
+            document.body.classList.remove("is-revealing");
+          }, 3000);
+        });
+      }
     </script>
   </body>
 </html>
