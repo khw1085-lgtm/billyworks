@@ -119,8 +119,8 @@
         grid-template-columns: repeat(3, minmax(0, 1fr));
         border: 1px solid #7b7b7b;
         background: #000;
-        opacity: 0;
-        transform: translateY(140px);
+        opacity: 1;
+        transform: translateY(0);
       }
 
       .work-tile {
@@ -178,13 +178,10 @@
         min-height: 100vh;
       }
 
-      body.is-thumbnails-visible .work-grid,
-      body.is-loaded:not(.is-skip-intro):not(.is-thumbnails-visible) .work-grid {
-        animation: thumbnail-rise 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      }
-
       body.is-skip-intro .work-grid {
-        animation: main-return-rise 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation: none;
+        opacity: 1;
+        transform: translateY(0);
       }
 
       body.is-skip-intro .main-content {
@@ -216,30 +213,6 @@
         }
       }
 
-      @keyframes thumbnail-rise {
-        0% {
-          opacity: 0;
-          transform: translateY(140px);
-        }
-
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes main-return-rise {
-        0% {
-          opacity: 0;
-          transform: translateY(54px);
-        }
-
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
       @keyframes main-return-fade {
         0% {
           opacity: 0;
@@ -255,10 +228,6 @@
           animation-duration: 1ms;
         }
 
-        body.is-thumbnails-visible .work-grid,
-        body.is-loaded:not(.is-skip-intro):not(.is-thumbnails-visible) .work-grid {
-          animation-duration: 1ms;
-        }
       }
 
       @media (max-width: 720px) {
@@ -364,10 +333,6 @@
       } else {
         typeLoadingTitle().then(() => {
           document.body.classList.add("is-revealing");
-
-          window.setTimeout(() => {
-            document.body.classList.add("is-thumbnails-visible");
-          }, 900);
 
           window.setTimeout(() => {
             document.body.classList.add("is-loaded");
