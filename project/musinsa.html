@@ -234,6 +234,7 @@
 
       closeButton.addEventListener("click", (event) => {
         event.preventDefault();
+        sessionStorage.setItem("billyworksSkipIntro", "1");
         document.body.classList.add("is-closing");
         window.setTimeout(() => {
           window.location.href = closeButton.href;
