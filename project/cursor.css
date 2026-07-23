@@ -1,0 +1,79 @@
+@media (pointer: fine) {
+  html,
+  body,
+  body * {
+    cursor: none !important;
+  }
+}
+
+.user-cursor {
+  --cursor-size: 31px;
+  --cursor-color: #fff;
+  --cursor-text-color: #000;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.user-cursor.is-visible {
+  visibility: visible;
+}
+
+.user-cursor__arrow,
+.user-cursor__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform, opacity;
+  transition: opacity 140ms ease;
+}
+
+.user-cursor.is-visible .user-cursor__arrow,
+.user-cursor.is-visible .user-cursor__label {
+  opacity: 1;
+}
+
+.user-cursor__arrow {
+  z-index: 2;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
+  transform-origin: 0 0;
+}
+
+.user-cursor__arrow svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 18%));
+}
+
+.user-cursor__label {
+  z-index: 1;
+  padding: 5.58px 11.16px;
+  border-radius: 999px;
+  background: var(--cursor-color);
+  color: var(--cursor-text-color);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 8%);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 13.33px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+  transform-origin: 0 50%;
+}
+
+@media (pointer: coarse) {
+  .user-cursor {
+    display: none;
+  }
+}
+
