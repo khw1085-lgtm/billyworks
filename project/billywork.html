@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>billyworks loading transition</title>
+    <title>Billyworks</title>
     <link rel="stylesheet" href="./cursor.css" />
     <style>
       :root {
+        --content-max-width: 1800px;
         color: #000;
-        background: #000;
+        background: #fff;
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
           "Segoe UI", sans-serif;
       }
@@ -19,52 +20,40 @@
 
       body {
         margin: 0;
+        min-width: 320px;
         min-height: 100vh;
         overflow: hidden;
+        background: #fff;
       }
 
       .screen {
         position: fixed;
         inset: 0;
-        display: grid;
         min-height: 100vh;
-        place-items: center;
       }
 
       .loading-screen {
         z-index: 1;
-        background: #000;
-        color: #fff;
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .design-frame {
-        width: min(100vw, 2316px);
-        min-height: 100vh;
-        margin: auto;
-      }
-
-      .loading-frame {
         display: grid;
         place-items: center;
+        background: #000;
+        color: #fff;
       }
 
       .loading-title {
-        margin: 0;
         display: flex;
-        gap: 12px;
         min-height: 36px;
+        margin: 0;
+        gap: 12px;
         font-size: 30px;
         font-weight: 400;
         line-height: 1.2;
-        text-align: center;
       }
 
       .loading-word {
-        position: relative;
         display: inline-block;
         min-width: var(--word-width);
+        position: relative;
         text-align: left;
       }
 
@@ -80,104 +69,174 @@
       }
 
       .main-screen {
-        display: block;
         z-index: 2;
+        overflow: hidden;
         background: #fff;
-        color: #000;
         clip-path: ellipse(0 0 at 50% 52%);
-        opacity: 1;
-        visibility: visible;
         will-change: clip-path;
       }
 
       .main-content {
-        width: min(100vw, 2316px);
-        min-height: max(100vh, 2536px);
-        padding: 0 clamp(24px, 11.14vw, 258px) 140px;
+        display: flex;
+        width: 100%;
+        max-width: var(--content-max-width);
+        margin-inline: auto;
+        padding: 80px 0;
+        flex-direction: column;
+        align-items: center;
+        gap: 100px;
+      }
+
+      .content-width {
+        width: 100%;
+        max-width: none;
+        margin-inline: auto;
+      }
+
+      .hero {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
       }
 
       .hero-title {
+        width: 100%;
         margin: 0;
-        font-size: clamp(80px, 8.59vw, 199px);
+        font-size: clamp(76px, 8.59vw, 199px);
         font-weight: 800;
-        line-height: 1.21;
-        letter-spacing: 0;
+        line-height: normal;
       }
 
       .intro {
         width: min(462px, 100%);
-        margin: 40px 0 0;
-        color: #000;
+        margin: 0;
         font-size: 16px;
         font-weight: 200;
-        line-height: 1.21;
+        line-height: normal;
       }
 
-      .work-grid {
-        display: grid;
-        width: calc(100% + 2px);
-        margin: 60px -1px 0;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        border: 1px solid #7b7b7b;
-        background: #000;
-        opacity: 1;
-        transform: translateY(0);
+      .section-heading {
+        margin: 0;
+        font-size: 60px;
+        font-weight: 800;
+        line-height: normal;
       }
 
-      .work-tile {
-        position: relative;
-        aspect-ratio: 599.333 / 723.5;
-        min-height: 0;
-        overflow: hidden;
-        border: 0;
-        border-right: 1px solid #7b7b7b;
-        border-bottom: 1px solid #7b7b7b;
+      .works-section,
+      .portfolio-section {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .works-list {
+        display: flex;
+        width: 100%;
+        height: 600px;
+        gap: 20px;
+      }
+
+      .works-card {
+        display: flex;
+        min-width: 0;
+        height: 600px;
+        padding: 40px;
+        flex: 1 1 0;
+        align-items: flex-start;
+        border: 1px solid #000;
         border-radius: 0;
         background: #fff;
-        transition: background-color 240ms ease, border-radius 320ms cubic-bezier(0.22, 1, 0.36, 1);
+        color: #000;
+        transition:
+          flex-grow 300ms cubic-bezier(0.22, 1, 0.36, 1),
+          background-color 180ms ease,
+          color 180ms ease;
       }
 
-      .work-tile:first-child {
+      .works-card:hover {
+        flex-grow: 1.6;
+        background: #000;
+        color: #fff;
+      }
+
+      .works-card span {
+        font-size: 32px;
+        font-weight: 700;
+        line-height: normal;
+        white-space: nowrap;
+      }
+
+      .reveal-section {
+        display: flex;
+        width: 100%;
+        max-width: var(--content-max-width);
+        padding: 150px 24px;
+        flex-direction: column;
+        align-items: center;
+        gap: 100px;
+        background: #000;
+        color: #fff;
+      }
+
+      .reveal-copy {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        font-size: 50px;
+        font-weight: 400;
+        line-height: normal;
+        text-align: center;
+      }
+
+      .reveal-art {
+        display: block;
+        width: min(1180px, 100%);
+        height: auto;
+      }
+
+      .portfolio-grid {
+        display: grid;
+        width: 100%;
+        height: 1450px;
+        padding: 1px;
+        gap: 1px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(0, 1fr));
         background: #000;
       }
 
-      .work-thumbnail {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        pointer-events: none;
+      .portfolio-tile {
+        min-width: 0;
+        min-height: 0;
+        background: #fff;
       }
 
-      .work-tile:hover {
-        z-index: 1;
-        background: #d9d9d9;
-        border-radius: 60px;
+      .portfolio-tile--featured {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+        background: #000;
       }
 
-      .work-tile:nth-child(3n) {
-        border-right: 0;
+      .portfolio-musinsa {
+        width: min(355.83px, 70%);
+        height: auto;
       }
 
-      .work-tile:nth-last-child(-n + 3) {
-        border-bottom: 0;
-      }
-
-      .work-tile:focus-visible {
-        outline: 4px solid #777;
-        outline-offset: -10px;
+      .portfolio-snap {
+        width: min(191.113px, 38%);
+        height: auto;
       }
 
       body.is-loaded,
       body.is-revealing {
         overflow: auto;
-        background: #fff;
       }
 
       body.is-loaded .loading-screen {
         display: none;
-        opacity: 0;
-        visibility: hidden;
       }
 
       body.is-revealing .main-screen {
@@ -186,16 +245,11 @@
       }
 
       body.is-loaded .main-screen {
-        animation: none;
-        clip-path: inset(0);
         position: relative;
         min-height: 100vh;
-      }
-
-      body.is-skip-intro .work-grid {
+        overflow: visible;
         animation: none;
-        opacity: 1;
-        transform: translateY(0);
+        clip-path: inset(0);
       }
 
       body.is-skip-intro .main-content {
@@ -213,27 +267,70 @@
         0% {
           clip-path: ellipse(0 0 at 50% 52%);
         }
-
         68% {
           clip-path: ellipse(156vmax 116vmax at 50% 52%);
         }
-
         84% {
           clip-path: ellipse(132vmax 98vmax at 50% 52%);
         }
-
         100% {
           clip-path: ellipse(146vmax 108vmax at 50% 52%);
         }
       }
 
       @keyframes main-return-fade {
-        0% {
-          opacity: 0;
+        to {
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 900px) {
+        .main-content {
+          padding-block: 48px;
+          gap: 72px;
         }
 
-        100% {
-          opacity: 1;
+        .content-width {
+          width: min(100% - 40px, 1800px);
+        }
+
+        .hero-title {
+          font-size: clamp(56px, 16vw, 110px);
+          line-height: 0.95;
+        }
+
+        .section-heading {
+          font-size: 42px;
+        }
+
+        .works-list {
+          height: 480px;
+          gap: 8px;
+        }
+
+        .works-card {
+          height: 480px;
+          padding: 20px 12px;
+        }
+
+        .works-card span {
+          font-size: 20px;
+          text-orientation: upright;
+          writing-mode: vertical-rl;
+        }
+
+        .reveal-section {
+          padding-block: 100px;
+          gap: 64px;
+        }
+
+        .reveal-copy {
+          font-size: 32px;
+        }
+
+        .portfolio-grid {
+          height: auto;
+          aspect-ratio: 1800 / 1450;
         }
       }
 
@@ -241,93 +338,98 @@
         body.is-revealing .main-screen {
           animation-duration: 1ms;
         }
-      }
 
-      @media (max-width: 720px) {
-        .main-content {
-          min-height: max(100vh, 980px);
-          padding: 0 20px 64px;
-        }
-
-        .hero-title {
-          font-size: clamp(56px, 18vw, 96px);
-          line-height: 1;
-          overflow-wrap: anywhere;
-        }
-
-        .intro {
-          margin-top: 28px;
-          font-size: 14px;
-          line-height: 1.25;
-        }
-
-        .work-grid {
-          margin-top: 42px;
-          grid-template-columns: 1fr;
-        }
-
-        .work-tile {
-          aspect-ratio: 592 / 320;
-          border-right: 0;
-          border-bottom: 1px solid #7b7b7b;
-        }
-
-        .work-tile:nth-last-child(-n + 3) {
-          border-bottom: 1px solid #7b7b7b;
-        }
-
-        .work-tile:last-child {
-          border-bottom: 0;
+        .works-card {
+          transition: none;
         }
       }
     </style>
   </head>
   <body>
     <section class="screen loading-screen" aria-label="Loading">
-      <div class="design-frame loading-frame">
-        <h1 class="loading-title" aria-label="BILLY WORKS">
-          <span class="loading-word" data-text="BILLY" style="--word-width: 5ch"></span>
-          <span class="loading-word" data-text="WORKS" style="--word-width: 5.5ch"></span>
-        </h1>
-      </div>
+      <h1 class="loading-title" aria-label="BILLY WORKS">
+        <span class="loading-word" data-text="BILLY" style="--word-width: 5ch"></span>
+        <span class="loading-word" data-text="WORKS" style="--word-width: 5.5ch"></span>
+      </h1>
     </section>
 
-    <main class="screen main-screen" aria-label="Billyworks introduction">
-      <div class="design-frame main-content">
-        <h1 class="hero-title">BILLY WORKS</h1>
-        <p class="intro">
-          Silvia Vargas is a Spanish artist and illustrator who brings fantasy and horror
-          to life through bold character designs and surreal, emotionally rich landscapes,
-          blending reality with imagination through vibrant colors and dynamic storytelling.
-        </p>
-        <section class="work-grid" aria-label="Featured work">
-          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 1">
-            <img class="work-thumbnail" src="./uploads/musinsa-thumbnail.png" alt="" />
-          </a>
-          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 2"></a>
-          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 3"></a>
-          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 4"></a>
-          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 5"></a>
-          <a class="work-tile" href="./musinsa.html" aria-label="Open featured work 6"></a>
+    <main class="screen main-screen" aria-label="Billyworks">
+      <div class="main-content">
+        <header class="hero content-width">
+          <h1 class="hero-title">BILLY WORKS</h1>
+          <p class="intro">
+            Silvia Vargas is a Spanish artist and illustrator who brings fantasy and horror
+            to life through bold character designs and surreal, emotionally rich landscapes,
+            blending reality with imagination through vibrant colors and dynamic storytelling.
+          </p>
+        </header>
+
+        <section class="works-section content-width" aria-labelledby="works-title">
+          <h2 class="section-heading" id="works-title">WORKS</h2>
+          <div class="works-list">
+            <div class="works-card"><span>UIUX</span></div>
+            <div class="works-card"><span>UIUX</span></div>
+            <div class="works-card"><span>UIUX</span></div>
+            <div class="works-card"><span>UIUX</span></div>
+            <div class="works-card"><span>UIUX</span></div>
+          </div>
+        </section>
+
+        <section class="reveal-section" aria-label="Hover reveal">
+          <p class="reveal-copy">
+            Not everything is meant to be seen at<br />
+            once. Hover to reveal
+          </p>
+          <img
+            class="reveal-art"
+            src="./uploads/figma-reveal.svg"
+            alt=""
+            width="1180"
+            height="172"
+          />
+        </section>
+
+        <section class="portfolio-section content-width" aria-labelledby="portfolio-title">
+          <h2 class="section-heading" id="portfolio-title">Portfolio</h2>
+          <div class="portfolio-grid">
+            <a class="portfolio-tile portfolio-tile--featured" href="./musinsa.html">
+              <img
+                class="portfolio-musinsa"
+                src="./uploads/figma-musinsa.svg"
+                alt="MUSINSA"
+                width="356"
+                height="60"
+              />
+              <img
+                class="portfolio-snap"
+                src="./uploads/figma-snap.svg"
+                alt="SNAP"
+                width="192"
+                height="60"
+              />
+            </a>
+            <div class="portfolio-tile"></div>
+            <div class="portfolio-tile"></div>
+            <div class="portfolio-tile"></div>
+            <div class="portfolio-tile"></div>
+            <div class="portfolio-tile"></div>
+          </div>
         </section>
       </div>
     </main>
 
-    <script src="./cursor.js"></script>
+    <script src="./cursor.js?v=2"></script>
     <script>
       const params = new URLSearchParams(window.location.search);
       const skipIntroKey = "billyworksSkipIntro";
       const shouldSkipIntro =
         params.get("skipIntro") === "1" || sessionStorage.getItem(skipIntroKey) === "1";
-      const workLinks = document.querySelectorAll(".work-tile");
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
 
-      workLinks.forEach((link) => {
-        link.addEventListener("click", () => {
-          sessionStorage.setItem(skipIntroKey, "1");
-        });
+      document.querySelector(".portfolio-tile--featured").addEventListener("click", () => {
+        sessionStorage.setItem(skipIntroKey, "1");
       });
 
       const typeLoadingTitle = async () => {
