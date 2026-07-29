@@ -114,16 +114,13 @@
         pointer-events: none;
       }
 
-      body.is-closing .close-button {
-        animation: close-exit 420ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+      body.is-closing {
+        overflow: hidden;
       }
 
-      body.is-closing .case-logo {
-        animation: content-exit 520ms ease forwards;
-      }
-
-      body.is-closing .case-visual {
-        animation: visual-exit 620ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+      body.is-closing .sub-page {
+        animation: subpage-fall 900ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+        pointer-events: none;
       }
 
       @keyframes subpage-rise {
@@ -134,45 +131,11 @@
         }
       }
 
-      @keyframes close-enter {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes content-enter {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes visual-enter {
-        to {
-          opacity: 1;
-          transform: translate3d(0, var(--parallax-y, 0px), 0);
-        }
-      }
-
-      @keyframes close-exit {
+      @keyframes subpage-fall {
         to {
           opacity: 0;
-          transform: translateY(-36px);
-        }
-      }
-
-      @keyframes content-exit {
-        to {
-          opacity: 0;
-          transform: translateY(24px);
-        }
-      }
-
-      @keyframes visual-exit {
-        to {
-          opacity: 0;
-          transform: translate3d(0, calc(100px + var(--parallax-y, 0px)), 0);
+          clip-path: inset(100% 0 0);
+          transform: translate3d(0, 120px, 0);
         }
       }
 
@@ -211,14 +174,7 @@
           will-change: auto;
         }
 
-        .close-button,
-        .case-logo,
-        .case-visual,
-        body.is-closing .close-button,
-        body.is-closing .case-logo,
-        body.is-closing .case-visual {
-          opacity: 1;
-          transform: none;
+        body.is-closing .sub-page {
           animation-duration: 1ms;
         }
       }
@@ -258,9 +214,28 @@
     <script src="./cursor.js?v=2"></script>
     <script>
       const closeButton = document.querySelector(".close-button");
+      const closeDuration = 900;
+      let isClosing = false;
 
-      closeButton.addEventListener("click", () => {
+      closeButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (isClosing) return;
+
+        isClosing = true;
         sessionStorage.setItem("billyworksSkipIntro", "1");
+        document.body.classList.add("is-closing");
+
+        window.setTimeout(() => {
+          const cameFromMain =
+            document.referrer &&
+            new URL(document.referrer).pathname.endsWith("/billywork.html");
+
+          if (cameFromMain && window.history.length > 1) {
+            window.history.back();
+          } else {
+            window.location.href = closeButton.href;
+          }
+        }, prefersReducedMotion ? 0 : closeDuration);
       });
 
       const prefersReducedMotion = window.matchMedia(

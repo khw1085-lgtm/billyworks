@@ -621,6 +621,7 @@
     <script>
       const params = new URLSearchParams(window.location.search);
       const skipIntroKey = "billyworksSkipIntro";
+      const scrollPositionKey = "billyworksScrollPosition";
       const shouldSkipIntro =
         params.get("skipIntro") === "1" || sessionStorage.getItem(skipIntroKey) === "1";
       const prefersReducedMotion = window.matchMedia(
@@ -629,7 +630,21 @@
 
       document.querySelector(".portfolio-tile--featured").addEventListener("click", () => {
         sessionStorage.setItem(skipIntroKey, "1");
+        sessionStorage.setItem(scrollPositionKey, String(window.scrollY));
       });
+
+      const restoreScrollPosition = () => {
+        const savedPosition = sessionStorage.getItem(scrollPositionKey);
+        if (savedPosition === null) return;
+
+        sessionStorage.removeItem(scrollPositionKey);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: Number(savedPosition), behavior: "auto" });
+            refreshParallax();
+          });
+        });
+      };
 
       const spotlight = document.querySelector(".spotlight-text");
       const spotlightContent = spotlight.querySelector(".spotlight-text__content");
@@ -748,7 +763,7 @@
         document.body.classList.add("is-loaded", "is-skip-intro");
         sessionStorage.removeItem(skipIntroKey);
         window.history.replaceState(null, "", window.location.pathname);
-        requestAnimationFrame(refreshParallax);
+        restoreScrollPosition();
       } else {
         typeLoadingTitle().then(() => {
           document.body.classList.add("is-revealing");
@@ -760,6 +775,10 @@
           }, 3000);
         });
       }
+
+      window.addEventListener("pageshow", (event) => {
+        if (event.persisted) restoreScrollPosition();
+      });
     </script>
   </body>
 </html>
