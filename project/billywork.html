@@ -93,6 +93,11 @@
         margin-inline: auto;
       }
 
+      .parallax-layer {
+        transform: translate3d(0, var(--parallax-y, 0px), 0);
+        will-change: transform;
+      }
+
       .hero {
         display: flex;
         flex-direction: column;
@@ -379,6 +384,11 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
+        .parallax-layer {
+          transform: none;
+          will-change: auto;
+        }
+
         body.is-revealing .main-screen {
           animation-duration: 1ms;
         }
@@ -399,7 +409,7 @@
 
     <main class="screen main-screen" aria-label="Billyworks">
       <div class="main-content">
-        <header class="hero content-width">
+        <header class="hero content-width parallax-layer" data-parallax-speed="0.08">
           <h1 class="hero-title">BILLY WORKS</h1>
           <p class="intro">
             Silvia Vargas is a Spanish artist and illustrator who brings fantasy and horror
@@ -409,8 +419,14 @@
         </header>
 
         <section class="works-section content-width" aria-labelledby="works-title">
-          <h2 class="section-heading" id="works-title">WORKS</h2>
-          <div class="works-list">
+          <h2
+            class="section-heading parallax-layer"
+            id="works-title"
+            data-parallax-speed="0.06"
+          >
+            WORKS
+          </h2>
+          <div class="works-list parallax-layer" data-parallax-speed="0.035">
             <div class="works-card"><span>UIUX</span></div>
             <div class="works-card"><span>UIUX</span></div>
             <div class="works-card"><span>UIUX</span></div>
@@ -421,7 +437,8 @@
 
         <section class="reveal-section" aria-label="Hover reveal">
           <div
-            class="spotlight-text"
+            class="spotlight-text parallax-layer"
+            data-parallax-speed="0.08"
             aria-label="Not everything is meant to be seen at once. Hover to reveal"
           >
             <div class="spotlight-text__content">
@@ -436,7 +453,8 @@
             </div>
           </div>
           <img
-            class="reveal-art"
+            class="reveal-art parallax-layer"
+            data-parallax-speed="0.12"
             src="./uploads/figma-reveal.svg"
             alt=""
             width="1180"
@@ -445,8 +463,14 @@
         </section>
 
         <section class="portfolio-section content-width" aria-labelledby="portfolio-title">
-          <h2 class="section-heading" id="portfolio-title">Portfolio</h2>
-          <div class="portfolio-grid">
+          <h2
+            class="section-heading parallax-layer"
+            id="portfolio-title"
+            data-parallax-speed="0.06"
+          >
+            Portfolio
+          </h2>
+          <div class="portfolio-grid parallax-layer" data-parallax-speed="0.03">
             <a class="portfolio-tile portfolio-tile--featured" href="./musinsa.html">
               <img
                 class="portfolio-musinsa"
@@ -531,6 +555,53 @@
         spotlight.addEventListener("pointerleave", () => animateSpotlight(0));
       }
 
+      const parallaxLayers = [...document.querySelectorAll("[data-parallax-speed]")];
+      let parallaxMetrics = [];
+      let parallaxFrame = 0;
+      let parallaxReady = false;
+
+      const measureParallax = () => {
+        parallaxMetrics = parallaxLayers.map((layer) => {
+          const rect = layer.getBoundingClientRect();
+          return {
+            layer,
+            center: rect.top + window.scrollY + rect.height / 2,
+            speed: Number(layer.dataset.parallaxSpeed),
+          };
+        });
+        parallaxReady = true;
+      };
+
+      const renderParallax = () => {
+        parallaxFrame = 0;
+        if (!parallaxReady || prefersReducedMotion) return;
+
+        const viewportCenter = window.scrollY + window.innerHeight / 2;
+        parallaxMetrics.forEach(({ layer, center, speed }) => {
+          const offset = Math.max(
+            -72,
+            Math.min(72, (viewportCenter - center) * speed),
+          );
+          layer.style.setProperty("--parallax-y", `${offset.toFixed(2)}px`);
+        });
+      };
+
+      const requestParallaxRender = () => {
+        if (!parallaxFrame) parallaxFrame = requestAnimationFrame(renderParallax);
+      };
+
+      const refreshParallax = () => {
+        if (prefersReducedMotion) return;
+        parallaxLayers.forEach((layer) => {
+          layer.style.setProperty("--parallax-y", "0px");
+        });
+        measureParallax();
+        renderParallax();
+      };
+
+      window.addEventListener("scroll", requestParallaxRender, { passive: true });
+      window.addEventListener("resize", refreshParallax);
+
       const typeLoadingTitle = async () => {
         if (shouldSkipIntro || prefersReducedMotion) {
           document.querySelectorAll(".loading-word").forEach((word) => {
@@ -557,6 +628,7 @@
         document.body.classList.add("is-loaded", "is-skip-intro");
         sessionStorage.removeItem(skipIntroKey);
         window.history.replaceState(null, "", window.location.pathname);
+        requestAnimationFrame(refreshParallax);
       } else {
         typeLoadingTitle().then(() => {
           document.body.classList.add("is-revealing");
@@ -564,6 +636,7 @@
           window.setTimeout(() => {
             document.body.classList.add("is-loaded");
             document.body.classList.remove("is-revealing");
+            requestAnimationFrame(refreshParallax);
           }, 3000);
         });
       }
