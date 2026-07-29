@@ -1,0 +1,27 @@
+project/billywork.html
+  h_6426af5d8d84ba 6,10,12,23,26,39-40,46-47,56,73,80-99,103,105,107,112,115,118-122,125-146,149-153,156-157,159-166,169-191,193-198,200-205,208-211,214-220,223-225,228-230,250,252,282,287-290,293-294,298-313,316-319,322-324,327-328,331-339,342-343,350-353,356-416,421,431-432
+project/cursor.js
+  h_6426af5d8d84ba 16
+project/index.html
+  h_6426af5d8d84ba 1,3-14
+project/musinsa.html
+  h_6426af5d8d84ba 233
+project/uploads/figma-musinsa.svg
+  h_6426af5d8d84ba 1-3
+project/uploads/figma-reveal.svg
+  h_6426af5d8d84ba 1-9
+project/uploads/figma-snap.svg
+  h_6426af5d8d84ba 1-8
+project/work.html
+  h_6426af5d8d84ba 218
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "18f7eba073ccf5e5e8be35150157dacd9e2f9f19",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}
