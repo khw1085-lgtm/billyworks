@@ -1,0 +1,23 @@
+project/billywork.html
+  h_6426af5d8d84ba 148,150,152-153,155,158-159,163,166-167,172-199,459,465-475,545-550,553-558,561-566,569-574,577-582
+project/uploads/figma-works-calendar.svg
+  h_6426af5d8d84ba 1-5
+project/uploads/figma-works-folder.svg
+  h_6426af5d8d84ba 1-5
+project/uploads/figma-works-globe.svg
+  h_6426af5d8d84ba 1-5
+project/uploads/figma-works-lightbulb.svg
+  h_6426af5d8d84ba 1-5
+project/uploads/figma-works-telegram.svg
+  h_6426af5d8d84ba 1-5
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "cd207d6c431d5e0e730bb0b70d6e3fdc8c17dbe5",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}
