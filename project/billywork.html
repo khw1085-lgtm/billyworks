@@ -699,7 +699,7 @@
 
       const restoreScrollPosition = () => {
         const savedPosition = sessionStorage.getItem(scrollPositionKey);
-        if (savedPosition === null) return;
+        if (savedPosition === null) return false;
 
         sessionStorage.removeItem(scrollPositionKey);
         requestAnimationFrame(() => {
@@ -708,6 +708,7 @@
             refreshParallax();
           });
         });
+        return true;
       };
 
       const spotlight = document.querySelector(".spotlight-text");
@@ -758,13 +759,13 @@
       let parallaxMetrics = [];
       let parallaxFrame = 0;
       let parallaxReady = false;
+      let parallaxOriginScroll = window.scrollY;
 
       const measureParallax = () => {
+        parallaxOriginScroll = window.scrollY;
         parallaxMetrics = parallaxLayers.map((layer) => {
-          const rect = layer.getBoundingClientRect();
           return {
             layer,
-            center: rect.top + window.scrollY + rect.height / 2,
             speed: Number(layer.dataset.parallaxSpeed),
           };
         });
@@ -775,11 +776,11 @@
         parallaxFrame = 0;
         if (!parallaxReady || prefersReducedMotion) return;
 
-        const viewportCenter = window.scrollY + window.innerHeight / 2;
-        parallaxMetrics.forEach(({ layer, center, speed }) => {
+        const scrollDelta = window.scrollY - parallaxOriginScroll;
+        parallaxMetrics.forEach(({ layer, speed }) => {
           const offset = Math.max(
             -72,
-            Math.min(72, (viewportCenter - center) * speed),
+            Math.min(72, scrollDelta * speed),
           );
           layer.style.setProperty("--parallax-y", `${offset.toFixed(2)}px`);
         });
@@ -827,7 +828,7 @@
         document.body.classList.add("is-loaded", "is-skip-intro");
         sessionStorage.removeItem(skipIntroKey);
         window.history.replaceState(null, "", window.location.pathname);
-        restoreScrollPosition();
+        if (!restoreScrollPosition()) requestAnimationFrame(refreshParallax);
       } else {
         typeLoadingTitle().then(() => {
           document.body.classList.add("is-revealing");
