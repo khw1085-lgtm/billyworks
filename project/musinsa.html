@@ -243,13 +243,8 @@
     <script>
       const closeButton = document.querySelector(".close-button");
 
-      closeButton.addEventListener("click", (event) => {
-        event.preventDefault();
+      closeButton.addEventListener("click", () => {
         sessionStorage.setItem("billyworksSkipIntro", "1");
-        document.body.classList.add("is-closing");
-        window.setTimeout(() => {
-          window.location.href = closeButton.href;
-        }, 640);
       });
 
       const prefersReducedMotion = window.matchMedia(
