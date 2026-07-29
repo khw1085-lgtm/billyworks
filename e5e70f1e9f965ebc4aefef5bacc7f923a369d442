@@ -1,0 +1,13 @@
+project/musinsa.html
+  h_6426af5d8d84ba 246
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "e5e70f1e9f965ebc4aefef5bacc7f923a369d442",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}
