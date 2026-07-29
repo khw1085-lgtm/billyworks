@@ -178,14 +178,56 @@
         color: #fff;
       }
 
-      .reveal-copy {
+      .spotlight-text {
+        display: flex;
         width: 100%;
         max-width: none;
+        min-height: 120px;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .spotlight-text__content {
+        width: 100%;
+        position: relative;
+      }
+
+      .spotlight-copy {
+        width: 100%;
         margin: 0;
         font-size: 50px;
         font-weight: 400;
         line-height: normal;
         text-align: center;
+        user-select: none;
+      }
+
+      .spotlight-copy--dim {
+        color: #000;
+      }
+
+      .spotlight-copy--bright {
+        position: absolute;
+        inset: 0;
+        color: #fff;
+        pointer-events: none;
+        -webkit-mask-image: radial-gradient(
+          circle var(--spotlight-radius, 0px) at
+            var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+          #000 0%,
+          #000 10%,
+          transparent 100%
+        );
+        mask-image: radial-gradient(
+          circle var(--spotlight-radius, 0px) at
+            var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+          #000 0%,
+          #000 10%,
+          transparent 100%
+        );
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
       }
 
       .reveal-art {
@@ -324,7 +366,7 @@
           gap: 64px;
         }
 
-        .reveal-copy {
+        .spotlight-copy {
           font-size: 32px;
         }
 
@@ -376,10 +418,21 @@
         </section>
 
         <section class="reveal-section" aria-label="Hover reveal">
-          <p class="reveal-copy">
-            Not everything is meant to be seen at<br />
-            once. Hover to reveal
-          </p>
+          <div
+            class="spotlight-text"
+            aria-label="Not everything is meant to be seen at once. Hover to reveal"
+          >
+            <div class="spotlight-text__content">
+              <p class="spotlight-copy spotlight-copy--dim" aria-hidden="true">
+                Not everything is meant to be seen at<br />
+                once. Hover to reveal
+              </p>
+              <p class="spotlight-copy spotlight-copy--bright" aria-hidden="true">
+                Not everything is meant to be seen at<br />
+                once. Hover to reveal
+              </p>
+            </div>
+          </div>
           <img
             class="reveal-art"
             src="./uploads/figma-reveal.svg"
@@ -431,6 +484,50 @@
       document.querySelector(".portfolio-tile--featured").addEventListener("click", () => {
         sessionStorage.setItem(skipIntroKey, "1");
       });
+
+      const spotlight = document.querySelector(".spotlight-text");
+      const spotlightContent = spotlight.querySelector(".spotlight-text__content");
+      let spotlightRadius = 0;
+      let spotlightFrame = 0;
+
+      const setSpotlightPosition = (event) => {
+        const rect = spotlightContent.getBoundingClientRect();
+        spotlight.style.setProperty("--spotlight-x", `${event.clientX - rect.left}px`);
+        spotlight.style.setProperty("--spotlight-y", `${event.clientY - rect.top}px`);
+      };
+
+      const animateSpotlight = (targetRadius) => {
+        cancelAnimationFrame(spotlightFrame);
+        const startRadius = spotlightRadius;
+        const startedAt = performance.now();
+
+        const step = (now) => {
+          const progress = Math.min(1, (now - startedAt) / 300);
+          const eased =
+            progress < 0.5
+              ? 2 * progress * progress
+              : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+          spotlightRadius = startRadius + (targetRadius - startRadius) * eased;
+          spotlight.style.setProperty("--spotlight-radius", `${spotlightRadius}px`);
+
+          if (progress < 1) spotlightFrame = requestAnimationFrame(step);
+        };
+
+        spotlightFrame = requestAnimationFrame(step);
+      };
+
+      if (prefersReducedMotion) {
+        spotlight.style.setProperty("--spotlight-x", "50%");
+        spotlight.style.setProperty("--spotlight-y", "50%");
+        spotlight.style.setProperty("--spotlight-radius", "150px");
+      } else {
+        spotlight.addEventListener("pointermove", setSpotlightPosition);
+        spotlight.addEventListener("pointerenter", (event) => {
+          setSpotlightPosition(event);
+          animateSpotlight(150);
+        });
+        spotlight.addEventListener("pointerleave", () => animateSpotlight(0));
+      }
 
       const typeLoadingTitle = async () => {
         if (shouldSkipIntro || prefersReducedMotion) {
