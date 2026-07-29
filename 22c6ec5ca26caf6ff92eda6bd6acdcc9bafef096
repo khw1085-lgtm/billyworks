@@ -1,0 +1,15 @@
+project/billywork.html
+  h_6426af5d8d84ba 142-156,166-167,170,172,523,639
+project/globe.js
+  h_6426af5d8d84ba 1-156
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "22c6ec5ca26caf6ff92eda6bd6acdcc9bafef096",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}
