@@ -245,27 +245,60 @@
       .portfolio-grid {
         display: grid;
         width: 100%;
-        height: 1450px;
-        padding: 1px;
-        gap: 1px;
+        height: auto;
+        gap: 40px;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        grid-template-rows: repeat(2, minmax(0, 1fr));
-        background: #000;
       }
 
       .portfolio-tile {
+        display: flex;
         min-width: 0;
-        min-height: 0;
-        background: #fff;
+        height: 723.5px;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
+        overflow: hidden;
+        border-radius: 30px;
+        position: relative;
+        text-decoration: none;
       }
 
       .portfolio-tile--featured {
+        background: #000;
+      }
+
+      .portfolio-tile--coral {
+        background: #ff8585;
+      }
+
+      .portfolio-tile--peach {
+        background: #ffbc9d;
+      }
+
+      .portfolio-tile--mint {
+        background: #7de2bc;
+      }
+
+      .portfolio-tile--blue {
+        background: #7db7e2;
+      }
+
+      .portfolio-tile--violet {
+        background: #ce57ef;
+      }
+
+      .portfolio-brand {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 50px;
-        background: #000;
+        position: relative;
+        z-index: 2;
+        transition:
+          opacity 420ms ease,
+          transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .portfolio-musinsa {
@@ -276,6 +309,31 @@
       .portfolio-snap {
         width: min(191.113px, 38%);
         height: auto;
+      }
+
+      .portfolio-preview {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transform: scale(1.06);
+        transition:
+          opacity 420ms ease,
+          transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .portfolio-tile--featured:hover .portfolio-preview {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .portfolio-tile--featured:hover .portfolio-brand {
+        opacity: 0;
+        transform: translateY(-18px);
       }
 
       body.is-loaded,
@@ -378,8 +436,17 @@
         }
 
         .portfolio-grid {
-          height: auto;
-          aspect-ratio: 1800 / 1450;
+          gap: 12px;
+        }
+
+        .portfolio-tile {
+          height: min(62vw, 520px);
+          border-radius: 18px;
+          gap: 24px;
+        }
+
+        .portfolio-brand {
+          gap: 24px;
         }
       }
 
@@ -486,26 +553,73 @@
               data-parallax-speed="0.02"
               href="./musinsa.html"
             >
+              <span class="portfolio-brand">
+                <img
+                  class="portfolio-musinsa"
+                  src="./uploads/figma-musinsa.svg"
+                  alt="MUSINSA"
+                  width="356"
+                  height="60"
+                />
+                <img
+                  class="portfolio-snap"
+                  src="./uploads/figma-snap.svg"
+                  alt="SNAP"
+                  width="192"
+                  height="60"
+                />
+              </span>
               <img
-                class="portfolio-musinsa"
-                src="./uploads/figma-musinsa.svg"
-                alt="MUSINSA"
-                width="356"
-                height="60"
-              />
-              <img
-                class="portfolio-snap"
-                src="./uploads/figma-snap.svg"
-                alt="SNAP"
-                width="192"
-                height="60"
+                class="portfolio-preview"
+                src="./uploads/figma-sub-musinsa-hero.png"
+                alt=""
               />
             </a>
-            <div class="portfolio-tile parallax-layer" data-parallax-speed="0.03"></div>
-            <div class="portfolio-tile parallax-layer" data-parallax-speed="0.04"></div>
-            <div class="portfolio-tile parallax-layer" data-parallax-speed="0.04"></div>
-            <div class="portfolio-tile parallax-layer" data-parallax-speed="0.03"></div>
-            <div class="portfolio-tile parallax-layer" data-parallax-speed="0.02"></div>
+            <div
+              class="portfolio-tile portfolio-tile--coral parallax-layer"
+              data-parallax-speed="0.03"
+            >
+              <span class="portfolio-brand">
+                <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
+                <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
+              </span>
+            </div>
+            <div
+              class="portfolio-tile portfolio-tile--peach parallax-layer"
+              data-parallax-speed="0.04"
+            >
+              <span class="portfolio-brand">
+                <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
+                <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
+              </span>
+            </div>
+            <div
+              class="portfolio-tile portfolio-tile--mint parallax-layer"
+              data-parallax-speed="0.04"
+            >
+              <span class="portfolio-brand">
+                <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
+                <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
+              </span>
+            </div>
+            <div
+              class="portfolio-tile portfolio-tile--blue parallax-layer"
+              data-parallax-speed="0.03"
+            >
+              <span class="portfolio-brand">
+                <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
+                <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
+              </span>
+            </div>
+            <div
+              class="portfolio-tile portfolio-tile--violet parallax-layer"
+              data-parallax-speed="0.02"
+            >
+              <span class="portfolio-brand">
+                <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
+                <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
+              </span>
+            </div>
           </div>
         </section>
       </div>

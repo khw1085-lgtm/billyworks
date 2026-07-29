@@ -34,6 +34,11 @@
         align-items: center;
         gap: 100px;
         background: #000;
+        opacity: 0;
+        clip-path: inset(100% 0 0);
+        transform: translate3d(0, 120px, 0);
+        animation: subpage-rise 1200ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        will-change: opacity, clip-path, transform;
       }
 
       .parallax-layer {
@@ -62,12 +67,11 @@
         background: #fff;
         color: #000;
         text-decoration: none;
-        opacity: 0;
-        transform: translateY(-36px);
+        opacity: 1;
+        transform: none;
         transition:
           background-color 180ms ease,
           transform 180ms ease;
-        animation: close-enter 520ms cubic-bezier(0.16, 1, 0.3, 1) 120ms forwards;
       }
 
       .close-button:hover {
@@ -90,9 +94,7 @@
         display: block;
         width: min(711.66px, 80vw);
         height: auto;
-        opacity: 0;
-        transform: translateY(24px);
-        animation: content-enter 900ms cubic-bezier(0.16, 1, 0.3, 1) 260ms forwards;
+        opacity: 1;
       }
 
       .case-visual {
@@ -100,9 +102,8 @@
         height: min(1000px, 55.556vw);
         min-height: 320px;
         overflow: hidden;
-        opacity: 0;
-        transform: translate3d(0, calc(100px + var(--parallax-y, 0px)), 0);
-        animation: visual-enter 1100ms cubic-bezier(0.16, 1, 0.3, 1) 380ms forwards;
+        opacity: 1;
+        transform: translate3d(0, var(--parallax-y, 0px), 0);
       }
 
       .case-visual img {
@@ -123,6 +124,14 @@
 
       body.is-closing .case-visual {
         animation: visual-exit 620ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+      }
+
+      @keyframes subpage-rise {
+        to {
+          opacity: 1;
+          clip-path: inset(0 0 0);
+          transform: translate3d(0, 0, 0);
+        }
       }
 
       @keyframes close-enter {
@@ -190,6 +199,13 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
+        .sub-page {
+          opacity: 1;
+          clip-path: none;
+          transform: none;
+          animation-duration: 1ms;
+        }
+
         .parallax-layer {
           transform: none;
           will-change: auto;
