@@ -1,3 +1,33 @@
+.page-progress {
+  --page-progress: 0;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 10000;
+  height: 10px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+.page-progress::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #1967ff 0%, #258cff 58%, #70c4ff 100%);
+  box-shadow: 0 0 12px rgb(37 140 255 / 55%);
+  content: "";
+  transform: scaleX(var(--page-progress));
+  transform-origin: left center;
+  transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.page-progress.is-active {
+  opacity: 1;
+}
+
 @media (pointer: fine) {
   html,
   body,
@@ -77,3 +107,9 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .page-progress,
+  .page-progress::before {
+    transition-duration: 1ms;
+  }
+}

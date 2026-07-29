@@ -1,4 +1,84 @@
 (() => {
+  const progress = document.createElement("div");
+  progress.className = "page-progress";
+  progress.setAttribute("aria-hidden", "true");
+  document.body.append(progress);
+
+  let progressValue = 0;
+  let progressTimer = 0;
+  let progressResetTimer = 0;
+
+  const renderProgress = () => {
+    progress.style.setProperty("--page-progress", progressValue.toFixed(3));
+  };
+
+  const startProgress = () => {
+    window.clearInterval(progressTimer);
+    window.clearTimeout(progressResetTimer);
+    progressValue = Math.max(progressValue, 0.08);
+    progress.classList.add("is-active");
+    renderProgress();
+
+    requestAnimationFrame(() => {
+      progressValue = Math.max(progressValue, 0.2);
+      renderProgress();
+    });
+
+    progressTimer = window.setInterval(() => {
+      progressValue = Math.min(0.9, progressValue + (0.92 - progressValue) * 0.12);
+      renderProgress();
+    }, 180);
+  };
+
+  const finishProgress = () => {
+    window.clearInterval(progressTimer);
+    progressValue = 1;
+    renderProgress();
+    progressResetTimer = window.setTimeout(() => {
+      progress.classList.remove("is-active");
+      progressValue = 0;
+      renderProgress();
+    }, 220);
+  };
+
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("a[href]");
+    if (
+      !link ||
+      (event.defaultPrevented && !document.body.classList.contains("is-closing")) ||
+      event.button > 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      link.target === "_blank" ||
+      link.hasAttribute("download")
+    ) {
+      return;
+    }
+
+    const target = new URL(link.href, window.location.href);
+    const isSameDocumentHash =
+      target.origin === window.location.origin &&
+      target.pathname === window.location.pathname &&
+      target.search === window.location.search &&
+      target.hash;
+
+    if (target.origin === window.location.origin && !isSameDocumentHash) {
+      startProgress();
+    }
+  });
+
+  document.addEventListener("submit", startProgress);
+  window.addEventListener("beforeunload", startProgress);
+  window.addEventListener("pageshow", finishProgress);
+
+  if (document.readyState === "complete") {
+    finishProgress();
+  } else {
+    window.addEventListener("load", finishProgress, { once: true });
+  }
+
   if (!window.matchMedia("(pointer: fine)").matches) return;
 
   const size = 31;
