@@ -81,10 +81,88 @@
         width: 100%;
         max-width: var(--content-max-width);
         margin-inline: auto;
-        padding: 80px 0 0;
+        padding: 200px 0 0;
         flex-direction: column;
         align-items: center;
         gap: 200px;
+      }
+
+      .contact-line {
+        position: sticky;
+        top: 0;
+        z-index: 9000;
+        display: flex;
+        width: 100%;
+        height: 64px;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: #25ff58;
+        color: #000;
+        font-size: 18px;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .contact-line img {
+        width: 24px;
+        height: 24px;
+      }
+
+      .site-gnb {
+        position: fixed;
+        top: 64px;
+        right: 0;
+        left: 0;
+        z-index: 8990;
+        display: flex;
+        height: 64px;
+        padding: 20px 80px;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.96);
+        color: #000;
+        backdrop-filter: blur(12px);
+      }
+
+      .site-gnb__inner {
+        display: flex;
+        width: min(1800px, 100%);
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .site-gnb__logo,
+      .site-gnb__link {
+        color: inherit;
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 20px;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .site-gnb__links {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 50px;
+      }
+
+      .site-gnb__language {
+        display: flex;
+        height: 24px;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .site-gnb__language img {
+        width: 24px;
+        height: 24px;
+      }
+
+      .site-gnb-spacer {
+        height: 64px;
       }
 
       .content-width {
@@ -297,23 +375,23 @@
       }
 
       .portfolio-tile--coral {
-        background: #ff8585;
+        background: #ff681b;
       }
 
       .portfolio-tile--peach {
-        background: #ffbc9d;
+        background: #584de4;
       }
 
       .portfolio-tile--mint {
-        background: #7de2bc;
+        background: #000;
       }
 
       .portfolio-tile--blue {
-        background: #7db7e2;
+        background: #ff681b;
       }
 
       .portfolio-tile--violet {
-        background: #ce57ef;
+        background: #584de4;
       }
 
       .portfolio-brand {
@@ -645,8 +723,32 @@
       }
 
       @media (max-width: 900px) {
+        .contact-line {
+          height: 52px;
+          font-size: 15px;
+        }
+
+        .site-gnb {
+          top: 52px;
+          height: 56px;
+          padding: 18px 20px;
+        }
+
+        .site-gnb__links {
+          gap: 18px;
+        }
+
+        .site-gnb__link:nth-child(2),
+        .site-gnb__link:nth-child(3) {
+          display: none;
+        }
+
+        .site-gnb-spacer {
+          height: 56px;
+        }
+
         .main-content {
-          padding-block: 48px;
+          padding: 100px 0 0;
           gap: 72px;
         }
 
@@ -782,8 +884,31 @@
     </section>
 
     <main class="screen main-screen" aria-label="Billyworks">
+      <a class="contact-line" href="#request-form">
+        <span>프로젝트 문의하기</span>
+        <img src="./uploads/figma-works-telegram.svg" alt="" />
+      </a>
+      <nav class="site-gnb" aria-label="Primary navigation">
+        <div class="site-gnb__inner">
+          <a class="site-gnb__logo" href="#top">LOGO</a>
+          <div class="site-gnb__links">
+            <a class="site-gnb__link" href="#about-us">ABOUT US</a>
+            <a class="site-gnb__link" href="#portfolio-title">WORKS</a>
+            <a class="site-gnb__link" href="#request-form">CONTACT</a>
+            <span class="site-gnb__language">
+              <span class="site-gnb__link">LAN&nbsp;&nbsp;KR</span>
+              <img src="./uploads/figma-works-globe.svg" alt="" />
+            </span>
+          </div>
+        </div>
+      </nav>
+      <div class="site-gnb-spacer" aria-hidden="true"></div>
       <div class="main-content">
-        <header class="hero content-width parallax-layer" data-parallax-speed="0.025">
+        <header
+          class="hero content-width parallax-layer"
+          id="top"
+          data-parallax-speed="0.025"
+        >
           <h1 class="hero-title">BILLY WORKS</h1>
           <p class="intro">
             Silvia Vargas is a Spanish artist and illustrator who brings fantasy and horror
@@ -795,10 +920,10 @@
         <section
           class="works-section content-width parallax-layer"
           data-parallax-speed="0.025"
-          aria-labelledby="works-title"
+          aria-labelledby="about-us"
         >
-          <h2 class="section-heading" id="works-title">
-            WORKS
+          <h2 class="section-heading" id="about-us">
+            ABOUT US
           </h2>
           <div class="works-list">
             <div class="works-card">
@@ -879,7 +1004,7 @@
           aria-labelledby="portfolio-title"
         >
           <h2 class="section-heading" id="portfolio-title">
-            Portfolio
+            WORKS
           </h2>
           <div class="portfolio-grid">
             <a
