@@ -109,9 +109,9 @@
         text-decoration: none;
       }
 
-      body:not(.is-loaded):not(.is-ui-ready) .contact-line,
-      body:not(.is-loaded):not(.is-ui-ready) .site-gnb {
-        visibility: hidden;
+      body:not(.is-loaded) .contact-line,
+      body:not(.is-loaded) .site-gnb {
+        z-index: 0;
       }
 
       .contact-line img {
@@ -1531,13 +1531,8 @@
           document.body.classList.add("is-revealing");
 
           window.setTimeout(() => {
-            document.body.classList.add("is-ui-ready");
-            requestGnbContrast();
-          }, 2900);
-
-          window.setTimeout(() => {
             document.body.classList.add("is-loaded");
-            document.body.classList.remove("is-revealing", "is-ui-ready");
+            document.body.classList.remove("is-revealing");
             requestAnimationFrame(refreshParallax);
           }, 3000);
         });
