@@ -107,13 +107,19 @@
         text-decoration: none;
       }
 
+      body:not(.is-loaded) .contact-line,
+      body:not(.is-loaded) .site-gnb {
+        visibility: hidden;
+      }
+
       .contact-line img {
         width: 24px;
         height: 24px;
       }
 
       .site-gnb {
-        position: relative;
+        position: sticky;
+        top: 52px;
         z-index: 8990;
         display: flex;
         height: 64px;
@@ -124,14 +130,6 @@
         background: rgba(255, 255, 255, 0.96);
         color: #000;
         backdrop-filter: blur(12px);
-      }
-
-      body.is-gnb-stuck .site-gnb {
-        position: fixed;
-        top: 52px;
-        right: 0;
-        left: 0;
-        margin-top: 0;
       }
 
       .site-gnb__inner {
@@ -209,15 +207,6 @@
       .site-lnb__item:hover,
       .site-lnb__item[aria-current="true"] {
         background: #25ff58;
-      }
-
-      .site-gnb-spacer {
-        display: none;
-      }
-
-      body.is-gnb-stuck .site-gnb-spacer {
-        display: block;
-        height: 64px;
       }
 
       .content-width {
@@ -785,6 +774,7 @@
         }
 
         .site-gnb {
+          top: 52px;
           height: 56px;
           margin-top: 52px;
           padding: 18px 20px;
@@ -797,20 +787,6 @@
         .site-gnb__link:nth-child(2),
         .site-gnb__link:nth-child(3) {
           display: none;
-        }
-
-        .site-gnb-spacer {
-          display: none;
-        }
-
-        body.is-gnb-stuck .site-gnb {
-          top: 52px;
-          margin-top: 0;
-        }
-
-        body.is-gnb-stuck .site-gnb-spacer {
-          display: block;
-          height: 56px;
         }
 
         .main-content {
@@ -954,47 +930,47 @@
       </h1>
     </section>
 
-    <main class="screen main-screen" aria-label="Billyworks">
-      <a class="contact-line" href="#request-title" data-cursor-label="PROJECT REQUEST">
-        <span>프로젝트 문의하기</span>
-        <img src="./uploads/figma-works-telegram.svg" alt="" />
-      </a>
-      <nav class="site-gnb" aria-label="Primary navigation">
-        <div class="site-gnb__inner">
-          <a class="site-gnb__logo" href="#top" data-cursor-label="HOME">LOGO</a>
-          <div class="site-gnb__links">
-            <a class="site-gnb__link" href="#about-us" data-cursor-label="ABOUT US">
-              ABOUT US
-            </a>
-            <a class="site-gnb__link" href="#portfolio-title" data-cursor-label="WORKS">
-              WORKS
-            </a>
-            <a class="site-gnb__link" href="#request-title" data-cursor-label="CONTACT">
-              CONTACT
-            </a>
-            <details class="site-gnb__language" data-cursor-label="LANGUAGE">
-              <summary class="site-gnb__link">
-                LAN&nbsp;&nbsp;<span class="site-gnb__language-current">KR</span>
-                <img src="./uploads/figma-works-globe.svg" alt="" />
-              </summary>
-              <div class="site-lnb" aria-label="Language">
-                <button
-                  class="site-lnb__item"
-                  type="button"
-                  data-language="KR"
-                  aria-current="true"
-                >
-                  KR
-                </button>
-                <button class="site-lnb__item" type="button" data-language="ENGLISH">
-                  ENGLISH
-                </button>
-              </div>
-            </details>
-          </div>
+    <a class="contact-line" href="#request-title" data-cursor-label="PROJECT REQUEST">
+      <span>프로젝트 문의하기</span>
+      <img src="./uploads/figma-works-telegram.svg" alt="" />
+    </a>
+    <nav class="site-gnb" aria-label="Primary navigation">
+      <div class="site-gnb__inner">
+        <a class="site-gnb__logo" href="#top" data-cursor-label="HOME">LOGO</a>
+        <div class="site-gnb__links">
+          <a class="site-gnb__link" href="#about-us" data-cursor-label="ABOUT US">
+            ABOUT US
+          </a>
+          <a class="site-gnb__link" href="#portfolio-title" data-cursor-label="WORKS">
+            WORKS
+          </a>
+          <a class="site-gnb__link" href="#request-title" data-cursor-label="CONTACT">
+            CONTACT
+          </a>
+          <details class="site-gnb__language" data-cursor-label="LANGUAGE">
+            <summary class="site-gnb__link">
+              LAN&nbsp;&nbsp;<span class="site-gnb__language-current">KR</span>
+              <img src="./uploads/figma-works-globe.svg" alt="" />
+            </summary>
+            <div class="site-lnb" aria-label="Language">
+              <button
+                class="site-lnb__item"
+                type="button"
+                data-language="KR"
+                aria-current="true"
+              >
+                KR
+              </button>
+              <button class="site-lnb__item" type="button" data-language="ENGLISH">
+                ENGLISH
+              </button>
+            </div>
+          </details>
         </div>
-      </nav>
-      <div class="site-gnb-spacer" aria-hidden="true"></div>
+      </div>
+    </nav>
+
+    <main class="screen main-screen" aria-label="Billyworks">
       <div class="main-content">
         <header
           class="hero content-width parallax-layer"
@@ -1309,12 +1285,6 @@
       const requestForm = document.querySelector(".request-form");
       const languageMenu = document.querySelector(".site-gnb__language");
       const languageCurrent = document.querySelector(".site-gnb__language-current");
-      const syncStickyGnb = () => {
-        document.body.classList.toggle("is-gnb-stuck", window.scrollY > 0);
-      };
-
-      window.addEventListener("scroll", syncStickyGnb, { passive: true });
-      syncStickyGnb();
 
       languageMenu.querySelectorAll("[data-language]").forEach((option) => {
         option.addEventListener("click", () => {
