@@ -70,6 +70,8 @@
 
       .main-screen {
         z-index: 2;
+        inset: 116px 0 0;
+        min-height: calc(100vh - 116px);
         overflow: hidden;
         background: #fff;
         clip-path: ellipse(0 0 at 50% 52%);
@@ -740,6 +742,7 @@
 
       body.is-loaded .main-screen {
         position: relative;
+        inset: auto;
         min-height: 100vh;
         overflow: visible;
         animation: none;
@@ -779,6 +782,11 @@
       }
 
       @media (max-width: 1000px) {
+        .main-screen {
+          inset: 108px 0 0;
+          min-height: calc(100vh - 108px);
+        }
+
         .contact-line {
           height: 52px;
           font-size: 15px;
@@ -804,6 +812,11 @@
           width: calc(100% - 40px);
           padding: 100px 0 0;
           gap: 72px;
+        }
+
+        body.is-loaded .main-screen {
+          inset: auto;
+          min-height: 100vh;
         }
 
         .content-width {
