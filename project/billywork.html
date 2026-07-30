@@ -88,8 +88,10 @@
       }
 
       .contact-line {
-        position: sticky;
+        position: fixed;
         top: 0;
+        right: 0;
+        left: 0;
         z-index: 9000;
         display: flex;
         width: 100%;
@@ -111,13 +113,12 @@
       }
 
       .site-gnb {
-        position: fixed;
+        position: sticky;
         top: 52px;
-        right: 0;
-        left: 0;
         z-index: 8990;
         display: flex;
         height: 64px;
+        margin-top: 52px;
         padding: 20px 80px;
         align-items: center;
         justify-content: center;
@@ -204,7 +205,7 @@
       }
 
       .site-gnb-spacer {
-        height: 64px;
+        display: none;
       }
 
       .content-width {
@@ -774,6 +775,7 @@
         .site-gnb {
           top: 52px;
           height: 56px;
+          margin-top: 52px;
           padding: 18px 20px;
         }
 
@@ -787,7 +789,7 @@
         }
 
         .site-gnb-spacer {
-          height: 56px;
+          display: none;
         }
 
         .main-content {
@@ -1295,6 +1297,12 @@
           });
           languageMenu.open = false;
         });
+      });
+
+      document.addEventListener("pointerdown", (event) => {
+        if (languageMenu.open && !languageMenu.contains(event.target)) {
+          languageMenu.open = false;
+        }
       });
 
       requestForm.addEventListener("submit", (event) => {
