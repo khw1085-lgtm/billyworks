@@ -70,8 +70,8 @@
 
       .main-screen {
         z-index: 2;
-        inset: 116px 0 0;
-        min-height: calc(100vh - 116px);
+        inset: 64px 0 0;
+        min-height: calc(100vh - 64px);
         overflow: hidden;
         background: #fff;
         clip-path: ellipse(0 0 at 50% 52%);
@@ -89,27 +89,6 @@
         gap: 200px;
       }
 
-      .contact-line {
-        position: fixed;
-        top: 64px;
-        right: 0;
-        left: 0;
-        z-index: 9000;
-        display: flex;
-        width: 100%;
-        min-height: 52px;
-        padding-block: 14px;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-        background: #25ff58;
-        color: #000;
-        font-size: 18px;
-        font-weight: 600;
-        text-decoration: none;
-      }
-
-      body:not(.is-loaded) .contact-line,
       body:not(.is-loaded) .site-gnb {
         z-index: 0;
       }
@@ -120,22 +99,13 @@
         right: 0;
         left: 0;
         z-index: 2;
-        height: 116px;
+        height: 64px;
         background: #fff;
         content: "";
       }
 
-      body.is-revealing .contact-line {
-        z-index: 9000;
-      }
-
       body.is-revealing .site-gnb {
         z-index: 8990;
-      }
-
-      .contact-line img {
-        width: 24px;
-        height: 24px;
       }
 
       .site-gnb {
@@ -145,7 +115,7 @@
         display: flex;
         height: 64px;
         margin-top: 0;
-        margin-bottom: 52px;
+        margin-bottom: 0;
         padding: 20px 80px;
         align-items: center;
         justify-content: center;
@@ -568,7 +538,7 @@
         font-size: 60px;
         font-weight: 800;
         line-height: normal;
-        scroll-margin-top: 44px;
+        scroll-margin-top: 0;
       }
 
       .request-description {
@@ -803,25 +773,19 @@
 
       @media (max-width: 1000px) {
         body.is-revealing::before {
-          height: 108px;
+          height: 56px;
         }
 
         .main-screen {
-          inset: 108px 0 0;
-          min-height: calc(100vh - 108px);
-        }
-
-        .contact-line {
-          top: 56px;
-          height: 52px;
-          font-size: 15px;
+          inset: 56px 0 0;
+          min-height: calc(100vh - 56px);
         }
 
         .site-gnb {
           top: 0;
           height: 56px;
           margin-top: 0;
-          margin-bottom: 52px;
+          margin-bottom: 0;
           padding: 18px 20px;
         }
 
@@ -928,7 +892,7 @@
 
         .request-title {
           font-size: 42px;
-          scroll-margin-top: 36px;
+          scroll-margin-top: 0;
         }
 
         .request-cube {
@@ -980,10 +944,6 @@
       </h1>
     </section>
 
-    <a class="contact-line" href="#request-title" data-cursor-label="PROJECT REQUEST">
-      <span>프로젝트 문의하기</span>
-      <img src="./uploads/figma-works-telegram.svg" alt="" />
-    </a>
     <nav class="site-gnb" aria-label="Primary navigation">
       <div class="site-gnb__inner">
         <a class="site-gnb__logo" href="#top" data-cursor-label="HOME">LOGO</a>
@@ -1365,7 +1325,7 @@
           .find(
             (element) =>
               !element.closest(
-                ".site-gnb, .contact-line, .user-cursor, .page-progress",
+                ".site-gnb, .user-cursor, .page-progress",
               ),
           );
         const [red, green, blue] = getVisibleBackground(backgroundElement);
