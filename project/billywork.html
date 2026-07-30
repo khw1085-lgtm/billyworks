@@ -81,7 +81,7 @@
         width: 100%;
         max-width: var(--content-max-width);
         margin-inline: auto;
-        padding: 80px 0 200px;
+        padding: 80px 0 0;
         flex-direction: column;
         align-items: center;
         gap: 200px;
@@ -500,6 +500,63 @@
         background: #000;
       }
 
+      .site-footer {
+        display: flex;
+        width: 100vw;
+        max-width: none;
+        margin-inline: calc(50% - 50vw);
+        padding: 0 24px 200px;
+        flex-direction: column;
+        align-items: center;
+        gap: 90px;
+        overflow: hidden;
+        background: #000;
+        color: #fff;
+      }
+
+      .site-footer__info {
+        display: flex;
+        width: min(1800px, 100%);
+        align-items: flex-start;
+        justify-content: space-between;
+        font-size: 20px;
+        font-weight: 300;
+        line-height: normal;
+      }
+
+      .site-footer__column {
+        display: flex;
+        margin: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+
+      .site-footer__column p {
+        margin: 0;
+      }
+
+      .site-footer__link {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-position: from-font;
+      }
+
+      .dot-scatter {
+        width: min(1800px, 100%);
+        height: 270px;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .dot-scatter canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
       body.is-loaded,
       body.is-revealing {
         overflow: auto;
@@ -648,6 +705,21 @@
           aspect-ratio: 1;
           flex-basis: auto;
           align-self: center;
+        }
+
+        .site-footer {
+          padding: 0 20px 100px;
+          gap: 64px;
+        }
+
+        .site-footer__info {
+          flex-direction: column;
+          gap: 48px;
+          font-size: 16px;
+        }
+
+        .dot-scatter {
+          height: clamp(84px, 15vw, 160px);
         }
       }
 
@@ -919,10 +991,48 @@
             ></div>
           </div>
         </section>
+
+        <footer
+          id="footer"
+          class="site-footer parallax-layer"
+          data-parallax-speed="0.025"
+          aria-label="Billyworks footer"
+        >
+          <div class="site-footer__info">
+            <div class="site-footer__column">
+              <p>T. +82-10-8060-7412</p>
+              <p>F. +82-2-598-7412</p>
+              <p>서울특별시 서초구 사임당로 98 2F</p>
+            </div>
+            <div class="site-footer__column">
+              <p>Address</p>
+              <p>서울특별시 서초구 사임당로 98 2F</p>
+            </div>
+            <div class="site-footer__column">
+              <p>Contact Info</p>
+              <a class="site-footer__link" href="mailto:billyworks@gmail.com">
+                billyworks@gmail.com
+              </a>
+              <a class="site-footer__link" href="#" aria-label="Company Profile">
+                Company Profile
+              </a>
+            </div>
+          </div>
+          <div
+            class="dot-scatter"
+            data-text="BILLYWORKS"
+            data-cursor-radius="115"
+            role="img"
+            aria-label="BILLYWORKS"
+          >
+            <canvas aria-hidden="true"></canvas>
+          </div>
+        </footer>
       </div>
     </main>
 
     <script src="./cube.js?v=1"></script>
+    <script src="./dot-scatter.js?v=1"></script>
     <script src="./cursor.js?v=3"></script>
     <script>
       const params = new URLSearchParams(window.location.search);
