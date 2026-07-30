@@ -91,7 +91,7 @@
 
       .contact-line {
         position: fixed;
-        top: 0;
+        top: 64px;
         right: 0;
         left: 0;
         z-index: 9000;
@@ -140,11 +140,12 @@
 
       .site-gnb {
         position: sticky;
-        top: 52px;
+        top: 0;
         z-index: 8990;
         display: flex;
         height: 64px;
-        margin-top: 52px;
+        margin-top: 0;
+        margin-bottom: 52px;
         padding: 20px 80px;
         align-items: center;
         justify-content: center;
@@ -811,14 +812,16 @@
         }
 
         .contact-line {
+          top: 56px;
           height: 52px;
           font-size: 15px;
         }
 
         .site-gnb {
-          top: 52px;
+          top: 0;
           height: 56px;
-          margin-top: 52px;
+          margin-top: 0;
+          margin-bottom: 52px;
           padding: 18px 20px;
         }
 
@@ -1352,7 +1355,11 @@
         gnbContrastFrame = 0;
         if (!document.body.classList.contains("is-loaded")) return;
 
-        const sampleY = Math.min(window.innerHeight - 1, 84);
+        const gnbRect = siteGnb.getBoundingClientRect();
+        const sampleY = Math.min(
+          window.innerHeight - 1,
+          gnbRect.top + gnbRect.height / 2,
+        );
         const backgroundElement = document
           .elementsFromPoint(window.innerWidth / 2, sampleY)
           .find(
