@@ -107,8 +107,8 @@
         text-decoration: none;
       }
 
-      body:not(.is-loaded):not(.is-revealing) .contact-line,
-      body:not(.is-loaded):not(.is-revealing) .site-gnb {
+      body:not(.is-loaded) .contact-line,
+      body:not(.is-loaded) .site-gnb {
         visibility: hidden;
       }
 
@@ -128,6 +128,10 @@
         align-items: center;
         justify-content: center;
         background: transparent;
+        color: #000;
+      }
+
+      .site-gnb.is-on-dark {
         color: #fff;
       }
 
@@ -146,7 +150,6 @@
         line-height: 20px;
         text-decoration: none;
         white-space: nowrap;
-        mix-blend-mode: difference;
       }
 
       .site-gnb__links {
@@ -178,6 +181,10 @@
       .site-gnb__language img {
         width: 24px;
         height: 24px;
+        transition: filter 120ms ease;
+      }
+
+      .site-gnb.is-on-dark .site-gnb__language img {
         filter: brightness(0) invert(1);
       }
 
@@ -1289,6 +1296,53 @@
       const requestForm = document.querySelector(".request-form");
       const languageMenu = document.querySelector(".site-gnb__language");
       const languageCurrent = document.querySelector(".site-gnb__language-current");
+      const siteGnb = document.querySelector(".site-gnb");
+      let gnbContrastFrame = 0;
+
+      const getVisibleBackground = (element) => {
+        let current = element;
+        while (current) {
+          const color = getComputedStyle(current).backgroundColor;
+          const channels = color.match(/[\d.]+/g)?.map(Number) || [];
+          if (channels.length >= 3 && (channels[3] ?? 1) > 0.05) {
+            return channels.slice(0, 3);
+          }
+          current = current.parentElement;
+        }
+        return [255, 255, 255];
+      };
+
+      const syncGnbContrast = () => {
+        gnbContrastFrame = 0;
+        if (!document.body.classList.contains("is-loaded")) return;
+
+        const sampleY = Math.min(window.innerHeight - 1, 84);
+        const backgroundElement = document
+          .elementsFromPoint(window.innerWidth / 2, sampleY)
+          .find(
+            (element) =>
+              !element.closest(
+                ".site-gnb, .contact-line, .user-cursor, .page-progress",
+              ),
+          );
+        const [red, green, blue] = getVisibleBackground(backgroundElement);
+        const luminance = (red * 299 + green * 587 + blue * 114) / 1000;
+        siteGnb.classList.toggle("is-on-dark", luminance < 145);
+      };
+
+      const requestGnbContrast = () => {
+        if (!gnbContrastFrame) {
+          gnbContrastFrame = requestAnimationFrame(syncGnbContrast);
+        }
+      };
+
+      window.addEventListener("scroll", requestGnbContrast, { passive: true });
+      window.addEventListener("resize", requestGnbContrast);
+      new MutationObserver(requestGnbContrast).observe(document.body, {
+        attributes: true,
+        attributeFilter: ["class"],
+      });
+      requestGnbContrast();
 
       languageMenu.querySelectorAll("[data-language]").forEach((option) => {
         option.addEventListener("click", () => {
