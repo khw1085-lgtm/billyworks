@@ -88,10 +88,8 @@
       }
 
       .contact-line {
-        position: fixed;
+        position: sticky;
         top: 0;
-        right: 0;
-        left: 0;
         z-index: 9000;
         display: flex;
         width: 100%;
@@ -206,7 +204,7 @@
       }
 
       .site-gnb-spacer {
-        height: 116px;
+        height: 64px;
       }
 
       .content-width {
@@ -506,7 +504,6 @@
         justify-content: center;
         background: #000;
         color: #fff;
-        scroll-margin-top: 44px;
       }
 
       .request-inner {
@@ -536,6 +533,7 @@
         font-size: 60px;
         font-weight: 800;
         line-height: normal;
+        scroll-margin-top: 44px;
       }
 
       .request-description {
@@ -732,7 +730,7 @@
         min-height: 100vh;
         overflow: visible;
         animation: none;
-        clip-path: inset(0);
+        clip-path: none;
       }
 
       body.is-skip-intro .main-content {
@@ -789,7 +787,7 @@
         }
 
         .site-gnb-spacer {
-          height: 108px;
+          height: 56px;
         }
 
         .main-content {
@@ -867,7 +865,6 @@
         .request-section {
           padding: 100px 20px;
           gap: 48px;
-          scroll-margin-top: 36px;
         }
 
         .request-inner {
@@ -882,6 +879,7 @@
 
         .request-title {
           font-size: 42px;
+          scroll-margin-top: 36px;
         }
 
         .request-cube {
@@ -934,7 +932,7 @@
     </section>
 
     <main class="screen main-screen" aria-label="Billyworks">
-      <a class="contact-line" href="#request-section" data-cursor-label="PROJECT REQUEST">
+      <a class="contact-line" href="#request-title" data-cursor-label="PROJECT REQUEST">
         <span>프로젝트 문의하기</span>
         <img src="./uploads/figma-works-telegram.svg" alt="" />
       </a>
@@ -948,7 +946,7 @@
             <a class="site-gnb__link" href="#portfolio-title" data-cursor-label="WORKS">
               WORKS
             </a>
-            <a class="site-gnb__link" href="#request-section" data-cursor-label="CONTACT">
+            <a class="site-gnb__link" href="#request-title" data-cursor-label="CONTACT">
               CONTACT
             </a>
             <details class="site-gnb__language" data-cursor-label="LANGUAGE">
