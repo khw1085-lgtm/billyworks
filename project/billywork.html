@@ -104,6 +104,10 @@
         content: "";
       }
 
+      body.is-revealing .site-gnb {
+        animation: gnb-reveal-sync 3000ms step-end forwards;
+      }
+
       .site-gnb {
         position: sticky;
         top: 0;
@@ -764,6 +768,12 @@
       @keyframes main-return-fade {
         to {
           opacity: 1;
+        }
+      }
+
+      @keyframes gnb-reveal-sync {
+        to {
+          z-index: 8990;
         }
       }
 
