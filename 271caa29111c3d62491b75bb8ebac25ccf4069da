@@ -1,0 +1,15 @@
+project/billywork.html
+  h_6426af5d8d84ba 84,87,118,207,375-467,591-616,800-862,866,877-881
+project/cube.js
+  h_6426af5d8d84ba 1-222
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "271caa29111c3d62491b75bb8ebac25ccf4069da",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}
