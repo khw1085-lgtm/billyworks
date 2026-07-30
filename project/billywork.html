@@ -70,8 +70,8 @@
 
       .main-screen {
         z-index: 2;
-        inset: 64px 0 0;
-        min-height: calc(100vh - 64px);
+        inset: 0;
+        min-height: 100vh;
         overflow: hidden;
         background: #fff;
         clip-path: ellipse(0 0 at 50% 52%);
@@ -91,21 +91,7 @@
 
       body:not(.is-loaded) .site-gnb {
         z-index: 0;
-      }
-
-      body.is-revealing::before {
-        position: fixed;
-        top: 0;
-        right: 0;
-        left: 0;
-        z-index: 2;
-        height: 64px;
-        background: #fff;
-        content: "";
-      }
-
-      body.is-revealing .site-gnb {
-        animation: gnb-reveal-sync 3000ms step-end forwards;
+        visibility: hidden;
       }
 
       .site-gnb {
@@ -771,20 +757,10 @@
         }
       }
 
-      @keyframes gnb-reveal-sync {
-        to {
-          z-index: 8990;
-        }
-      }
-
       @media (max-width: 1000px) {
-        body.is-revealing::before {
-          height: 56px;
-        }
-
         .main-screen {
-          inset: 56px 0 0;
-          min-height: calc(100vh - 56px);
+          inset: 0;
+          min-height: 100vh;
         }
 
         .site-gnb {
