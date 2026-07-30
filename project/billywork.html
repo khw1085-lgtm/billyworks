@@ -107,8 +107,8 @@
         text-decoration: none;
       }
 
-      body:not(.is-loaded) .contact-line,
-      body:not(.is-loaded) .site-gnb {
+      body:not(.is-loaded):not(.is-ui-ready) .contact-line,
+      body:not(.is-loaded):not(.is-ui-ready) .site-gnb {
         visibility: hidden;
       }
 
@@ -1518,8 +1518,13 @@
           document.body.classList.add("is-revealing");
 
           window.setTimeout(() => {
+            document.body.classList.add("is-ui-ready");
+            requestGnbContrast();
+          }, 2900);
+
+          window.setTimeout(() => {
             document.body.classList.add("is-loaded");
-            document.body.classList.remove("is-revealing");
+            document.body.classList.remove("is-revealing", "is-ui-ready");
             requestAnimationFrame(refreshParallax);
           }, 3000);
         });
