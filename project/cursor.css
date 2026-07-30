@@ -15,8 +15,8 @@
 .page-progress::before {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #1967ff 0%, #258cff 58%, #70c4ff 100%);
-  box-shadow: 0 0 12px rgb(37 140 255 / 55%);
+  background: #25ff58;
+  box-shadow: 0 0 12px rgb(37 255 88 / 55%);
   content: "";
   transform: scaleX(var(--page-progress));
   transform-origin: left center;

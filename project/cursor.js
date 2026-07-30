@@ -41,6 +41,11 @@
     }, 220);
   };
 
+  window.BillyProgress = {
+    start: startProgress,
+    finish: finishProgress,
+  };
+
   document.addEventListener("click", (event) => {
     const link = event.target.closest("a[href]");
     if (
@@ -76,6 +81,7 @@
   if (document.readyState === "complete") {
     finishProgress();
   } else {
+    startProgress();
     window.addEventListener("load", finishProgress, { once: true });
   }
 
