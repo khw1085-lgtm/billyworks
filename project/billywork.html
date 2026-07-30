@@ -642,7 +642,7 @@
 
     <main class="screen main-screen" aria-label="Billyworks">
       <div class="main-content">
-        <header class="hero content-width parallax-layer" data-parallax-speed="0.08">
+        <header class="hero content-width parallax-layer" data-parallax-speed="0.025">
           <h1 class="hero-title">BILLY WORKS</h1>
           <p class="intro">
             Silvia Vargas is a Spanish artist and illustrator who brings fantasy and horror
@@ -651,16 +651,16 @@
           </p>
         </header>
 
-        <section class="works-section content-width" aria-labelledby="works-title">
-          <h2
-            class="section-heading parallax-layer"
-            id="works-title"
-            data-parallax-speed="0.06"
-          >
+        <section
+          class="works-section content-width parallax-layer"
+          data-parallax-speed="0.025"
+          aria-labelledby="works-title"
+        >
+          <h2 class="section-heading" id="works-title">
             WORKS
           </h2>
           <div class="works-list">
-            <div class="works-card parallax-layer" data-parallax-speed="0.025">
+            <div class="works-card">
               <p class="works-card__title">WEB/APP</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -668,7 +668,7 @@
                 </span>
               </div>
             </div>
-            <div class="works-card parallax-layer" data-parallax-speed="0.035">
+            <div class="works-card">
               <p class="works-card__title">INTERACTIVE<br />WEB</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -676,7 +676,7 @@
                 </span>
               </div>
             </div>
-            <div class="works-card parallax-layer" data-parallax-speed="0.045">
+            <div class="works-card">
               <p class="works-card__title">UIUX</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -684,7 +684,7 @@
                 </span>
               </div>
             </div>
-            <div class="works-card parallax-layer" data-parallax-speed="0.035">
+            <div class="works-card">
               <p class="works-card__title">DESIGN<br />SYSTEM</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -692,7 +692,7 @@
                 </span>
               </div>
             </div>
-            <div class="works-card parallax-layer" data-parallax-speed="0.025">
+            <div class="works-card">
               <p class="works-card__title">Marketing</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -703,10 +703,13 @@
           </div>
         </section>
 
-        <section class="reveal-section" aria-label="Hover reveal">
+        <section
+          class="reveal-section parallax-layer"
+          data-parallax-speed="0.025"
+          aria-label="Hover reveal"
+        >
           <div
-            class="spotlight-text parallax-layer"
-            data-parallax-speed="0.08"
+            class="spotlight-text"
             aria-label="Not everything is meant to be seen at once. Hover to reveal"
           >
             <div class="spotlight-text__content">
@@ -721,8 +724,7 @@
             </div>
           </div>
           <img
-            class="reveal-art parallax-layer"
-            data-parallax-speed="0.12"
+            class="reveal-art"
             src="./uploads/figma-reveal.svg"
             alt=""
             width="1180"
@@ -730,15 +732,15 @@
           />
         </section>
 
-        <section class="portfolio-section content-width" aria-labelledby="portfolio-title">
-          <h2
-            class="section-heading parallax-layer"
-            id="portfolio-title"
-            data-parallax-speed="0.06"
-          >
+        <section
+          class="portfolio-section content-width parallax-layer"
+          data-parallax-speed="0.025"
+          aria-labelledby="portfolio-title"
+        >
+          <h2 class="section-heading" id="portfolio-title">
             Portfolio
           </h2>
-          <div class="portfolio-grid parallax-layer" data-parallax-speed="0.03">
+          <div class="portfolio-grid">
             <a
               class="portfolio-tile portfolio-tile--featured"
               href="./musinsa.html"
@@ -798,9 +800,13 @@
           </div>
         </section>
 
-        <section class="request-section" aria-labelledby="request-title">
+        <section
+          class="request-section parallax-layer"
+          data-parallax-speed="0.025"
+          aria-labelledby="request-title"
+        >
           <div class="request-inner">
-            <div class="request-copy parallax-layer" data-parallax-speed="0.025">
+            <div class="request-copy">
               <div class="request-heading-wrap">
                 <h2 class="request-title" id="request-title">프로젝트 요청하기</h2>
                 <p class="request-description">
@@ -853,8 +859,7 @@
             </div>
 
             <div
-              class="request-cube parallax-layer"
-              data-parallax-speed="0.035"
+              class="request-cube"
               role="img"
               aria-label="움직이는 점 형태의 큐브"
             ></div>
