@@ -91,8 +91,27 @@
 
       body:not(.is-loaded) .site-gnb {
         z-index: 8990;
+        background: #f3f3f3;
         opacity: 1;
         transform: translate3d(0, 0, 0);
+      }
+
+      body:not(.is-loaded) .site-gnb__inner {
+        opacity: 0;
+      }
+
+      body:not(.is-loaded) .site-gnb::after {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          100deg,
+          transparent 20%,
+          rgb(255 255 255 / 75%) 45%,
+          transparent 70%
+        );
+        content: "";
+        transform: translateX(-100%);
+        animation: gnb-skeleton-shimmer 1200ms ease-in-out infinite;
       }
 
       .site-gnb {
@@ -765,6 +784,12 @@
         }
       }
 
+      @keyframes gnb-skeleton-shimmer {
+        to {
+          transform: translateX(100%);
+        }
+      }
+
       @media (max-width: 1000px) {
         .main-screen {
           inset: 56px 0 0;
@@ -911,6 +936,10 @@
       }
 
       @media (prefers-reduced-motion: reduce) {
+        body:not(.is-loaded) .site-gnb::after {
+          animation: none;
+        }
+
         .site-gnb {
           transition-duration: 1ms;
         }
