@@ -116,6 +116,15 @@
 
   const arrow = cursor.querySelector(".user-cursor__arrow");
   const label = cursor.querySelector(".user-cursor__label");
+  const defaultLabel = "billy";
+  const interactiveSelector =
+    "[data-cursor-label], a, button, input, textarea, select, [role='button']";
+  const getComponentLabel = (component) =>
+    component?.dataset.cursorLabel ||
+    component?.getAttribute("aria-label") ||
+    component?.getAttribute("placeholder") ||
+    component?.textContent?.trim().replace(/\s+/g, " ").slice(0, 24) ||
+    defaultLabel;
   const pointer = { x: -9999, y: -9999 };
   const arrowPosition = { x: -9999, y: -9999 };
   const labelPosition = { x: -9999, y: -9999 };
@@ -169,6 +178,19 @@
     rotationTarget =
       direction * Math.min(1, speed / 1500) * labelTiltStrength;
     cursor.classList.add("is-visible");
+  });
+
+  document.addEventListener("pointerover", (event) => {
+    const component = event.target.closest(interactiveSelector);
+    label.textContent = getComponentLabel(component);
+  });
+
+  document.addEventListener("pointerout", (event) => {
+    const fromComponent = event.target.closest(interactiveSelector);
+    const toComponent = event.relatedTarget?.closest?.(interactiveSelector);
+    if (fromComponent && fromComponent !== toComponent) {
+      label.textContent = getComponentLabel(toComponent);
+    }
   });
 
   window.addEventListener("mousedown", () => {

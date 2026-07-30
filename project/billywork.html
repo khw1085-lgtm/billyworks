@@ -78,7 +78,7 @@
 
       .main-content {
         display: flex;
-        width: 100%;
+        width: min(1800px, calc(100% - 80px));
         max-width: var(--content-max-width);
         margin-inline: auto;
         padding: 200px 0 0;
@@ -93,7 +93,8 @@
         z-index: 9000;
         display: flex;
         width: 100%;
-        height: 64px;
+        min-height: 52px;
+        padding-block: 14px;
         align-items: center;
         justify-content: center;
         gap: 10px;
@@ -111,7 +112,7 @@
 
       .site-gnb {
         position: fixed;
-        top: 64px;
+        top: 52px;
         right: 0;
         left: 0;
         z-index: 8990;
@@ -150,15 +151,56 @@
       }
 
       .site-gnb__language {
+        position: relative;
         display: flex;
         height: 24px;
         align-items: center;
         gap: 4px;
       }
 
+      .site-gnb__language summary {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        list-style: none;
+      }
+
+      .site-gnb__language summary::-webkit-details-marker {
+        display: none;
+      }
+
       .site-gnb__language img {
         width: 24px;
         height: 24px;
+      }
+
+      .site-lnb {
+        position: absolute;
+        top: calc(100% + 20px);
+        right: 0;
+        display: flex;
+        min-width: 150px;
+        padding: 14px;
+        flex-direction: column;
+        gap: 4px;
+        border: 1px solid #000;
+        background: #fff;
+        box-shadow: 0 12px 30px rgb(0 0 0 / 12%);
+      }
+
+      .site-lnb__item {
+        display: block;
+        padding: 10px 12px;
+        border: 0;
+        background: transparent;
+        color: #000;
+        font: 600 14px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+        text-align: left;
+      }
+
+      .site-lnb__item:hover,
+      .site-lnb__item[aria-current="true"] {
+        background: #25ff58;
       }
 
       .site-gnb-spacer {
@@ -722,7 +764,7 @@
         }
       }
 
-      @media (max-width: 900px) {
+      @media (max-width: 1000px) {
         .contact-line {
           height: 52px;
           font-size: 15px;
@@ -748,12 +790,13 @@
         }
 
         .main-content {
+          width: calc(100% - 40px);
           padding: 100px 0 0;
           gap: 72px;
         }
 
         .content-width {
-          width: min(100% - 40px, 1800px);
+          width: 100%;
         }
 
         .hero-title {
@@ -766,19 +809,21 @@
         }
 
         .works-list {
-          height: 480px;
+          height: auto;
           gap: 8px;
+          flex-direction: column;
         }
 
         .works-card {
-          height: 480px;
-          padding: 20px 12px;
+          width: 100%;
+          min-height: 220px;
+          height: 220px;
+          padding: 20px;
+          flex: none;
         }
 
         .works-card__title {
           font-size: 20px;
-          text-orientation: upright;
-          writing-mode: vertical-rl;
         }
 
         .works-card__icon {
@@ -803,10 +848,11 @@
 
         .portfolio-grid {
           gap: 40px;
+          grid-template-columns: 1fr;
         }
 
         .portfolio-tile {
-          height: min(62vw, 520px);
+          height: min(80vw, 640px);
           border-radius: 18px;
           gap: 24px;
         }
@@ -884,21 +930,42 @@
     </section>
 
     <main class="screen main-screen" aria-label="Billyworks">
-      <a class="contact-line" href="#request-form">
+      <a class="contact-line" href="#request-form" data-cursor-label="PROJECT REQUEST">
         <span>프로젝트 문의하기</span>
         <img src="./uploads/figma-works-telegram.svg" alt="" />
       </a>
       <nav class="site-gnb" aria-label="Primary navigation">
         <div class="site-gnb__inner">
-          <a class="site-gnb__logo" href="#top">LOGO</a>
+          <a class="site-gnb__logo" href="#top" data-cursor-label="HOME">LOGO</a>
           <div class="site-gnb__links">
-            <a class="site-gnb__link" href="#about-us">ABOUT US</a>
-            <a class="site-gnb__link" href="#portfolio-title">WORKS</a>
-            <a class="site-gnb__link" href="#request-form">CONTACT</a>
-            <span class="site-gnb__language">
-              <span class="site-gnb__link">LAN&nbsp;&nbsp;KR</span>
-              <img src="./uploads/figma-works-globe.svg" alt="" />
-            </span>
+            <a class="site-gnb__link" href="#about-us" data-cursor-label="ABOUT US">
+              ABOUT US
+            </a>
+            <a class="site-gnb__link" href="#portfolio-title" data-cursor-label="WORKS">
+              WORKS
+            </a>
+            <a class="site-gnb__link" href="#request-form" data-cursor-label="CONTACT">
+              CONTACT
+            </a>
+            <details class="site-gnb__language" data-cursor-label="LANGUAGE">
+              <summary class="site-gnb__link">
+                LAN&nbsp;&nbsp;<span class="site-gnb__language-current">KR</span>
+                <img src="./uploads/figma-works-globe.svg" alt="" />
+              </summary>
+              <div class="site-lnb" aria-label="Language">
+                <button
+                  class="site-lnb__item"
+                  type="button"
+                  data-language="KR"
+                  aria-current="true"
+                >
+                  KR
+                </button>
+                <button class="site-lnb__item" type="button" data-language="ENGLISH">
+                  ENGLISH
+                </button>
+              </div>
+            </details>
           </div>
         </div>
       </nav>
@@ -926,7 +993,7 @@
             ABOUT US
           </h2>
           <div class="works-list">
-            <div class="works-card">
+            <div class="works-card" data-cursor-label="WEB/APP">
               <p class="works-card__title">WEB/APP</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -934,7 +1001,7 @@
                 </span>
               </div>
             </div>
-            <div class="works-card">
+            <div class="works-card" data-cursor-label="INTERACTIVE WEB">
               <p class="works-card__title">INTERACTIVE<br />WEB</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -942,7 +1009,7 @@
                 </span>
               </div>
             </div>
-            <div class="works-card">
+            <div class="works-card" data-cursor-label="UIUX">
               <p class="works-card__title">UIUX</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -950,7 +1017,7 @@
                 </span>
               </div>
             </div>
-            <div class="works-card">
+            <div class="works-card" data-cursor-label="DESIGN SYSTEM">
               <p class="works-card__title">DESIGN<br />SYSTEM</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -958,7 +1025,7 @@
                 </span>
               </div>
             </div>
-            <div class="works-card">
+            <div class="works-card" data-cursor-label="MARKETING">
               <p class="works-card__title">Marketing</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
@@ -1010,6 +1077,7 @@
             <a
               class="portfolio-tile portfolio-tile--featured"
               href="./musinsa.html"
+              data-cursor-label="MUSINSA"
             >
               <span class="portfolio-brand">
                 <img
@@ -1033,31 +1101,31 @@
                 alt=""
               />
             </a>
-            <div class="portfolio-tile portfolio-tile--coral">
+            <div class="portfolio-tile portfolio-tile--coral" data-cursor-label="ZIGBANG CEO">
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
               </span>
             </div>
-            <div class="portfolio-tile portfolio-tile--peach">
+            <div class="portfolio-tile portfolio-tile--peach" data-cursor-label="HOGANGNONO">
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
               </span>
             </div>
-            <div class="portfolio-tile portfolio-tile--mint">
+            <div class="portfolio-tile portfolio-tile--mint" data-cursor-label="MUSINSA">
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
               </span>
             </div>
-            <div class="portfolio-tile portfolio-tile--blue">
+            <div class="portfolio-tile portfolio-tile--blue" data-cursor-label="ZIGBANG CEO">
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
               </span>
             </div>
-            <div class="portfolio-tile portfolio-tile--violet">
+            <div class="portfolio-tile portfolio-tile--violet" data-cursor-label="HOGANGNONO">
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
@@ -1150,7 +1218,12 @@
             ></div>
           </div>
           <div class="request-actions">
-            <button class="request-submit" type="submit" form="request-form">
+            <button
+              class="request-submit"
+              type="submit"
+              form="request-form"
+              data-cursor-label="REQUEST"
+            >
               요청하기
             </button>
           </div>
@@ -1197,7 +1270,7 @@
 
     <script src="./cube.js?v=1"></script>
     <script src="./dot-scatter.js?v=1"></script>
-    <script src="./cursor.js?v=4"></script>
+    <script src="./cursor.js?v=5"></script>
     <script>
       const params = new URLSearchParams(window.location.search);
       const skipIntroKey = "billyworksSkipIntro";
@@ -1208,6 +1281,18 @@
         "(prefers-reduced-motion: reduce)",
       ).matches;
       const requestForm = document.querySelector(".request-form");
+      const languageMenu = document.querySelector(".site-gnb__language");
+      const languageCurrent = document.querySelector(".site-gnb__language-current");
+
+      languageMenu.querySelectorAll("[data-language]").forEach((option) => {
+        option.addEventListener("click", () => {
+          languageCurrent.textContent = option.dataset.language;
+          languageMenu.querySelectorAll("[data-language]").forEach((item) => {
+            item.setAttribute("aria-current", String(item === option));
+          });
+          languageMenu.open = false;
+        });
+      });
 
       requestForm.addEventListener("submit", (event) => {
         event.preventDefault();
