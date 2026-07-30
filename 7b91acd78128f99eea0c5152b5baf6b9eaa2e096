@@ -1,0 +1,19 @@
+project/billywork.html
+  h_6426af5d8d84ba 620
+project/cursor.css
+  h_6426af5d8d84ba 1-30,110-115
+project/cursor.js
+  h_6426af5d8d84ba 2-81
+project/musinsa.html
+  h_6426af5d8d84ba 214
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "7b91acd78128f99eea0c5152b5baf6b9eaa2e096",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}

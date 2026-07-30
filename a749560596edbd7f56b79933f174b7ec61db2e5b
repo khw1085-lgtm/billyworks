@@ -1,0 +1,13 @@
+project/cursor.css
+  h_6426af5d8d84ba 8
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "a749560596edbd7f56b79933f174b7ec61db2e5b",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}

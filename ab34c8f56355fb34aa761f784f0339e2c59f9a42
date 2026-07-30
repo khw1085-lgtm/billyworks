@@ -1,0 +1,15 @@
+project/billywork.html
+  h_6426af5d8d84ba 624,633,636-648,766,778-781
+project/musinsa.html
+  h_6426af5d8d84ba 117-118,121-123,134,137-138,177,217-222,224,226-238
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "ab34c8f56355fb34aa761f784f0339e2c59f9a42",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}
