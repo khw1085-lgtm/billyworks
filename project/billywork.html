@@ -114,6 +114,25 @@
         z-index: 0;
       }
 
+      body.is-revealing::before {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 2;
+        height: 116px;
+        background: #fff;
+        content: "";
+      }
+
+      body.is-revealing .contact-line {
+        z-index: 9000;
+      }
+
+      body.is-revealing .site-gnb {
+        z-index: 8990;
+      }
+
       .contact-line img {
         width: 24px;
         height: 24px;
@@ -782,6 +801,10 @@
       }
 
       @media (max-width: 1000px) {
+        body.is-revealing::before {
+          height: 108px;
+        }
+
         .main-screen {
           inset: 108px 0 0;
           min-height: calc(100vh - 108px);
