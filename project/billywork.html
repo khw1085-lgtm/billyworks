@@ -113,8 +113,7 @@
       }
 
       .site-gnb {
-        position: sticky;
-        top: 52px;
+        position: relative;
         z-index: 8990;
         display: flex;
         height: 64px;
@@ -125,6 +124,14 @@
         background: rgba(255, 255, 255, 0.96);
         color: #000;
         backdrop-filter: blur(12px);
+      }
+
+      body.is-gnb-stuck .site-gnb {
+        position: fixed;
+        top: 52px;
+        right: 0;
+        left: 0;
+        margin-top: 0;
       }
 
       .site-gnb__inner {
@@ -206,6 +213,11 @@
 
       .site-gnb-spacer {
         display: none;
+      }
+
+      body.is-gnb-stuck .site-gnb-spacer {
+        display: block;
+        height: 64px;
       }
 
       .content-width {
@@ -773,7 +785,6 @@
         }
 
         .site-gnb {
-          top: 52px;
           height: 56px;
           margin-top: 52px;
           padding: 18px 20px;
@@ -790,6 +801,16 @@
 
         .site-gnb-spacer {
           display: none;
+        }
+
+        body.is-gnb-stuck .site-gnb {
+          top: 52px;
+          margin-top: 0;
+        }
+
+        body.is-gnb-stuck .site-gnb-spacer {
+          display: block;
+          height: 56px;
         }
 
         .main-content {
@@ -1288,6 +1309,12 @@
       const requestForm = document.querySelector(".request-form");
       const languageMenu = document.querySelector(".site-gnb__language");
       const languageCurrent = document.querySelector(".site-gnb__language-current");
+      const syncStickyGnb = () => {
+        document.body.classList.toggle("is-gnb-stuck", window.scrollY > 0);
+      };
+
+      window.addEventListener("scroll", syncStickyGnb, { passive: true });
+      syncStickyGnb();
 
       languageMenu.querySelectorAll("[data-language]").forEach((option) => {
         option.addEventListener("click", () => {
