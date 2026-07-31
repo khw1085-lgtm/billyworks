@@ -1,0 +1,13 @@
+project/billywork.html
+  h_6426af5d8d84ba 869-870,875-878
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "0a873f63de0af91c6bb827df80fe235bad39336e",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}
