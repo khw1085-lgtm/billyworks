@@ -898,6 +898,15 @@
           height: 220px;
           padding: 20px;
           flex: none;
+          transition: none;
+        }
+
+        .works-card:hover {
+          flex-grow: 0;
+        }
+
+        .works-list:has(.works-card:hover) .works-card:not(:hover) > * {
+          opacity: 1;
         }
 
         .works-card__title {
