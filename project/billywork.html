@@ -866,14 +866,16 @@
         }
 
         .hero-main {
-          align-items: flex-start;
+          flex-direction: column;
+          align-items: stretch;
           gap: 20px;
         }
 
         .hero-cats {
-          width: clamp(80px, 22vw, 220px);
-          height: clamp(80px, 22vw, 220px);
-          flex-basis: clamp(80px, 22vw, 220px);
+          width: clamp(180px, 42vw, 280px);
+          height: clamp(180px, 42vw, 280px);
+          flex-basis: clamp(180px, 42vw, 280px);
+          align-self: flex-end;
         }
 
         .section-heading {
