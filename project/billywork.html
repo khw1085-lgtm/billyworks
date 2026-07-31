@@ -223,12 +223,39 @@
         gap: 40px;
       }
 
-      .hero-title {
+      .hero-main {
+        display: flex;
         width: 100%;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .hero-title {
+        min-width: 0;
         margin: 0;
+        flex: 1 1 0;
+        color: #1cf24e;
         font-size: clamp(76px, 8.59vw, 199px);
         font-weight: 800;
-        line-height: normal;
+        line-height: 0.96;
+      }
+
+      .hero-title span {
+        display: block;
+      }
+
+      .hero-cats {
+        width: 300px;
+        height: 300px;
+        flex: 0 0 300px;
+        overflow: hidden;
+        background: #000;
+      }
+
+      .hero-cats svg {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
       }
 
       .intro {
@@ -241,6 +268,7 @@
 
       .section-heading {
         margin: 0;
+        color: #1cf24e;
         font-size: 60px;
         font-weight: 800;
         line-height: normal;
@@ -406,7 +434,7 @@
         justify-content: center;
         gap: 50px;
         overflow: hidden;
-        border-radius: 30px;
+        border-radius: 0;
         position: relative;
         text-decoration: none;
       }
@@ -632,7 +660,7 @@
         padding: 17px 70px;
         border: 0;
         border-radius: 12px;
-        background: #25ff58;
+        background: #1cf24e;
         color: #000;
         font: 600 20px/normal Inter, ui-sans-serif, system-ui, sans-serif;
         white-space: nowrap;
@@ -808,6 +836,17 @@
           line-height: 0.95;
         }
 
+        .hero-main {
+          align-items: flex-start;
+          gap: 20px;
+        }
+
+        .hero-cats {
+          width: clamp(80px, 22vw, 220px);
+          height: clamp(80px, 22vw, 220px);
+          flex-basis: clamp(80px, 22vw, 220px);
+        }
+
         .section-heading {
           font-size: 42px;
         }
@@ -857,7 +896,7 @@
 
         .portfolio-tile {
           height: min(80vw, 640px);
-          border-radius: 18px;
+          border-radius: 0;
           gap: 24px;
         }
 
@@ -981,7 +1020,18 @@
           id="top"
           data-parallax-speed="0.025"
         >
-          <h1 class="hero-title">BILLY WORKS</h1>
+          <div class="hero-main">
+            <h1 class="hero-title">
+              <span>BILLY</span>
+              <span>WORKS</span>
+            </h1>
+            <div
+              class="hero-cats"
+              role="img"
+              aria-label="움직이는 고양이 로더"
+              data-cursor-label="CATS"
+            ></div>
+          </div>
           <p class="intro">
             Silvia Vargas is a Spanish artist and illustrator who brings fantasy and horror
             to life through bold character designs and surreal, emotionally rich landscapes,
@@ -1031,7 +1081,7 @@
               </div>
             </div>
             <div class="works-card" data-cursor-label="MARKETING">
-              <p class="works-card__title">Marketing</p>
+              <p class="works-card__title">MAKETING</p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
                   <img src="./uploads/figma-works-telegram.svg" alt="" />
@@ -1276,6 +1326,7 @@
 
     <script src="./cube.js?v=1"></script>
     <script src="./dot-scatter.js?v=1"></script>
+    <script src="./lottie.min.js?v=1"></script>
     <script src="./cursor.js?v=5"></script>
     <script>
       const params = new URLSearchParams(window.location.search);
@@ -1287,6 +1338,16 @@
         "(prefers-reduced-motion: reduce)",
       ).matches;
       const requestForm = document.querySelector(".request-form");
+      const catsAnimation = window.lottie?.loadAnimation({
+        container: document.querySelector(".hero-cats"),
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: "./uploads/loader-cat.json",
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid meet",
+        },
+      });
       const languageMenu = document.querySelector(".site-gnb__language");
       const languageCurrent = document.querySelector(".site-gnb__language-current");
       const siteGnb = document.querySelector(".site-gnb");
