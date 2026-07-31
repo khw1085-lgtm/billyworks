@@ -1,0 +1,13 @@
+project/.gitignore
+  h_6426af5d8d84ba 1
+---
+{
+  "schema_version": "zax-attestation/1.1.0",
+  "base_commit_sha": "c618e0d038533a15ed2e80849c920d1e65aa36fd",
+  "prompts": {},
+  "humans": {
+    "h_6426af5d8d84ba": {
+      "author": "khw1085@gmail.com"
+    }
+  }
+}
