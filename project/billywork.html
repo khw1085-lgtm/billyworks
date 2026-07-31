@@ -220,6 +220,11 @@
         background: #25ff58;
       }
 
+      .mobile-menu-toggle,
+      .mobile-menu-panel {
+        display: none;
+      }
+
       .content-width {
         width: 100%;
         max-width: none;
@@ -776,6 +781,10 @@
         overflow-x: hidden;
       }
 
+      body.is-loaded.is-mobile-menu-open {
+        overflow: hidden;
+      }
+
       body.is-loaded .loading-screen {
         display: none;
       }
@@ -834,19 +843,110 @@
 
         .site-gnb {
           top: 0;
-          height: 56px;
+          height: 64px;
           margin-top: 0;
           margin-bottom: 0;
-          padding: 18px 20px;
+          padding: 20px;
         }
 
         .site-gnb__links {
-          gap: 18px;
+          display: none;
         }
 
-        .site-gnb__link:nth-child(2),
-        .site-gnb__link:nth-child(3) {
-          display: none;
+        .mobile-menu-toggle,
+        .mobile-menu-close {
+          display: grid;
+          width: 24px;
+          height: 24px;
+          padding: 0;
+          border: 0;
+          background: transparent;
+          place-items: center;
+        }
+
+        .mobile-menu-toggle img,
+        .mobile-menu-close img {
+          display: block;
+          width: 24px;
+          height: 24px;
+        }
+
+        .site-gnb.is-on-dark .mobile-menu-toggle img {
+          filter: brightness(0) invert(1);
+        }
+
+        .mobile-menu-panel {
+          position: fixed;
+          inset: 0;
+          z-index: 2;
+          display: flex;
+          min-height: 100dvh;
+          flex-direction: column;
+          background: #fff;
+          color: #000;
+          opacity: 0;
+          visibility: hidden;
+          transform: translate3d(0, -16px, 0);
+          pointer-events: none;
+          transition:
+            opacity 360ms ease,
+            visibility 0s linear 360ms,
+            transform 440ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .site-gnb.is-mobile-menu-open .mobile-menu-panel {
+          opacity: 1;
+          visibility: visible;
+          transform: translate3d(0, 0, 0);
+          pointer-events: auto;
+          transition-delay: 0s;
+        }
+
+        .mobile-menu-panel__header {
+          display: flex;
+          width: 100%;
+          height: 64px;
+          padding: 20px;
+          flex: 0 0 64px;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .mobile-menu-panel__nav {
+          display: flex;
+          min-height: calc(100dvh - 64px);
+          padding: 20px;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 50px;
+        }
+
+        .mobile-menu-panel__link,
+        .mobile-menu-panel__language {
+          display: flex;
+          padding: 0;
+          border: 0;
+          align-items: center;
+          gap: 4px;
+          background: transparent;
+          color: #000;
+          font: 600 32px/20px Inter, ui-sans-serif, system-ui, sans-serif;
+          text-decoration: none;
+          white-space: nowrap;
+          transition: color 180ms ease;
+        }
+
+        .mobile-menu-panel__link:hover,
+        .mobile-menu-panel__link:focus-visible,
+        .mobile-menu-panel__language:hover,
+        .mobile-menu-panel__language:focus-visible {
+          color: var(--primary-green);
+        }
+
+        .mobile-menu-panel__language img {
+          width: 24px;
+          height: 24px;
         }
 
         .main-content {
@@ -1017,6 +1117,10 @@
           transition-duration: 1ms;
         }
 
+        .mobile-menu-panel {
+          transition-duration: 1ms;
+        }
+
         .parallax-layer {
           transform: none;
           will-change: auto;
@@ -1072,6 +1176,54 @@
               </button>
             </div>
           </details>
+        </div>
+        <button
+          class="mobile-menu-toggle"
+          type="button"
+          aria-label="메뉴 열기"
+          aria-controls="mobile-menu-panel"
+          aria-expanded="false"
+        >
+          <img src="./uploads/figma-mobile-menu.svg" alt="" />
+        </button>
+      </div>
+      <div
+        class="mobile-menu-panel"
+        id="mobile-menu-panel"
+        aria-hidden="true"
+      >
+        <div class="mobile-menu-panel__header">
+          <a class="site-gnb__logo" href="#top" data-mobile-menu-link>LOGO</a>
+          <button class="mobile-menu-close" type="button" aria-label="메뉴 닫기">
+            <img src="./uploads/figma-mobile-close.svg" alt="" />
+          </button>
+        </div>
+        <div class="mobile-menu-panel__nav">
+          <a
+            class="mobile-menu-panel__link"
+            href="#about-us"
+            data-mobile-menu-link
+          >
+            ABOUT US
+          </a>
+          <a
+            class="mobile-menu-panel__link"
+            href="#portfolio-title"
+            data-mobile-menu-link
+          >
+            WORKS
+          </a>
+          <a
+            class="mobile-menu-panel__link"
+            href="#request-title"
+            data-mobile-menu-link
+          >
+            CONTACT
+          </a>
+          <div class="mobile-menu-panel__language">
+            LAN&nbsp;&nbsp;<span class="site-gnb__language-current">KR</span>
+            <img src="./uploads/figma-mobile-globe.svg" alt="" />
+          </div>
         </div>
       </div>
     </nav>
@@ -1444,9 +1596,41 @@
         },
       });
       const languageMenu = document.querySelector(".site-gnb__language");
-      const languageCurrent = document.querySelector(".site-gnb__language-current");
+      const languageCurrents = document.querySelectorAll(
+        ".site-gnb__language-current",
+      );
       const siteGnb = document.querySelector(".site-gnb");
+      const mobileMenuToggle = document.querySelector(".mobile-menu-toggle");
+      const mobileMenuClose = document.querySelector(".mobile-menu-close");
+      const mobileMenuPanel = document.querySelector(".mobile-menu-panel");
       let gnbContrastFrame = 0;
+
+      const setMobileMenuOpen = (isOpen) => {
+        siteGnb.classList.toggle("is-mobile-menu-open", isOpen);
+        document.body.classList.toggle("is-mobile-menu-open", isOpen);
+        mobileMenuToggle.setAttribute("aria-expanded", String(isOpen));
+        mobileMenuPanel.setAttribute("aria-hidden", String(!isOpen));
+
+        if (isOpen) {
+          requestAnimationFrame(() => mobileMenuClose.focus());
+        } else if (document.activeElement === mobileMenuClose) {
+          mobileMenuToggle.focus();
+        }
+      };
+
+      mobileMenuToggle.addEventListener("click", () => setMobileMenuOpen(true));
+      mobileMenuClose.addEventListener("click", () => setMobileMenuOpen(false));
+      document.querySelectorAll("[data-mobile-menu-link]").forEach((link) => {
+        link.addEventListener("click", () => setMobileMenuOpen(false));
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && siteGnb.classList.contains("is-mobile-menu-open")) {
+          setMobileMenuOpen(false);
+        }
+      });
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 1000) setMobileMenuOpen(false);
+      });
 
       const getVisibleBackground = (element) => {
         let current = element;
@@ -1499,7 +1683,9 @@
 
       languageMenu.querySelectorAll("[data-language]").forEach((option) => {
         option.addEventListener("click", () => {
-          languageCurrent.textContent = option.dataset.language;
+          languageCurrents.forEach((current) => {
+            current.textContent = option.dataset.language;
+          });
           languageMenu.querySelectorAll("[data-language]").forEach((item) => {
             item.setAttribute("aria-current", String(item === option));
           });
