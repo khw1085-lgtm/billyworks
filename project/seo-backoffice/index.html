@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Billyworks SEO Backoffice</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="admin-shell">
+      <aside class="sidebar">
+        <a class="sidebar__brand" href="#overview">Billyworks <span>SEO</span></a>
+        <nav class="sidebar__nav" aria-label="SEO 관리 메뉴">
+          <p>SEO</p>
+          <a href="#overview" data-route="overview">Overview</a>
+          <a href="#pages" data-route="pages">Pages</a>
+          <a href="#global" data-route="global">Global Settings</a>
+          <a href="#schema" data-route="schema">Structured Data</a>
+          <a href="#redirects" data-route="redirects">Redirects</a>
+          <a href="#sitemap" data-route="sitemap">Sitemap & Robots</a>
+          <a href="#integrations" data-route="integrations">Integrations</a>
+        </nav>
+        <div class="sidebar__footer">
+          <span class="status-dot"></span>
+          <div><strong>Local source</strong><small id="source-state">연결 확인 중</small></div>
+        </div>
+      </aside>
+
+      <div class="admin-main">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="route-eyebrow">SEO / OVERVIEW</p>
+            <h1 id="route-title">SEO Overview</h1>
+          </div>
+          <div class="topbar__actions">
+            <button class="button button--ghost" id="auth-button" type="button">Supabase 로그인</button>
+            <span class="save-state" id="save-state">Saved</span>
+            <button class="button button--ghost" id="refresh-button" type="button">새로고침</button>
+            <a class="button button--ghost" id="preview-link" href="/billywork.html" target="_blank" rel="noreferrer">사이트 보기</a>
+            <button class="button button--dark" id="save-button" type="button">변경사항 저장</button>
+          </div>
+        </header>
+        <main id="view" tabindex="-1"></main>
+      </div>
+    </div>
+    <dialog class="auth-dialog" id="auth-dialog">
+      <button class="auth-dialog__close" id="auth-close" type="button" aria-label="닫기">×</button>
+      <p class="eyebrow">SECURE CLOUD SYNC</p>
+      <h2>Supabase 로그인</h2>
+      <p>이메일로 받은 로그인 링크를 열면 SEO 설정이 안전하게 동기화됩니다.</p>
+      <form id="auth-form">
+        <label class="field"><span>관리자 이메일</span><input id="auth-email" type="email" autocomplete="email" required placeholder="name@example.com" /></label>
+        <button class="button button--dark button--large" type="submit">로그인 링크 받기</button>
+      </form>
+      <small id="auth-message" role="status"></small>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
