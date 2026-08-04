@@ -32,6 +32,22 @@
         background: #fff;
       }
 
+      .sr-only {
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        position: absolute;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      .portfolio-article {
+        display: contents;
+      }
+
       .screen {
         position: fixed;
         inset: 0;
@@ -278,11 +294,12 @@
       }
 
       .intro {
-        width: min(462px, 100%);
+        width: min(857px, 100%);
         margin: 0;
         font-size: 18px;
-        font-weight: 200;
+        font-weight: 400;
         line-height: normal;
+        white-space: nowrap;
       }
 
       .section-heading {
@@ -370,10 +387,19 @@
         background: #fff;
       }
 
-      .works-card__icon img {
+      .works-card__icon img,
+      .works-card__icon video,
+      .works-card__lottie {
         display: block;
         width: 60px;
         height: 60px;
+        object-fit: contain;
+      }
+
+      .works-card__lottie svg {
+        display: block;
+        width: 100% !important;
+        height: 100% !important;
       }
 
       .works-list:has(.works-card:hover) .works-card:not(:hover) > * {
@@ -1138,15 +1164,17 @@
   </head>
   <body>
     <section class="screen loading-screen" aria-label="Loading">
-      <h1 class="loading-title" aria-label="BILLY WORKS">
+      <div class="loading-title" aria-label="BILLY WORKS">
         <span class="loading-word" data-text="BILLY" style="--word-width: 5ch"></span>
         <span class="loading-word" data-text="WORKS" style="--word-width: 5.5ch"></span>
-      </h1>
+      </div>
     </section>
 
-    <nav class="site-gnb" aria-label="Primary navigation">
-      <div class="site-gnb__inner">
-        <a class="site-gnb__logo" href="#top" data-cursor-label="HOME">LOGO</a>
+    <header class="site-gnb">
+      <nav class="site-gnb__inner" aria-label="주요 메뉴">
+        <a class="site-gnb__logo" href="#top" data-cursor-label="HOME">
+          <span class="sr-only">Billyworks</span><span aria-hidden="true">LOGO</span>
+        </a>
         <div class="site-gnb__links">
           <a class="site-gnb__link" href="#about-us" data-cursor-label="ABOUT US">
             ABOUT US
@@ -1186,14 +1214,16 @@
         >
           <img src="./uploads/figma-mobile-menu.svg" alt="" />
         </button>
-      </div>
+      </nav>
       <div
         class="mobile-menu-panel"
         id="mobile-menu-panel"
         aria-hidden="true"
       >
         <div class="mobile-menu-panel__header">
-          <a class="site-gnb__logo" href="#top" data-mobile-menu-link>LOGO</a>
+          <a class="site-gnb__logo" href="#top" data-mobile-menu-link>
+            <span class="sr-only">Billyworks</span><span aria-hidden="true">LOGO</span>
+          </a>
           <button class="mobile-menu-close" type="button" aria-label="메뉴 닫기">
             <img src="./uploads/figma-mobile-close.svg" alt="" />
           </button>
@@ -1226,20 +1256,22 @@
           </div>
         </div>
       </div>
-    </nav>
+    </header>
 
     <main class="screen main-screen" aria-label="Billyworks">
       <div class="main-content">
-        <header
+        <section
           class="hero content-width parallax-layer"
           id="top"
           data-parallax-speed="0.025"
+          aria-labelledby="hero-heading"
         >
           <div class="hero-main">
-            <h1 class="hero-title">
+            <h1 class="sr-only" id="hero-heading">웹사이트를 통해 브랜드의 가능성을 확장합니다</h1>
+            <div class="hero-title" aria-hidden="true">
               <span>BILLY</span>
               <span>WORKS</span>
-            </h1>
+            </div>
             <div
               class="hero-cats"
               role="img"
@@ -1248,11 +1280,10 @@
             ></div>
           </div>
           <p class="intro">
-            Silvia Vargas is a Spanish artist and illustrator who brings fantasy and horror
-            to life through bold character designs and surreal, emotionally rich landscapes,
-            blending reality with imagination through vibrant colors and dynamic storytelling.
+            앱과 웹을 만드는 모든 과정, 한 팀에서 끝냅니다.<br />
+            기획부터 디자인, 개발, 마케팅, 운영까지, 배달 · 패션 · 부동산 서비스 프로덕트 디자인의 경험으로 제대로 만듭니다.
           </p>
-        </header>
+        </section>
 
         <section
           class="works-section content-width parallax-layer"
@@ -1260,11 +1291,14 @@
           aria-labelledby="about-us"
         >
           <h2 class="section-heading" id="about-us">
-            ABOUT US
+            <span class="sr-only">우리가 할 수 있는 일</span>
+            <span aria-hidden="true">ABOUT US</span>
           </h2>
           <div class="works-list">
-            <div class="works-card" data-cursor-label="WEB/APP">
-              <p class="works-card__title">WEB/APP</p>
+            <article class="works-card" data-cursor-label="WEB/APP">
+              <h3 class="works-card__title">
+                <span class="sr-only">웹사이트 디자인</span><span aria-hidden="true">WEB/APP</span>
+              </h3>
               <p class="works-card__description">
                 비즈니스의 아이디어를<br />
                 직관적이고 안정적인 디지털 제품으로 만듭니다.<br />
@@ -1272,12 +1306,14 @@
               </p>
               <div class="works-card__icon-wrap">
                 <span class="works-card__icon">
-                  <img src="./uploads/figma-works-box.svg" alt="" />
+                  <span class="works-card__lottie" aria-hidden="true"></span>
                 </span>
               </div>
-            </div>
-            <div class="works-card" data-cursor-label="INTERACTIVE WEB">
-              <p class="works-card__title">INTERACTIVE<br />WEB</p>
+            </article>
+            <article class="works-card" data-cursor-label="INTERACTIVE WEB">
+              <h3 class="works-card__title">
+                <span class="sr-only">Framer 웹사이트 개발</span><span aria-hidden="true">INTERACTIVE<br />WEB</span>
+              </h3>
               <p class="works-card__description">
                 움직임과 반응으로 브랜드의 이야기를 확장합니다.<br />
                 사용자가 보고, 움직이고, 기억하는<br />
@@ -1288,9 +1324,11 @@
                   <img src="./uploads/figma-works-globe.svg" alt="" />
                 </span>
               </div>
-            </div>
-            <div class="works-card" data-cursor-label="UIUX">
-              <p class="works-card__title">UIUX</p>
+            </article>
+            <article class="works-card" data-cursor-label="UIUX">
+              <h3 class="works-card__title">
+                <span class="sr-only">UI/UX 디자인</span><span aria-hidden="true">UIUX</span>
+              </h3>
               <p class="works-card__description">
                 사용자의 맥락을 이해하고<br />
                 복잡한 문제를 단순한 경험으로 바꿉니다.<br />
@@ -1301,9 +1339,11 @@
                   <img src="./uploads/figma-works-mouse.svg" alt="" />
                 </span>
               </div>
-            </div>
-            <div class="works-card" data-cursor-label="DESIGN SYSTEM">
-              <p class="works-card__title">DESIGN<br />SYSTEM</p>
+            </article>
+            <article class="works-card" data-cursor-label="DESIGN SYSTEM">
+              <h3 class="works-card__title">
+                <span class="sr-only">디자인 시스템</span><span aria-hidden="true">DESIGN<br />SYSTEM</span>
+              </h3>
               <p class="works-card__description">
                 브랜드의 일관성을 지키면서<br />
                 더 빠르게 만들고 확장할 수 있도록<br />
@@ -1314,9 +1354,11 @@
                   <img src="./uploads/figma-works-folder.svg" alt="" />
                 </span>
               </div>
-            </div>
-            <div class="works-card" data-cursor-label="MARKETING">
-              <p class="works-card__title">MAKETING</p>
+            </article>
+            <article class="works-card" data-cursor-label="MARKETING">
+              <h3 class="works-card__title">
+                <span class="sr-only">마케팅</span><span aria-hidden="true">MAKETING</span>
+              </h3>
               <p class="works-card__description">
                 좋은 브랜드가 발견되고 선택될 수 있도록<br />
                 메시지와 콘텐츠, 채널을 연결해<br />
@@ -1327,15 +1369,21 @@
                   <img src="./uploads/figma-works-lightbulb.svg" alt="" />
                 </span>
               </div>
-            </div>
+            </article>
           </div>
         </section>
 
         <section
           class="reveal-section parallax-layer"
           data-parallax-speed="0.025"
-          aria-label="Hover reveal"
+          aria-labelledby="process-title"
         >
+          <h2 class="sr-only" id="process-title">일하는 방식</h2>
+          <div class="sr-only">
+            <h3>01. 발견과 정의</h3>
+            <h3>02. 기획과 디자인</h3>
+            <h3>03. 개발과 검수</h3>
+          </div>
           <div
             class="spotlight-text"
             aria-label="Not everything is meant to be seen at once. Hover to reveal"
@@ -1366,7 +1414,7 @@
           aria-labelledby="portfolio-title"
         >
           <h2 class="section-heading" id="portfolio-title">
-            WORKS
+            <span class="sr-only">프로젝트</span><span aria-hidden="true">WORKS</span>
           </h2>
           <div class="portfolio-grid">
             <a
@@ -1374,6 +1422,8 @@
               href="./musinsa.html"
               data-cursor-label="MUSINSA"
             >
+              <article class="portfolio-article">
+                <h3 class="sr-only">무신사 프로젝트</h3>
               <span class="portfolio-brand">
                 <img
                   class="portfolio-musinsa"
@@ -1395,36 +1445,47 @@
                 src="./uploads/figma-portfolio-musinsa-hover.png"
                 alt=""
               />
+              </article>
             </a>
             <div class="portfolio-tile portfolio-tile--coral" data-cursor-label="ZIGBANG CEO">
+              <article class="portfolio-article"><h3 class="sr-only">직방 CEO 프로젝트</h3>
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
               </span>
+              </article>
             </div>
             <div class="portfolio-tile portfolio-tile--peach" data-cursor-label="HOGANGNONO">
+              <article class="portfolio-article"><h3 class="sr-only">호갱노노 프로젝트</h3>
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
               </span>
+              </article>
             </div>
             <div class="portfolio-tile portfolio-tile--mint" data-cursor-label="MUSINSA">
+              <article class="portfolio-article"><h3 class="sr-only">무신사 프로젝트</h3>
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
               </span>
+              </article>
             </div>
             <div class="portfolio-tile portfolio-tile--blue" data-cursor-label="ZIGBANG CEO">
+              <article class="portfolio-article"><h3 class="sr-only">직방 CEO 프로젝트</h3>
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
               </span>
+              </article>
             </div>
             <div class="portfolio-tile portfolio-tile--violet" data-cursor-label="HOGANGNONO">
+              <article class="portfolio-article"><h3 class="sr-only">호갱노노 프로젝트</h3>
               <span class="portfolio-brand">
                 <img class="portfolio-musinsa" src="./uploads/figma-musinsa.svg" alt="MUSINSA" />
                 <img class="portfolio-snap" src="./uploads/figma-snap.svg" alt="SNAP" />
               </span>
+              </article>
             </div>
           </div>
         </section>
@@ -1438,7 +1499,10 @@
           <div class="request-inner">
             <div class="request-copy">
               <div class="request-heading-wrap">
-                <h2 class="request-title" id="request-title">프로젝트 요청하기</h2>
+                <h2 class="request-title" id="request-title">
+                  <span class="sr-only">함께 좋은 웹사이트를 만들어볼까요?</span>
+                  <span aria-hidden="true">프로젝트 요청하기</span>
+                </h2>
                 <p class="request-description">
                   저희와 프로젝트에 대해 논의하고 싶으시거나 질문이 있으시다면<br />
                   아래 문의를 남겨주세요. 빠르게 검토 후 연락드리겠습니다.
@@ -1591,6 +1655,16 @@
         loop: true,
         autoplay: true,
         path: "./uploads/loader-cat.json",
+        rendererSettings: {
+          preserveAspectRatio: "xMidYMid meet",
+        },
+      });
+      const webAppAnimation = window.lottie?.loadAnimation({
+        container: document.querySelector(".works-card__lottie"),
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: "./uploads/animated-browser-icon-80x80.json",
         rendererSettings: {
           preserveAspectRatio: "xMidYMid meet",
         },
