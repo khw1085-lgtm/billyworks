@@ -28,7 +28,8 @@
         margin: 0;
         min-width: 320px;
         min-height: 100vh;
-        overflow: hidden;
+        overflow: auto;
+        overflow-x: hidden;
         background: #fff;
       }
 
@@ -54,50 +55,13 @@
         min-height: 100vh;
       }
 
-      .loading-screen {
-        z-index: 1;
-        display: grid;
-        place-items: center;
-        background: #000;
-        color: #fff;
-      }
-
-      .loading-title {
-        display: flex;
-        min-height: 36px;
-        margin: 0;
-        gap: 12px;
-        font-size: 30px;
-        font-weight: 400;
-        line-height: 1.2;
-      }
-
-      .loading-word {
-        display: inline-block;
-        min-width: var(--word-width);
-        position: relative;
-        text-align: left;
-      }
-
-      .loading-word.is-typing::after {
-        display: inline-block;
-        width: 1px;
-        height: 0.9em;
-        margin-left: 3px;
-        background: currentColor;
-        vertical-align: -0.1em;
-        animation: caret-blink 760ms step-end infinite;
-        content: "";
-      }
-
       .main-screen {
         z-index: 2;
-        inset: 0;
+        position: relative;
+        inset: auto;
         min-height: 100vh;
-        overflow: hidden;
+        overflow: visible;
         background: #fff;
-        clip-path: ellipse(0 0 at 50% 52%);
-        will-change: clip-path;
       }
 
       .main-content {
@@ -109,12 +73,6 @@
         flex-direction: column;
         align-items: center;
         gap: 200px;
-      }
-
-      body:not(.is-loaded) .site-gnb {
-        z-index: 0;
-        opacity: 0;
-        transform: translate3d(0, -8px, 0);
       }
 
       .site-gnb {
@@ -275,52 +233,66 @@
       }
 
       .hero {
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
+        position: relative;
+        min-height: 620px;
       }
 
       .hero-main {
-        display: flex;
+        position: relative;
         width: 100%;
-        align-items: center;
-        gap: 40px;
+        height: 460px;
+      }
+
+      html.reveal-enabled [data-reveal]:not(.is-revealed) {
+        opacity: 0;
+        translate: 0 var(--reveal-distance, 32px);
+      }
+
+      html.reveal-enabled [data-reveal] {
+        will-change: opacity, translate;
+      }
+
+      html.reveal-enabled [data-reveal].is-revealed {
+        animation: reveal-up var(--reveal-duration, 800ms)
+          cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) both;
+      }
+
+      @keyframes reveal-up {
+        from {
+          opacity: 0;
+          translate: 0 var(--reveal-distance, 32px);
+        }
+        to {
+          opacity: 1;
+          translate: 0 0;
+        }
       }
 
       .hero-title {
-        min-width: 0;
-        margin: 0;
-        flex: 1 1 0;
-        color: #1cf24e;
-        font-size: clamp(76px, 8.59vw, 199px);
-        font-weight: 800;
-        line-height: 0.96;
+        position: absolute;
+        top: 88px;
+        left: 50%;
+        z-index: 2;
+        width: min(1120px, 76vw);
+        overflow: visible;
+        transform: translateX(-50%);
       }
 
-      .hero-title span {
+      .hero-title object {
         display: block;
-      }
-
-      .hero-cats {
-        width: 482px;
-        height: 482px;
-        flex: 0 0 482px;
-        overflow: hidden;
-        background: transparent;
-      }
-
-      .hero-cats svg {
-        display: block;
-        width: 100% !important;
-        height: 100% !important;
+        width: 100%;
+        aspect-ratio: 850 / 220;
+        height: auto;
+        overflow: visible;
       }
 
       .intro {
         width: min(857px, 100%);
-        margin: 0;
+        margin: 56px auto 0;
         font-size: 18px;
         font-weight: 400;
         line-height: normal;
+        text-align: center;
         white-space: nowrap;
       }
 
@@ -332,11 +304,55 @@
         line-height: normal;
       }
 
+      .who-is-section,
       .works-section,
       .portfolio-section {
         display: flex;
         flex-direction: column;
         gap: 40px;
+      }
+
+      .who-is-poster {
+        width: 320px;
+        margin: 0;
+        flex: 0 0 320px;
+        overflow: hidden;
+        background: #fffaf0;
+      }
+
+      .who-is-poster img {
+        display: block;
+        width: 100%;
+        height: auto;
+        transform: scale(1);
+        transition:
+          filter 500ms cubic-bezier(0.22, 1, 0.36, 1),
+          transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+        will-change: filter, transform;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .who-is-poster:hover img {
+          filter: blur(5px);
+          transform: scale(1.035);
+        }
+      }
+
+      .who-is-content {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(40px, 7vw, 120px);
+      }
+
+      .who-is-description {
+        max-width: 620px;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.75;
+        word-break: keep-all;
       }
 
       .works-list {
@@ -823,64 +839,8 @@
         height: 100%;
       }
 
-      body.is-loaded,
-      body.is-revealing {
-        overflow: auto;
-        overflow-x: hidden;
-      }
-
-      body.is-loaded.is-mobile-menu-open {
+      body.is-mobile-menu-open {
         overflow: hidden;
-      }
-
-      body.is-loaded .loading-screen {
-        display: none;
-      }
-
-      body.is-revealing .main-screen {
-        animation: squashed-reveal 3000ms cubic-bezier(0.74, -0.02, 0.18, 1.02)
-          forwards;
-      }
-
-      body.is-loaded .main-screen {
-        position: relative;
-        inset: auto;
-        min-height: 100vh;
-        overflow: visible;
-        animation: none;
-        clip-path: none;
-      }
-
-      body.is-skip-intro .main-content {
-        opacity: 0;
-        animation: main-return-fade 720ms ease forwards;
-      }
-
-      @keyframes caret-blink {
-        50% {
-          opacity: 0;
-        }
-      }
-
-      @keyframes squashed-reveal {
-        0% {
-          clip-path: ellipse(0 0 at 50% 52%);
-        }
-        68% {
-          clip-path: ellipse(156vmax 116vmax at 50% 52%);
-        }
-        84% {
-          clip-path: ellipse(132vmax 98vmax at 50% 52%);
-        }
-        100% {
-          clip-path: ellipse(146vmax 108vmax at 50% 52%);
-        }
-      }
-
-      @keyframes main-return-fade {
-        to {
-          opacity: 1;
-        }
       }
 
       @media (max-width: 1000px) {
@@ -1003,35 +963,53 @@
           gap: 72px;
         }
 
-        body.is-loaded .main-screen {
-          inset: auto;
-          min-height: 100vh;
-        }
-
         .content-width {
           width: 100%;
         }
 
-        .hero-title {
-          font-size: clamp(56px, 16vw, 110px);
-          line-height: 0.95;
-        }
-
         .hero-main {
-          flex-direction: column;
-          align-items: stretch;
-          gap: 20px;
+          height: auto;
         }
 
-        .hero-cats {
-          width: clamp(180px, 42vw, 280px);
-          height: clamp(180px, 42vw, 280px);
-          flex-basis: clamp(180px, 42vw, 280px);
-          align-self: center;
+        .hero {
+          min-height: 0;
+        }
+
+        .hero-title {
+          position: relative;
+          top: auto;
+          left: auto;
+          width: min(100%, 820px);
+          margin: 24px auto 56px;
+          transform: none;
+        }
+
+        html.reveal-enabled [data-reveal]:not(.is-revealed) {
+          translate: 0 calc(var(--reveal-distance, 32px) * 0.7);
+        }
+
+        .intro {
+          margin-top: 32px;
+          white-space: normal;
         }
 
         .section-heading {
           font-size: 42px;
+        }
+
+        .who-is-content {
+          align-items: center;
+          flex-direction: column;
+          gap: 28px;
+        }
+
+        .who-is-description {
+          text-align: center;
+        }
+
+        .who-is-poster {
+          width: min(320px, 100%);
+          flex-basis: auto;
         }
 
         .works-list {
@@ -1174,8 +1152,24 @@
           will-change: auto;
         }
 
-        body.is-revealing .main-screen {
-          animation-duration: 1ms;
+        html.reveal-enabled [data-reveal],
+        html.reveal-enabled [data-reveal]:not(.is-revealed) {
+          opacity: 1;
+          translate: none;
+          animation: none;
+          will-change: auto;
+        }
+
+        .who-is-poster {
+          clip-path: none;
+          opacity: 1;
+          transform: none;
+          transition: none;
+          will-change: auto;
+        }
+
+        .who-is-poster img {
+          transition: none;
         }
 
         .works-card {
@@ -1185,13 +1179,6 @@
     </style>
   </head>
   <body>
-    <section class="screen loading-screen" aria-label="Loading">
-      <div class="loading-title" aria-label="BILLY WORKS">
-        <span class="loading-word" data-text="BILLY" style="--word-width: 5ch"></span>
-        <span class="loading-word" data-text="WORKS" style="--word-width: 5.5ch"></span>
-      </div>
-    </section>
-
     <header class="site-gnb">
       <nav class="site-gnb__inner" aria-label="주요 메뉴">
         <a class="site-gnb__logo" href="#top" data-cursor-label="HOME">
@@ -1291,20 +1278,38 @@
           <div class="hero-main">
             <h1 class="sr-only" id="hero-heading">웹사이트를 통해 브랜드의 가능성을 확장합니다</h1>
             <div class="hero-title" aria-hidden="true">
-              <span>BILLY</span>
-              <span>WORKS</span>
+              <object
+                data="./uploads/billyworks-ribbon-wordmark.svg"
+                type="image/svg+xml"
+                tabindex="-1"
+              ></object>
             </div>
-            <div
-              class="hero-cats"
-              role="img"
-              aria-label="움직이는 고양이 로더"
-              data-cursor-label="CATS"
-            ></div>
           </div>
           <p class="intro">
             앱과 웹을 만드는 모든 과정, 한 팀에서 끝냅니다.<br />
             기획부터 디자인, 개발, 마케팅, 운영까지, 배달 · 패션 · 부동산 서비스 프로덕트 디자인의 경험으로 제대로 만듭니다.
           </p>
+        </section>
+
+        <section
+          class="who-is-section content-width parallax-layer"
+          data-parallax-speed="0.025"
+          aria-labelledby="who-is-title"
+        >
+          <h2 class="section-heading" id="who-is-title">WHO IS</h2>
+          <div class="who-is-content">
+            <figure class="who-is-poster" data-cursor-label="WHO IS">
+              <img
+                src="./uploads/who-is-line-portrait-v2.png"
+                alt="촘촘한 오렌지 라인 패턴으로 표현한 인물 초상"
+              />
+            </figure>
+            <p class="who-is-description">
+              우리는 브랜드의 가능성을 디지털 경험으로 연결합니다.<br />
+              기획과 디자인, 개발의 경계를 유연하게 넘나듭니다.<br />
+              오래 기억되는 웹과 서비스를 함께 만들어갑니다.
+            </p>
+          </div>
         </section>
 
         <section
@@ -1661,26 +1666,26 @@
     <script src="./dot-scatter.js?v=1"></script>
     <script src="./lottie.min.js?v=1"></script>
     <script src="./cursor.js?v=5"></script>
+    <script src="./scroll-reveal.js?v=1"></script>
     <script>
-      const params = new URLSearchParams(window.location.search);
-      const skipIntroKey = "billyworksSkipIntro";
       const scrollPositionKey = "billyworksScrollPosition";
-      const shouldSkipIntro =
-        params.get("skipIntro") === "1" || sessionStorage.getItem(skipIntroKey) === "1";
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
+      const restartHeroWordmark = () => {
+        const currentWordmark = document.querySelector(".hero-title object");
+        if (!currentWordmark) return;
+
+        const freshWordmark = currentWordmark.cloneNode(true);
+        const source = new URL(
+          "./uploads/billyworks-ribbon-wordmark.svg",
+          window.location.href,
+        );
+        source.searchParams.set("draw", String(Date.now()));
+        freshWordmark.data = source.href;
+        currentWordmark.replaceWith(freshWordmark);
+      };
       const requestForm = document.querySelector(".request-form");
-      const catsAnimation = window.lottie?.loadAnimation({
-        container: document.querySelector(".hero-cats"),
-        renderer: "svg",
-        loop: true,
-        autoplay: true,
-        path: "./uploads/loader-cat.json",
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid meet",
-        },
-      });
       const webAppAnimation = window.lottie?.loadAnimation({
         container: document.querySelector(".works-card__lottie"),
         renderer: "svg",
@@ -1743,7 +1748,6 @@
 
       const syncGnbContrast = () => {
         gnbContrastFrame = 0;
-        if (!document.body.classList.contains("is-loaded")) return;
 
         const gnbRect = siteGnb.getBoundingClientRect();
         const sampleY = Math.min(
@@ -1812,7 +1816,6 @@
       });
 
       document.querySelector(".portfolio-tile--featured").addEventListener("click", () => {
-        sessionStorage.setItem(skipIntroKey, "1");
         sessionStorage.setItem(scrollPositionKey, String(window.scrollY));
       });
 
@@ -1875,32 +1878,18 @@
       }
 
       const parallaxLayers = [...document.querySelectorAll("[data-parallax-speed]")];
-      let parallaxMetrics = [];
       let parallaxFrame = 0;
-      let parallaxReady = false;
-      let parallaxOriginScroll = window.scrollY;
-
-      const measureParallax = () => {
-        parallaxOriginScroll = window.scrollY;
-        parallaxMetrics = parallaxLayers.map((layer) => {
-          return {
-            layer,
-            speed: Number(layer.dataset.parallaxSpeed),
-          };
-        });
-        parallaxReady = true;
-      };
 
       const renderParallax = () => {
         parallaxFrame = 0;
-        if (!parallaxReady || prefersReducedMotion) return;
+        if (prefersReducedMotion) return;
 
-        const scrollDelta = window.scrollY - parallaxOriginScroll;
-        parallaxMetrics.forEach(({ layer, speed }) => {
-          const offset = Math.max(
-            -72,
-            Math.min(72, scrollDelta * speed),
-          );
+        const viewportCenter = window.innerHeight / 2;
+        parallaxLayers.forEach((layer, index) => {
+          const rect = layer.getBoundingClientRect();
+          const layerCenter = rect.top + rect.height / 2;
+          const speed = Number(layer.dataset.parallaxSpeed) + (index % 3) * 0.006;
+          const offset = Math.max(-64, Math.min(64, (viewportCenter - layerCenter) * speed));
           layer.style.setProperty("--parallax-y", `${offset.toFixed(2)}px`);
         });
       };
@@ -1914,54 +1903,20 @@
         parallaxLayers.forEach((layer) => {
           layer.style.setProperty("--parallax-y", "0px");
         });
-        measureParallax();
         renderParallax();
       };
 
       window.addEventListener("scroll", requestParallaxRender, { passive: true });
       window.addEventListener("resize", refreshParallax);
 
-      const typeLoadingTitle = async () => {
-        if (shouldSkipIntro || prefersReducedMotion) {
-          document.querySelectorAll(".loading-word").forEach((word) => {
-            word.textContent = word.dataset.text;
-          });
-          return;
-        }
-
-        for (const word of document.querySelectorAll(".loading-word")) {
-          const text = word.dataset.text;
-          word.classList.add("is-typing");
-
-          for (let index = 0; index <= text.length; index += 1) {
-            word.textContent = text.slice(0, index);
-            await new Promise((resolve) => window.setTimeout(resolve, 96));
-          }
-
-          await new Promise((resolve) => window.setTimeout(resolve, 180));
-          word.classList.remove("is-typing");
-        }
-      };
-
-      if (shouldSkipIntro) {
-        document.body.classList.add("is-loaded", "is-skip-intro");
-        sessionStorage.removeItem(skipIntroKey);
-        window.history.replaceState(null, "", window.location.pathname);
-        if (!restoreScrollPosition()) requestAnimationFrame(refreshParallax);
-      } else {
-        typeLoadingTitle().then(() => {
-          document.body.classList.add("is-revealing");
-
-          window.setTimeout(() => {
-            document.body.classList.add("is-loaded");
-            document.body.classList.remove("is-revealing");
-            requestAnimationFrame(refreshParallax);
-          }, 3000);
-        });
-      }
+      restartHeroWordmark();
+      if (!restoreScrollPosition()) requestAnimationFrame(refreshParallax);
 
       window.addEventListener("pageshow", (event) => {
-        if (event.persisted) restoreScrollPosition();
+        if (event.persisted) {
+          restartHeroWordmark();
+          restoreScrollPosition();
+        }
       });
     </script>
   </body>
