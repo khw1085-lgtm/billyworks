@@ -1,0 +1,201 @@
+.process-section {
+  --process-bg: var(--site-background, #fff);
+  --process-fg: #000;
+  --process-muted: rgb(0 0 0 / 66%);
+  --process-line: rgb(0 0 0 / 78%);
+  --process-border: rgb(0 0 0 / 28%);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--process-border);
+  background: var(--process-bg);
+  color: var(--process-fg);
+}
+
+.process-grid {
+  display: grid;
+  min-height: clamp(560px, 42vw, 760px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.process-step {
+  --step-delay: calc(var(--step-index) * 110ms);
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 100%;
+  padding: clamp(28px, 2.5vw, 48px) clamp(22px, 2.2vw, 42px) 0;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid var(--process-border);
+}
+
+.process-step:last-child {
+  border-right: 0;
+}
+
+.process-step__content {
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 620ms ease var(--step-delay),
+    transform 760ms cubic-bezier(0.22, 1, 0.36, 1) var(--step-delay);
+}
+
+.process-section.is-visible .process-step__content {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.process-step__number {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  margin-bottom: clamp(54px, 5vw, 88px);
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1;
+}
+
+.process-step__title {
+  margin: 0;
+  font-size: clamp(30px, 2.5vw, 46px);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  text-transform: lowercase;
+}
+
+.process-step__description {
+  max-width: 31ch;
+  margin: 24px 0 0;
+  color: var(--process-muted);
+  font-size: clamp(14px, 1vw, 16px);
+  font-weight: 430;
+  line-height: 1.48;
+}
+
+.process-step__art {
+  position: relative;
+  height: clamp(230px, 18vw, 330px);
+  margin: auto clamp(-42px, -2.2vw, -22px) 0;
+  overflow: hidden;
+}
+
+.process-step__icon {
+  position: absolute;
+  right: 50%;
+  bottom: clamp(-70px, -4vw, -34px);
+  display: block;
+  width: min(125%, 440px);
+  height: auto;
+  color: var(--process-line);
+  transform: translateX(50%);
+}
+
+.process-step__icon path,
+.process-step__icon circle,
+.process-step__icon ellipse {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: calc(260ms + var(--step-delay));
+}
+
+.process-section.is-visible .process-step__icon path,
+.process-section.is-visible .process-step__icon circle,
+.process-section.is-visible .process-step__icon ellipse {
+  stroke-dashoffset: 0;
+}
+
+@media (max-width: 1000px) {
+  .process-grid {
+    min-height: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .process-step {
+    min-height: 540px;
+  }
+
+  .process-step:nth-child(2) {
+    border-right: 0;
+  }
+
+  .process-step:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--process-border);
+  }
+
+  .process-step__art {
+    height: 240px;
+  }
+}
+
+@media (max-width: 620px) {
+  .process-grid {
+    display: block;
+  }
+
+  .process-step {
+    min-height: 500px;
+    padding: 28px 24px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--process-border);
+  }
+
+  .process-step:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--process-border);
+  }
+
+  .process-step:last-child {
+    border-bottom: 0;
+  }
+
+  .process-step__number {
+    margin-bottom: 48px;
+  }
+
+  .process-step__title {
+    font-size: 40px;
+  }
+
+  .process-step__description {
+    max-width: 35ch;
+  }
+
+  .process-step__art {
+    height: 230px;
+    margin-right: -24px;
+    margin-left: -24px;
+  }
+
+  .process-step__icon {
+    bottom: -58px;
+    width: min(104%, 390px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-step__content {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .process-step__icon path,
+  .process-step__icon circle,
+  .process-step__icon ellipse {
+    stroke-dashoffset: 0;
+    transition: none;
+  }
+}

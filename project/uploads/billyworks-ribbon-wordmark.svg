@@ -5,18 +5,29 @@
     #wordmark path {
       stroke-dasharray: 1;
       stroke-dashoffset: 1;
-      animation: draw-ribbon 0.56s cubic-bezier(0.65, 0, 0.35, 1) var(--delay) forwards;
+      opacity: 0;
+      animation: draw-ribbon 0.94s cubic-bezier(0.2, 0.72, 0.18, 1)
+        calc(var(--delay) + var(--path-delay, 0s)) both;
     }
 
     #wordmark [id^="ribbon-weave"] path {
-      animation-duration: 0.3s;
+      animation-duration: 0.52s;
+      animation-timing-function: cubic-bezier(0.22, 0.8, 0.24, 1);
+    }
+
+    #wordmark > g[id^="letter-"] path:nth-child(2) {
+      --path-delay: 0.08s;
+    }
+
+    #wordmark > g[id^="letter-"] path:nth-child(3) {
+      --path-delay: 0.16s;
     }
 
     #wordmark > g[id^="letter-"] {
       pointer-events: none;
       transform-box: fill-box;
       transform-origin: center;
-      transition: transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+      transition: transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
       will-change: transform;
     }
 
@@ -51,7 +62,20 @@
     }
 
     @keyframes draw-ribbon {
-      to { stroke-dashoffset: 0; }
+      0% {
+        opacity: 0;
+        stroke-dashoffset: 1;
+      }
+      10% {
+        opacity: 1;
+      }
+      72% {
+        stroke-dashoffset: 0.035;
+      }
+      100% {
+        opacity: 1;
+        stroke-dashoffset: 0;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -67,19 +91,19 @@
   </style>
   <g id="wordmark" fill="none" stroke="#111111" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
     <g id="letter-b" stroke="#F05A28" style="--delay: 0s"><path pathLength="1" d="M24 22 C29 58 27 108 27 150 C30 111 45 82 68 80 C92 78 102 98 98 120 C94 142 78 153 59 151 C39 149 28 133 28 115" /></g>
-    <g id="letter-i" stroke="#18A66A" style="--delay: 0.4s"><path pathLength="1" d="M132 84 C134 105 133 129 133 150" /><path pathLength="1" d="M132 43 C133 44 135 44 136 43" /></g>
-    <g id="letter-l-1" stroke="#D3A21A" style="--delay: 0.8s"><path pathLength="1" d="M174 23 C180 62 177 111 178 150" /></g>
-    <g id="letter-l-2" stroke="#8A73D9" style="--delay: 1.2s"><path pathLength="1" d="M216 23 C222 62 219 111 220 150" /></g>
-    <g id="letter-y" stroke="#111111" style="--delay: 1.6s"><path pathLength="1" d="M255 84 C257 111 261 138 276 146 C292 141 301 111 303 84 C303 126 302 153 288 168" /></g>
-    <g id="letter-w" stroke="#8A4F3D" style="--delay: 2s"><path pathLength="1" d="M340 84 C342 109 344 139 357 150 C371 141 375 112 378 91 C381 113 385 141 398 150 C413 140 417 108 419 84" /></g>
-    <g id="letter-o" stroke="#2F6FED" style="--delay: 2.4s"><path pathLength="1" d="M479 79 C454 77 440 94 442 117 C444 140 458 152 479 152 C501 152 515 137 515 115 C515 92 502 79 479 79 Z" /></g>
-    <g id="letter-r" stroke="#E95F3C" style="--delay: 2.8s"><path pathLength="1" d="M551 150 C553 127 552 105 551 84 C556 101 564 111 572 103 C581 94 588 80 603 81 C612 81 619 86 623 94" /></g>
-    <g id="letter-k" stroke="#149B67" style="--delay: 3.2s"><path pathLength="1" d="M654 22 C660 61 657 111 658 150" /><path pathLength="1" d="M659 120 C677 111 691 96 701 82" /><path pathLength="1" d="M679 111 C688 124 699 138 713 150" /></g>
-    <g id="letter-s" stroke="#7159C9" style="--delay: 3.6s"><path pathLength="1" d="M794 91 C783 78 758 77 744 88 C731 98 737 111 753 116 C771 121 791 121 796 134 C801 147 786 154 768 152 C752 151 740 146 733 138" /></g>
+    <g id="letter-i" stroke="#18A66A" style="--delay: 0.24s"><path pathLength="1" d="M132 84 C134 105 133 129 133 150" /><path pathLength="1" d="M132 43 C133 44 135 44 136 43" /></g>
+    <g id="letter-l-1" stroke="#D3A21A" style="--delay: 0.48s"><path pathLength="1" d="M174 23 C180 62 177 111 178 150" /></g>
+    <g id="letter-l-2" stroke="#8A73D9" style="--delay: 0.72s"><path pathLength="1" d="M216 23 C222 62 219 111 220 150" /></g>
+    <g id="letter-y" stroke="#111111" style="--delay: 0.96s"><path pathLength="1" d="M255 84 C257 111 261 138 276 146 C292 141 301 111 303 84 C303 126 302 153 288 168" /></g>
+    <g id="letter-w" stroke="#8A4F3D" style="--delay: 1.2s"><path pathLength="1" d="M340 84 C342 109 344 139 357 150 C371 141 375 112 378 91 C381 113 385 141 398 150 C413 140 417 108 419 84" /></g>
+    <g id="letter-o" stroke="#2F6FED" style="--delay: 1.44s"><path pathLength="1" d="M479 79 C454 77 440 94 442 117 C444 140 458 152 479 152 C501 152 515 137 515 115 C515 92 502 79 479 79 Z" /></g>
+    <g id="letter-r" stroke="#E95F3C" style="--delay: 1.68s"><path pathLength="1" d="M551 150 C553 127 552 105 551 84 C556 101 564 111 572 103 C581 94 588 80 603 81 C612 81 619 86 623 94" /></g>
+    <g id="letter-k" stroke="#149B67" style="--delay: 1.92s"><path pathLength="1" d="M654 22 C660 61 657 111 658 150" /><path pathLength="1" d="M659 120 C677 111 691 96 701 82" /><path pathLength="1" d="M679 111 C688 124 699 138 713 150" /></g>
+    <g id="letter-s" stroke="#7159C9" style="--delay: 2.16s"><path pathLength="1" d="M794 91 C783 78 758 77 744 88 C731 98 737 111 753 116 C771 121 791 121 796 134 C801 147 786 154 768 152 C752 151 740 146 733 138" /></g>
     <g id="ribbon-weave-1" stroke="#F0A61A" style="--delay: 0.32s"><path pathLength="1" d="M99 119 C110 115 118 109 130 105" /></g>
-    <g id="ribbon-weave-2" stroke="#3F78D8" style="--delay: 1.9s"><path pathLength="1" d="M304 108 C316 102 327 100 339 106" /></g>
-    <g id="ribbon-weave-3" stroke="#B56A32" style="--delay: 2.7s"><path pathLength="1" d="M516 108 C528 102 539 99 551 105" /></g>
-    <g id="ribbon-weave-4" stroke="#D08A18" style="--delay: 3.5s"><path pathLength="1" d="M713 116 C721 111 727 108 736 109" /></g>
+    <g id="ribbon-weave-2" stroke="#3F78D8" style="--delay: 1.12s"><path pathLength="1" d="M304 108 C316 102 327 100 339 106" /></g>
+    <g id="ribbon-weave-3" stroke="#B56A32" style="--delay: 1.6s"><path pathLength="1" d="M516 108 C528 102 539 99 551 105" /></g>
+    <g id="ribbon-weave-4" stroke="#D08A18" style="--delay: 2.08s"><path pathLength="1" d="M713 116 C721 111 727 108 736 109" /></g>
     <g id="hit-areas" fill="transparent" stroke="none">
       <rect id="hit-b" x="8" y="0" width="104" height="180" />
       <rect id="hit-i" x="112" y="20" width="48" height="150" />

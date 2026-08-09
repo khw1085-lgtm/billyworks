@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Billyworks</title>
     <link rel="stylesheet" href="./cursor.css?v=5" />
+    <link rel="stylesheet" href="./scroll-word-section.css?v=5" />
+    <link rel="stylesheet" href="./process-section.css?v=1" />
     <style>
       :root {
         --content-max-width: 1800px;
         --primary-green: #1cf24e;
+        --site-background: #efeeea;
         color: #000;
-        background: #000;
+        background: var(--site-background);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
           "Segoe UI", sans-serif;
       }
@@ -30,7 +33,7 @@
         min-height: 100vh;
         overflow: auto;
         overflow-x: hidden;
-        background: #fff;
+        background: var(--site-background);
       }
 
       .sr-only {
@@ -61,7 +64,7 @@
         inset: auto;
         min-height: 100vh;
         overflow: visible;
-        background: #fff;
+        background: var(--site-background);
       }
 
       .main-content {
@@ -69,7 +72,7 @@
         width: min(1800px, calc(100% - 80px));
         max-width: var(--content-max-width);
         margin-inline: auto;
-        padding: 200px 0 0;
+        padding: 0;
         flex-direction: column;
         align-items: center;
         gap: 200px;
@@ -234,7 +237,9 @@
 
       .hero {
         position: relative;
-        min-height: 620px;
+        height: 100vh;
+        min-height: 100vh;
+        padding-top: 200px;
       }
 
       .hero-main {
@@ -284,6 +289,7 @@
         aspect-ratio: 850 / 220;
         height: auto;
         overflow: visible;
+        pointer-events: none;
       }
 
       .intro {
@@ -294,6 +300,50 @@
         line-height: normal;
         text-align: center;
         white-space: nowrap;
+      }
+
+      .hero-scroll-indicator {
+        position: absolute;
+        bottom: 36px;
+        left: 50%;
+        z-index: 3;
+        display: grid;
+        width: 48px;
+        height: 64px;
+        place-items: center;
+        color: #111;
+        text-decoration: none;
+        transform: translateX(-50%);
+      }
+
+      .hero-scroll-indicator svg {
+        width: 28px;
+        height: 48px;
+        overflow: visible;
+        animation: hero-scroll-arrow 1.6s cubic-bezier(0.45, 0, 0.25, 1)
+          infinite;
+      }
+
+      .hero-scroll-indicator path {
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+      }
+
+      @keyframes hero-scroll-arrow {
+        0% {
+          opacity: 0.25;
+          transform: translateY(-6px);
+        }
+        45% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 0.25;
+          transform: translateY(8px);
+        }
       }
 
       .section-heading {
@@ -373,6 +423,7 @@
         justify-content: space-between;
         border: 0;
         border-radius: 0;
+        overflow: hidden;
         background: #f8f8f8;
         color: #000;
         transition:
@@ -959,7 +1010,7 @@
 
         .main-content {
           width: calc(100% - 40px);
-          padding: 100px 0 0;
+          padding: 0;
           gap: 72px;
         }
 
@@ -972,7 +1023,11 @@
         }
 
         .hero {
-          min-height: 0;
+          height: 100vh;
+          height: 100svh;
+          min-height: 100vh;
+          min-height: 100svh;
+          padding-top: 100px;
         }
 
         .hero-title {
@@ -991,6 +1046,10 @@
         .intro {
           margin-top: 32px;
           white-space: normal;
+        }
+
+        .hero-scroll-indicator {
+          bottom: 24px;
         }
 
         .section-heading {
@@ -1175,6 +1234,10 @@
         .works-card {
           transition: none;
         }
+
+        .hero-scroll-indicator svg {
+          animation: none;
+        }
       }
     </style>
   </head>
@@ -1277,7 +1340,7 @@
         >
           <div class="hero-main">
             <h1 class="sr-only" id="hero-heading">웹사이트를 통해 브랜드의 가능성을 확장합니다</h1>
-            <div class="hero-title" aria-hidden="true">
+            <div class="hero-title" aria-hidden="true" data-cursor-label="BILLYWORKS">
               <object
                 data="./uploads/billyworks-ribbon-wordmark.svg"
                 type="image/svg+xml"
@@ -1289,6 +1352,43 @@
             앱과 웹을 만드는 모든 과정, 한 팀에서 끝냅니다.<br />
             기획부터 디자인, 개발, 마케팅, 운영까지, 배달 · 패션 · 부동산 서비스 프로덕트 디자인의 경험으로 제대로 만듭니다.
           </p>
+          <a
+            class="hero-scroll-indicator"
+            href="#scroll-word-title"
+            aria-label="다음 섹션으로 스크롤"
+            data-cursor-label="SCROLL"
+          >
+            <svg viewBox="0 0 28 48" aria-hidden="true">
+              <path d="M14 2v40M6 34l8 8 8-8" />
+            </svg>
+          </a>
+        </section>
+
+        <section
+          class="scroll-word-section"
+          aria-labelledby="scroll-word-title"
+          data-scroll-word-section
+        >
+          <h2 class="sr-only" id="scroll-word-title">
+            Billyworks designs, prototypes, solves, builds, develops, and launches digital products.
+          </h2>
+          <div class="scroll-word-stage" data-scroll-word-stage></div>
+          <div class="scroll-word-outro">
+            <p>
+              ideas become<br />
+              experiences people use.
+            </p>
+            <span>BILLYWORKS · SEOUL</span>
+          </div>
+        </section>
+
+        <section
+          class="process-section content-width"
+          aria-labelledby="process-title"
+          data-process-section
+        >
+          <h2 class="sr-only" id="process-title">How we work</h2>
+          <div class="process-grid" data-process-grid></div>
         </section>
 
         <section
@@ -1666,6 +1766,8 @@
     <script src="./dot-scatter.js?v=1"></script>
     <script src="./lottie.min.js?v=1"></script>
     <script src="./cursor.js?v=5"></script>
+    <script src="./scroll-word-section.js?v=1"></script>
+    <script src="./process-section.js?v=1"></script>
     <script src="./scroll-reveal.js?v=1"></script>
     <script>
       const scrollPositionKey = "billyworksScrollPosition";

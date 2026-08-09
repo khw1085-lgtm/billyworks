@@ -1,0 +1,201 @@
+.scroll-word-section {
+  --word-count: 7;
+  --word-start: 24vh;
+  --word-space: 42vh;
+  --word-accent: var(--primary-green, #1cf24e);
+  --word-bg: var(--site-background, #fff);
+  --word-fg: #000;
+  --word-dim: rgb(0 0 0 / 15%);
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  margin-block-start: -200px;
+  margin-inline: calc(50% - 50vw);
+  overflow: clip;
+  background: var(--word-bg);
+  color: var(--word-fg);
+}
+
+.scroll-word-stage {
+  position: sticky;
+  top: calc((var(--word-count) - 1) * -0.98em);
+  display: flex;
+  width: 100%;
+  margin-bottom: var(--word-space);
+  align-items: flex-start;
+  justify-content: center;
+  font-size: clamp(62px, 8.8vw, 158px);
+  font-weight: 750;
+  letter-spacing: -0.065em;
+  line-height: 0.98;
+}
+
+.scroll-word-stage__inner {
+  display: flex;
+  width: min(1800px, calc(100% - 80px));
+  padding-top: calc(var(--word-start) - 0.5em);
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.scroll-word-stage__lead {
+  position: sticky;
+  top: calc(var(--word-start) - 0.5em);
+  margin: 0;
+  flex: 0 0 auto;
+  font: inherit;
+  white-space: nowrap;
+}
+
+.scroll-word-stage__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scroll-word-stage__item {
+  background:
+    linear-gradient(
+      180deg,
+      var(--word-dim) 0 calc(var(--word-start) - 0.53em),
+      var(--word-accent) calc(var(--word-start) - 0.53em)
+        calc(var(--word-start) + 0.53em),
+      var(--word-dim) calc(var(--word-start) + 0.53em)
+    );
+  background-attachment: fixed;
+  background-clip: text;
+  color: transparent;
+  white-space: nowrap;
+}
+
+.scroll-word-stage__item:nth-child(1) { --word-accent: #f05a28; }
+.scroll-word-stage__item:nth-child(2) { --word-accent: #18a66a; }
+.scroll-word-stage__item:nth-child(3) { --word-accent: #d3a21a; }
+.scroll-word-stage__item:nth-child(4) { --word-accent: #8a73d9; }
+.scroll-word-stage__item:nth-child(5) { --word-accent: #8a4f3d; }
+.scroll-word-stage__item:nth-child(6) { --word-accent: #2f6fed; }
+.scroll-word-stage__item:nth-child(7) { --word-accent: #e95f3c; }
+
+.scroll-word-outro {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: 100%;
+  height: 100svh;
+  min-height: 640px;
+  padding: clamp(28px, 4vw, 72px);
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  border-radius: 22px 22px 0 0;
+  background: #000;
+  color: var(--word-bg);
+  transform-origin: 50% 100%;
+}
+
+.scroll-word-outro p {
+  margin: auto 0;
+  font-size: clamp(56px, 9.5vw, 170px);
+  font-weight: 750;
+  letter-spacing: -0.075em;
+  line-height: 0.85;
+}
+
+.scroll-word-outro span {
+  align-self: flex-end;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+@supports (animation-timeline: view()) {
+  .scroll-word-outro {
+    view-timeline-name: --word-outro;
+    view-timeline-axis: block;
+    scale: 0.94;
+    animation: scroll-word-grow both cubic-bezier(0.22, 1, 0.36, 1);
+    animation-timeline: --word-outro;
+    animation-range: entry 15% entry 85%;
+  }
+
+  .scroll-word-outro p {
+    opacity: 0;
+    transform: translate3d(0, 42px, 0);
+    animation: scroll-word-copy both cubic-bezier(0.22, 1, 0.36, 1);
+    animation-timeline: --word-outro;
+    animation-range: entry 30% entry 90%;
+  }
+}
+
+@keyframes scroll-word-grow {
+  to {
+    border-radius: 0;
+    scale: 1;
+  }
+}
+
+@keyframes scroll-word-copy {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (max-width: 1000px) {
+  .scroll-word-section {
+    margin-block-start: -72px;
+  }
+
+  .scroll-word-stage {
+    font-size: clamp(54px, 11vw, 94px);
+  }
+
+  .scroll-word-stage__inner {
+    width: calc(100% - 40px);
+  }
+
+  .scroll-word-outro {
+    min-height: 560px;
+  }
+}
+
+@media (max-width: 620px) {
+  .scroll-word-section {
+    --word-start: 28vh;
+    --word-space: 32vh;
+  }
+
+  .scroll-word-stage {
+    font-size: clamp(42px, 13.2vw, 64px);
+    letter-spacing: -0.072em;
+  }
+
+  .scroll-word-stage__inner {
+    width: calc(100% - 32px);
+    justify-content: flex-start;
+  }
+
+  .scroll-word-outro {
+    min-height: 520px;
+    padding: 24px 20px;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .scroll-word-outro p {
+    font-size: clamp(49px, 15.5vw, 72px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-word-section {
+    --word-space: 22vh;
+  }
+
+  .scroll-word-outro,
+  .scroll-word-outro p {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    scale: 1;
+  }
+}
