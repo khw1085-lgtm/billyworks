@@ -13,6 +13,14 @@ export type Apartment = {
   postCount: number
   trending?: boolean
   topics: Category[]
+  source?: 'k-apt' | 'sample'
+}
+
+export type MapBounds = {
+  south: number
+  west: number
+  north: number
+  east: number
 }
 
 export type Post = {

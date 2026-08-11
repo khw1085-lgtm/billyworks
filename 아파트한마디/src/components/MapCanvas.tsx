@@ -1,7 +1,7 @@
 import { Minus, Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { getKakaoMaps, loadKakaoMaps } from '../lib/kakaoMaps'
-import type { Apartment } from '../types'
+import type { Apartment, MapBounds } from '../types'
 
 type Props = {
   apartments: Apartment[]
@@ -9,6 +9,7 @@ type Props = {
   zoom: number
   onZoom: (zoom: number) => void
   onSelect: (apartment: Apartment) => void
+  onBoundsChange?: (bounds: MapBounds) => void
 }
 
 function markerImage(maps: any, apartment: Apartment) {
@@ -37,14 +38,19 @@ function ZoomControl({ onIn, onOut }: { onIn: () => void; onOut: () => void }) {
 export function MapCanvas(props: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<any>(null)
+  const clustererRef = useRef<any>(null)
+  const markersRef = useRef<any[]>([])
+  const onSelectRef = useRef(props.onSelect)
+  const onBoundsChangeRef = useRef(props.onBoundsChange)
   const [sdkState, setSdkState] = useState<'loading' | 'ready' | 'fallback'>('loading')
   const key = import.meta.env.VITE_KAKAO_MAP_JAVASCRIPT_KEY || ''
+
+  useEffect(() => { onSelectRef.current = props.onSelect }, [props.onSelect])
+  useEffect(() => { onBoundsChangeRef.current = props.onBoundsChange }, [props.onBoundsChange])
 
   useEffect(() => {
     if (!key || !containerRef.current) { setSdkState('fallback'); return }
     let active = true
-    let clusterer: any
-    let markers: any[] = []
     const locate = () => navigator.geolocation?.getCurrentPosition(({ coords }) => {
       if (!active || !mapRef.current) return
       const maps = getKakaoMaps()
@@ -56,23 +62,35 @@ export function MapCanvas(props: Props) {
       const maps = getKakaoMaps()
       const map = new maps.Map(containerRef.current, { center: new maps.LatLng(37.5237, 126.9846), level: 9 })
       mapRef.current = map
-      markers = props.apartments.map((apartment) => {
-        const marker = new maps.Marker({ position: new maps.LatLng(apartment.latitude, apartment.longitude), image: markerImage(maps, apartment), title: apartment.name })
-        maps.event.addListener(marker, 'click', () => props.onSelect(apartment))
-        return marker
-      })
-      clusterer = new maps.MarkerClusterer({ map, averageCenter: true, minLevel: 6, markers, disableClickZoom: false, styles: [{ width: '48px', height: '48px', background: '#292927', color: '#fff', border: '3px solid #fff', borderRadius: '50%', textAlign: 'center', fontWeight: '700', lineHeight: '42px' }] })
-      const updateVisibleMarkers = () => {
+      clustererRef.current = new maps.MarkerClusterer({ map, averageCenter: true, minLevel: 6, disableClickZoom: false, styles: [{ width: '48px', height: '48px', background: '#292927', color: '#fff', border: '3px solid #fff', borderRadius: '50%', textAlign: 'center', fontWeight: '700', lineHeight: '42px' }] })
+      const updateBounds = () => {
         const bounds = map.getBounds()
-        clusterer.clear()
-        clusterer.addMarkers(markers.filter((marker) => bounds.contain(marker.getPosition())))
+        onBoundsChangeRef.current?.({
+          south: bounds.getSouthWest().getLat(),
+          west: bounds.getSouthWest().getLng(),
+          north: bounds.getNorthEast().getLat(),
+          east: bounds.getNorthEast().getLng(),
+        })
       }
-      maps.event.addListener(map, 'idle', updateVisibleMarkers)
+      maps.event.addListener(map, 'idle', updateBounds)
       window.addEventListener('hanmadi:locate', locate)
       setSdkState('ready')
+      updateBounds()
     }).catch(() => active && setSdkState('fallback'))
-    return () => { active = false; clusterer?.clear(); window.removeEventListener('hanmadi:locate', locate) }
-  }, [key, props.apartments, props.onSelect])
+    return () => { active = false; clustererRef.current?.clear(); window.removeEventListener('hanmadi:locate', locate) }
+  }, [key])
+
+  useEffect(() => {
+    if (sdkState !== 'ready' || !clustererRef.current) return
+    const maps = getKakaoMaps()
+    clustererRef.current.clear()
+    markersRef.current = props.apartments.map((apartment) => {
+      const marker = new maps.Marker({ position: new maps.LatLng(apartment.latitude, apartment.longitude), image: markerImage(maps, apartment), title: apartment.name })
+      maps.event.addListener(marker, 'click', () => onSelectRef.current(apartment))
+      return marker
+    })
+    clustererRef.current.addMarkers(markersRef.current)
+  }, [props.apartments, sdkState])
 
   if (sdkState === 'fallback') return <FallbackMap {...props} />
   const zoomIn = () => mapRef.current?.setLevel(Math.max(1, mapRef.current.getLevel() - 1))

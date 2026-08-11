@@ -1,3 +1,4 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "functions": { "api/apartments.js": { "includeFiles": "public/data/apartments.json" } },
+  "rewrites": [{ "source": "/((?!api/).*)", "destination": "/index.html" }]
 }
