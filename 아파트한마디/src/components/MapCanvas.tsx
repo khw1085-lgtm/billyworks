@@ -51,6 +51,10 @@ function SentimentLegend() {
   return <div className="sentiment-legend" aria-label="지도 색상과 원 크기 안내"><div><span><i className="positive" />장점 많음</span><b aria-hidden="true" /><span><i className="negative" />불만 많음</span></div><small>원 크기 = 포함 단지 수</small></div>
 }
 
+function MapLoadingOverlay({ ready }: { ready: boolean }) {
+  return <div className={`map-loading ${ready ? 'is-ready' : ''}`} role={ready ? undefined : 'status'} aria-hidden={ready} aria-live="polite"><div className="ios-spinner" aria-hidden="true" /><span>아파트 지도를 불러오는 중</span></div>
+}
+
 function ZoomControl({ onIn, onOut }: { onIn: () => void; onOut: () => void }) {
   return <div className="zoom-control" aria-label="지도 확대 축소"><button onClick={onIn} aria-label="지도 확대"><Plus size={18} /></button><button onClick={onOut} aria-label="지도 축소"><Minus size={18} /></button></div>
 }
@@ -63,6 +67,7 @@ export function MapCanvas(props: Props) {
   const onSelectRef = useRef(props.onSelect)
   const onBoundsChangeRef = useRef(props.onBoundsChange)
   const [sdkState, setSdkState] = useState<'loading' | 'ready' | 'fallback'>('loading')
+  const [initialClustersReady, setInitialClustersReady] = useState(false)
   const key = import.meta.env.VITE_KAKAO_MAP_JAVASCRIPT_KEY || ''
 
   useEffect(() => { onSelectRef.current = props.onSelect }, [props.onSelect])
@@ -71,6 +76,19 @@ export function MapCanvas(props: Props) {
   useEffect(() => {
     if (!key || !containerRef.current) { setSdkState('fallback'); return }
     let active = true
+    const loadingStartedAt = performance.now()
+    let revealTimer = 0
+    let loadingFallback = 0
+    let revealScheduled = false
+    const revealMap = () => {
+      if (revealScheduled) return
+      revealScheduled = true
+      window.clearTimeout(loadingFallback)
+      const minimumVisibleTime = Math.max(0, 700 - (performance.now() - loadingStartedAt))
+      revealTimer = window.setTimeout(() => active && setInitialClustersReady(true), minimumVisibleTime)
+    }
+    setInitialClustersReady(false)
+    loadingFallback = window.setTimeout(revealMap, 8000)
     const locate = () => navigator.geolocation?.getCurrentPosition(({ coords }) => {
       if (!active || !mapRef.current) return
       const maps = getKakaoMaps()
@@ -106,6 +124,7 @@ export function MapCanvas(props: Props) {
             content.setAttribute('aria-label', content.title)
           }
         })
+        if (markersRef.current.length >= 20 && clusters.length > 0) revealMap()
       })
       const updateBounds = () => {
         const bounds = map.getBounds()
@@ -121,7 +140,7 @@ export function MapCanvas(props: Props) {
       setSdkState('ready')
       updateBounds()
     }).catch(() => active && setSdkState('fallback'))
-    return () => { active = false; clustererRef.current?.clear(); window.removeEventListener('hanmadi:locate', locate) }
+    return () => { active = false; window.clearTimeout(loadingFallback); window.clearTimeout(revealTimer); clustererRef.current?.clear(); window.removeEventListener('hanmadi:locate', locate) }
   }, [key])
 
   useEffect(() => {
@@ -138,7 +157,8 @@ export function MapCanvas(props: Props) {
   }, [props.apartments, sdkState])
 
   if (sdkState === 'fallback') return <FallbackMap {...props} />
+  const mapReady = sdkState === 'ready' && initialClustersReady
   const zoomIn = () => mapRef.current?.setLevel(Math.max(1, mapRef.current.getLevel() - 1))
   const zoomOut = () => mapRef.current?.setLevel(Math.min(14, mapRef.current.getLevel() + 1))
-  return <section className="map-canvas kakao-map-shell" aria-label="Kakao 아파트 지도"><div className="kakao-map" ref={containerRef} />{sdkState === 'loading' ? <div className="map-loading" role="status">카카오맵을 불러오는 중…</div> : null}<ZoomControl onIn={zoomIn} onOut={zoomOut} /><SentimentLegend /><p className="map-attribution">© Kakao</p></section>
+  return <section className="map-canvas kakao-map-shell" aria-label="Kakao 아파트 지도" aria-busy={!mapReady}><div className="kakao-map" ref={containerRef} /><MapLoadingOverlay ready={mapReady} />{mapReady ? <><ZoomControl onIn={zoomIn} onOut={zoomOut} /><SentimentLegend /><p className="map-attribution">© Kakao</p></> : null}</section>
 }
