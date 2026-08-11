@@ -5,6 +5,8 @@ export type Apartment = {
   name: string
   address: string
   region: string
+  latitude: number
+  longitude: number
   x: number
   y: number
   householdCount: number

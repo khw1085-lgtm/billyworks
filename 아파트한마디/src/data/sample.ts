@@ -3,13 +3,13 @@ import type { Apartment, Category, Post } from '../types'
 export const categories: Category[] = ['층간소음', '주차', '관리비', '엘리베이터', '하자', '냄새', '교통', '관리사무소', '이웃', '택배', '기타']
 
 export const apartments: Apartment[] = [
-  { id: 'mapo-raemian', name: '마포래미안푸르지오', address: '서울 마포구 마포대로 195', region: '서울 마포구', x: 38, y: 41, householdCount: 3885, postCount: 38, trending: true, topics: ['주차', '엘리베이터', '관리비'] },
-  { id: 'heliocity', name: '헬리오시티', address: '서울 송파구 송파대로 345', region: '서울 송파구', x: 68, y: 62, householdCount: 9510, postCount: 24, topics: ['주차', '층간소음', '택배'] },
-  { id: 'eunpyeong-lotte', name: '은평롯데캐슬', address: '서울 은평구 진관3로 70', region: '서울 은평구', x: 26, y: 22, householdCount: 1618, postCount: 8, topics: ['교통', '냄새', '관리비'] },
-  { id: 'seongsu-trimage', name: '트리마제', address: '서울 성동구 왕십리로 16', region: '서울 성동구', x: 56, y: 46, householdCount: 688, postCount: 13, topics: ['관리비', '이웃', '주차'] },
-  { id: 'gwanggyo-class', name: '광교중흥S클래스', address: '경기 수원시 영통구 광교호수공원로 277', region: '경기 수원시', x: 74, y: 78, householdCount: 2231, postCount: 5, topics: ['엘리베이터', '하자', '교통'] },
-  { id: 'dasan-centreville', name: '다산센트레빌', address: '경기 남양주시 다산중앙로 82번길 15', region: '경기 남양주시', x: 81, y: 31, householdCount: 1423, postCount: 17, trending: true, topics: ['층간소음', '관리사무소', '주차'] },
-  { id: 'mokdong-7', name: '목동신시가지7단지', address: '서울 양천구 목동로 212', region: '서울 양천구', x: 22, y: 58, householdCount: 2550, postCount: 0, topics: ['주차', '하자', '관리비'] },
+  { id: 'mapo-raemian', name: '마포래미안푸르지오', address: '서울 마포구 마포대로 195', region: '서울 마포구', latitude: 37.5536, longitude: 126.9548, x: 38, y: 41, householdCount: 3885, postCount: 38, trending: true, topics: ['주차', '엘리베이터', '관리비'] },
+  { id: 'heliocity', name: '헬리오시티', address: '서울 송파구 송파대로 345', region: '서울 송파구', latitude: 37.4977, longitude: 127.1078, x: 68, y: 62, householdCount: 9510, postCount: 24, topics: ['주차', '층간소음', '택배'] },
+  { id: 'eunpyeong-lotte', name: '은평롯데캐슬', address: '서울 은평구 진관3로 70', region: '서울 은평구', latitude: 37.6387, longitude: 126.9189, x: 26, y: 22, householdCount: 1618, postCount: 8, topics: ['교통', '냄새', '관리비'] },
+  { id: 'seongsu-trimage', name: '트리마제', address: '서울 성동구 왕십리로 16', region: '서울 성동구', latitude: 37.5384, longitude: 127.0443, x: 56, y: 46, householdCount: 688, postCount: 13, topics: ['관리비', '이웃', '주차'] },
+  { id: 'gwanggyo-class', name: '광교중흥S클래스', address: '경기 수원시 영통구 광교호수공원로 277', region: '경기 수원시', latitude: 37.2855, longitude: 127.0583, x: 74, y: 78, householdCount: 2231, postCount: 5, topics: ['엘리베이터', '하자', '교통'] },
+  { id: 'dasan-centreville', name: '다산센트레빌', address: '경기 남양주시 다산중앙로 82번길 15', region: '경기 남양주시', latitude: 37.6242, longitude: 127.1511, x: 81, y: 31, householdCount: 1423, postCount: 17, trending: true, topics: ['층간소음', '관리사무소', '주차'] },
+  { id: 'mokdong-7', name: '목동신시가지7단지', address: '서울 양천구 목동로 212', region: '서울 양천구', latitude: 37.5285, longitude: 126.8748, x: 22, y: 58, householdCount: 2550, postCount: 0, topics: ['주차', '하자', '관리비'] },
 ]
 
 export const seedPosts: Post[] = [

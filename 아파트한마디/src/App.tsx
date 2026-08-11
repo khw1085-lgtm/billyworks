@@ -59,7 +59,7 @@ export default function App() {
     return <MapHome apartments={apartments} posts={posts} selected={selected} onSelect={setSelected} onWrite={setWriting} />
   }
 
-  return <div className="app-shell"><a className="skip-link" href="#main-content">본문으로 건너뛰기</a><AppHeader onLocate={() => setToast('현재 위치 주변 단지를 불러왔어요.')} onSearch={() => navigate('/search')} />{renderPage()}
+  return <div className="app-shell"><a className="skip-link" href="#main-content">본문으로 건너뛰기</a><AppHeader onLocate={() => { window.dispatchEvent(new Event('hanmadi:locate')); setToast('현재 위치 주변으로 지도를 이동합니다.') }} onSearch={() => navigate('/search')} />{renderPage()}
     {path === '/search' && <SearchOverlay apartments={apartments} onClose={() => navigate('/')} onSelect={(item) => { setSelected(item); navigate('/') }} />}
     {writing && <WriteDialog apartment={writing} onClose={() => setWriting(undefined)} onSubmit={(category, content) => submitPost(writing, category, content)} />}
     {reporting && <ReportDialog onClose={() => setReporting(undefined)} onSubmit={(reason: ReportReason, detail) => { saveReport(reporting, reason, detail); setReporting(undefined); setToast('신고가 접수됐어요. 검토 전까지 바로 삭제되지는 않습니다.') }} />}

@@ -31,6 +31,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 .map-message p { margin: 0; color: var(--muted); line-height: 1.55; font-size: 14px; }
 .mobile-area { display: none; }
 .map-canvas { position: absolute; inset: 68px 0 0; overflow: hidden; background: #eeeee9; background-image: linear-gradient(#deded7 1px, transparent 1px), linear-gradient(90deg, #deded7 1px, transparent 1px); background-size: 56px 56px; }
+.kakao-map-shell { background: #e9e8e3; background-image: none; }.kakao-map { position: absolute; inset: 0; }.map-loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); background: #eeeee9; font-size: 13px; }.kakao-map-shell .zoom-control { z-index: 7; }
 .map-grid { position: absolute; inset: 0; transform-origin: center; transition: transform .25s ease; }
 .river { position: absolute; width: 125%; height: 106px; top: 55%; left: -10%; background: #d4e1e4; border-block: 1px solid #c4d4d7; transform: rotate(-6deg); }
 .district { position: absolute; color: #969690; font-size: 12px; font-weight: 700; }.d1{left:22%;top:25%}.d2{left:43%;top:44%}.d3{left:57%;top:36%}.d4{left:73%;top:65%}
@@ -43,7 +44,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
 @keyframes pulse { 0%{opacity:.8;transform:scale(.9)} 100%{opacity:0;transform:scale(1.45)} }
 .zoom-control { position: absolute; z-index: 5; right: 24px; bottom: 42px; display: grid; background: #fff; border: 1px solid var(--line); }
 .zoom-control button { width: 42px; height: 42px; display: grid; place-items: center; }.zoom-control button + button { border-top: 1px solid var(--line); }
-.map-attribution { position: absolute; right: 78px; bottom: 39px; color: #777; font-size: 10px; }
+.map-attribution { position: absolute; z-index: 6; right: 78px; bottom: 39px; margin: 0; padding: 3px 5px; color: #666; background: rgba(255,255,255,.75); font-size: 10px; }
 
 .apartment-panel { position: absolute; z-index: 20; top: 84px; right: 16px; bottom: 16px; width: 390px; display: flex; flex-direction: column; padding: 26px 24px; background: #fff; border: 1px solid var(--line); overflow-y: auto; animation: slideIn .24s both; }
 @keyframes slideIn { from { opacity:0; transform:translateX(20px) } }
