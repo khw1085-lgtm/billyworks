@@ -1,7 +1,7 @@
 import { Building2, Minus, Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { getKakaoMaps, loadKakaoMaps } from '../lib/kakaoMaps'
-import { sentimentColor, sentimentCounts, sentimentLabel, sentimentShortLabel } from '../lib/sentiment'
+import { sentimentColor, sentimentCounts, sentimentLabel } from '../lib/sentiment'
 import type { Apartment, MapBounds } from '../types'
 
 type Props = {
@@ -38,11 +38,10 @@ function FallbackMap({ apartments, selectedId, zoom, onZoom, onSelect }: Props) 
   const visible = zoom < 1.15 ? apartments.filter((_, index) => index % 2 === 0 || index < 3) : apartments
   const clusterCounts = visible.reduce((total, apartment) => ({ positive: total.positive + (apartment.positiveCount ?? 0), negative: total.negative + (apartment.negativeCount ?? 0) }), { positive: 0, negative: 0 })
   const clusterLabel = sentimentLabel(clusterCounts.positive, clusterCounts.negative)
-  const clusterShortLabel = sentimentShortLabel(clusterCounts.positive, clusterCounts.negative)
   const fallbackClusterSize = zoom < 1 ? 76 : 60
   return <section className="map-canvas fallback-map" aria-label="서울·경기 샘플 아파트 지도">
     <div className="map-grid" style={{ transform: `scale(${zoom})` }} aria-hidden="true"><span className="river" /><span className="district d1">은평구</span><span className="district d2">마포구</span><span className="district d3">성동구</span><span className="district d4">송파구</span></div>
-    <div className="marker-layer">{visible.map((apartment) => { const { positive, negative } = sentimentCounts(apartment); const hasOpinion = positive + negative > 0; const label = sentimentLabel(positive, negative); return <button key={apartment.id} className={`map-marker ${apartment.postCount >= 10 ? 'active' : ''} ${hasOpinion ? '' : 'neutral'} ${apartment.trending ? 'trending' : ''} ${selectedId === apartment.id ? 'selected' : ''}`} style={{ left: `${apartment.x}%`, top: `${apartment.y}%`, backgroundColor: hasOpinion ? sentimentColor(positive, negative) : '#181816' }} onClick={() => onSelect(apartment)} aria-label={`${apartment.name}, 장점 ${positive}개, 불만 ${negative}개, ${label}`}>{hasOpinion ? <b>{apartment.postCount}</b> : <Building2 size={15} strokeWidth={2.2} aria-hidden="true" />}</button> })}{zoom < 1.15 ? <button className="map-cluster sentiment-cluster" style={{ width: fallbackClusterSize, height: fallbackClusterSize, backgroundColor: sentimentColor(clusterCounts.positive, clusterCounts.negative) }} onClick={() => onZoom(1.2)} aria-label={`숨겨진 단지 2개, ${clusterLabel}, 확대해서 보기`}><strong>2<small>단지</small></strong><span>{clusterShortLabel}</span></button> : null}</div>
+    <div className="marker-layer">{visible.map((apartment) => { const { positive, negative } = sentimentCounts(apartment); const hasOpinion = positive + negative > 0; const label = sentimentLabel(positive, negative); return <button key={apartment.id} className={`map-marker ${apartment.postCount >= 10 ? 'active' : ''} ${hasOpinion ? '' : 'neutral'} ${apartment.trending ? 'trending' : ''} ${selectedId === apartment.id ? 'selected' : ''}`} style={{ left: `${apartment.x}%`, top: `${apartment.y}%`, backgroundColor: hasOpinion ? sentimentColor(positive, negative) : '#181816' }} onClick={() => onSelect(apartment)} aria-label={`${apartment.name}, 장점 ${positive}개, 불만 ${negative}개, ${label}`}>{hasOpinion ? <b>{apartment.postCount}</b> : <Building2 size={15} strokeWidth={2.2} aria-hidden="true" />}</button> })}{zoom < 1.15 ? <button className="map-cluster sentiment-cluster" style={{ width: fallbackClusterSize, height: fallbackClusterSize, backgroundColor: sentimentColor(clusterCounts.positive, clusterCounts.negative) }} onClick={() => onZoom(1.2)} aria-label={`숨겨진 단지 2개, ${clusterLabel}, 확대해서 보기`}><strong>2<small>단지</small></strong></button> : null}</div>
     <ZoomControl onIn={() => onZoom(Math.min(1.35, zoom + .1))} onOut={() => onZoom(Math.max(.85, zoom - .1))} />
     <SentimentLegend />
     <p className="map-attribution">Kakao JavaScript 키를 연결하면 실제 지도가 표시됩니다</p>
@@ -114,12 +113,10 @@ export function MapCanvas(props: Props) {
           if (content instanceof HTMLElement) {
             const count = document.createElement('strong')
             const unit = document.createElement('small')
-            const label = document.createElement('span')
             count.textContent = String(cluster.getSize())
             unit.textContent = '단지'
-            label.textContent = sentimentShortLabel(counts.positive, counts.negative)
             count.append(unit)
-            content.replaceChildren(count, label)
+            content.replaceChildren(count)
             content.classList.add('sentiment-cluster')
             content.style.background = sentimentColor(counts.positive, counts.negative)
             content.title = `${sentimentLabel(counts.positive, counts.negative)} · 장점 ${counts.positive} · 불만 ${counts.negative}`
