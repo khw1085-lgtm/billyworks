@@ -19,6 +19,17 @@ npm run dev
 - 최신/공감/댓글 정렬, 인기 불만, 권리침해 요청, 관리자 숨김/삭제
 - PWA manifest 및 오프라인 앱 셸, Vercel SPA 경로 rewrite
 
+## 모바일 앱 배포
+
+현재 빌드는 반응형 PWA로, HTTPS 환경에 배포하면 Android의 `앱 설치` 버튼과 iOS Safari의 `홈 화면에 추가`를 통해 독립 앱처럼 실행할 수 있습니다. 모바일 안전 영역, 동적 화면 높이, 오프라인 앱 셸, 192·512px 및 iOS 전용 아이콘이 포함됩니다.
+
+```bash
+npm run build
+# dist 결과물을 Vercel 또는 다른 HTTPS 호스팅에 배포
+```
+
+App Store·Google Play에 스토어 앱으로 제출할 때는 이 PWA 빌드를 Capacitor 웹뷰로 감싼 후 Apple/Google 개발자 계정, 서명 인증서, 스토어 메타데이터를 추가하면 됩니다. 현재 구조는 해당 랩핑을 전제로 경로와 안전 영역을 구성했습니다.
+
 ## Kakao Maps 연결
 
 카카오디벨로퍼스에서 앱의 카카오맵 사용 설정을 켜고 JavaScript 키에 로컬·배포 도메인을 등록한 뒤 환경변수를 설정합니다. REST API 키가 아니라 **JavaScript 키**를 사용해야 합니다.
