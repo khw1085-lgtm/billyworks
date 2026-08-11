@@ -1,0 +1,10 @@
+{
+  "name": "아파트 한마디",
+  "short_name": "한마디",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f7f5",
+  "theme_color": "#f7f7f5",
+  "lang": "ko",
+  "description": "전국 아파트 불만 지도"
+}
