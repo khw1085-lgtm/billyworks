@@ -3,7 +3,6 @@ type KakaoWindow = Window & { kakao?: { maps: { load: (callback: () => void) => 
 const SCRIPT_ID = 'kakao-maps-sdk'
 
 export function loadKakaoMaps(javaScriptKey: string) {
-  javaScriptKey = javaScriptKey.trim()
   return new Promise<void>((resolve, reject) => {
     if (!javaScriptKey) return reject(new Error('MISSING_KAKAO_KEY'))
     const kakaoWindow = window as KakaoWindow

@@ -31,3 +31,10 @@ export function sentimentLabel(positive: number, negative: number) {
   if (dominant === 'negative') return '불만이 더 많아요'
   return positive + negative ? '장점과 불만이 비슷해요' : '아직 한마디가 없어요'
 }
+
+export function sentimentShortLabel(positive: number, negative: number) {
+  const dominant = dominantSentiment(positive, negative)
+  if (dominant === 'positive') return '장점 우세'
+  if (dominant === 'negative') return '불만 우세'
+  return positive + negative ? '장단점 균형' : '의견 없음'
+}
