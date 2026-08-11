@@ -74,7 +74,7 @@ export function MapCanvas(props: Props) {
   const onBoundsChangeRef = useRef(props.onBoundsChange)
   const [sdkState, setSdkState] = useState<'loading' | 'ready' | 'fallback'>('loading')
   const [initialClustersReady, setInitialClustersReady] = useState(false)
-  const key = import.meta.env.VITE_KAKAO_MAP_JAVASCRIPT_KEY || ''
+  const key = (import.meta.env.VITE_KAKAO_MAP_JAVASCRIPT_KEY || '').trim()
 
   useEffect(() => { onSelectRef.current = props.onSelect }, [props.onSelect])
   useEffect(() => { onBoundsChangeRef.current = props.onBoundsChange }, [props.onBoundsChange])
