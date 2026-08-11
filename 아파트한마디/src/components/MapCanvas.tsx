@@ -1,4 +1,4 @@
-import { Minus, Plus } from 'lucide-react'
+import { Building2, Minus, Plus } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { getKakaoMaps, loadKakaoMaps } from '../lib/kakaoMaps'
 import { sentimentColor, sentimentCounts, sentimentLabel, sentimentShortLabel } from '../lib/sentiment'
@@ -24,10 +24,12 @@ function clusterStyle(size: number) {
 
 function markerImage(maps: any, apartment: Apartment) {
   const active = apartment.postCount >= 10
-  const size = active ? 42 : apartment.postCount ? 32 : 18
   const { positive, negative } = sentimentCounts(apartment)
-  const fill = sentimentColor(positive, negative)
-  const label = apartment.postCount ? `<text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" fill="white" font-family="Arial,sans-serif" font-size="${active ? 13 : 11}" font-weight="700">${apartment.postCount}</text>` : ''
+  const hasOpinion = positive + negative > 0
+  const size = active ? 42 : hasOpinion ? 32 : 30
+  const fill = hasOpinion ? sentimentColor(positive, negative) : '#181816'
+  const building = '<path d="M9 23V7c0-1.1.9-2 2-2h6c1.1 0 2 .9 2 2v16M6 23h16M12 9h1M16 9h1M12 13h1M16 13h1M12 17h1M16 17h1" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+  const label = hasOpinion ? `<text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" fill="white" font-family="Arial,sans-serif" font-size="${active ? 13 : 11}" font-weight="700">${apartment.postCount}</text>` : building
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - 2}" fill="${fill}" stroke="white" stroke-width="3"/>${label}</svg>`
   return new maps.MarkerImage(`data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`, new maps.Size(size, size))
 }
@@ -40,7 +42,7 @@ function FallbackMap({ apartments, selectedId, zoom, onZoom, onSelect }: Props) 
   const fallbackClusterSize = zoom < 1 ? 76 : 60
   return <section className="map-canvas fallback-map" aria-label="서울·경기 샘플 아파트 지도">
     <div className="map-grid" style={{ transform: `scale(${zoom})` }} aria-hidden="true"><span className="river" /><span className="district d1">은평구</span><span className="district d2">마포구</span><span className="district d3">성동구</span><span className="district d4">송파구</span></div>
-    <div className="marker-layer">{visible.map((apartment) => { const { positive, negative } = sentimentCounts(apartment); const label = sentimentLabel(positive, negative); return <button key={apartment.id} className={`map-marker ${apartment.postCount >= 10 ? 'active' : ''} ${apartment.trending ? 'trending' : ''} ${selectedId === apartment.id ? 'selected' : ''}`} style={{ left: `${apartment.x}%`, top: `${apartment.y}%`, backgroundColor: sentimentColor(positive, negative) }} onClick={() => onSelect(apartment)} aria-label={`${apartment.name}, 장점 ${positive}개, 불만 ${negative}개, ${label}`}><b>{apartment.postCount || ''}</b></button> })}{zoom < 1.15 ? <button className="map-cluster sentiment-cluster" style={{ width: fallbackClusterSize, height: fallbackClusterSize, backgroundColor: sentimentColor(clusterCounts.positive, clusterCounts.negative) }} onClick={() => onZoom(1.2)} aria-label={`숨겨진 단지 2개, ${clusterLabel}, 확대해서 보기`}><strong>2<small>단지</small></strong><span>{clusterShortLabel}</span></button> : null}</div>
+    <div className="marker-layer">{visible.map((apartment) => { const { positive, negative } = sentimentCounts(apartment); const hasOpinion = positive + negative > 0; const label = sentimentLabel(positive, negative); return <button key={apartment.id} className={`map-marker ${apartment.postCount >= 10 ? 'active' : ''} ${hasOpinion ? '' : 'neutral'} ${apartment.trending ? 'trending' : ''} ${selectedId === apartment.id ? 'selected' : ''}`} style={{ left: `${apartment.x}%`, top: `${apartment.y}%`, backgroundColor: hasOpinion ? sentimentColor(positive, negative) : '#181816' }} onClick={() => onSelect(apartment)} aria-label={`${apartment.name}, 장점 ${positive}개, 불만 ${negative}개, ${label}`}>{hasOpinion ? <b>{apartment.postCount}</b> : <Building2 size={15} strokeWidth={2.2} aria-hidden="true" />}</button> })}{zoom < 1.15 ? <button className="map-cluster sentiment-cluster" style={{ width: fallbackClusterSize, height: fallbackClusterSize, backgroundColor: sentimentColor(clusterCounts.positive, clusterCounts.negative) }} onClick={() => onZoom(1.2)} aria-label={`숨겨진 단지 2개, ${clusterLabel}, 확대해서 보기`}><strong>2<small>단지</small></strong><span>{clusterShortLabel}</span></button> : null}</div>
     <ZoomControl onIn={() => onZoom(Math.min(1.35, zoom + .1))} onOut={() => onZoom(Math.max(.85, zoom - .1))} />
     <SentimentLegend />
     <p className="map-attribution">Kakao JavaScript 키를 연결하면 실제 지도가 표시됩니다</p>
