@@ -18,8 +18,8 @@ export function AppHeader({ onLocate, onSearch }: Props) {
         <button className="header-action" onClick={onLocate} aria-label="현재 위치">
           <LocateFixed size={19} /><span>현재 위치</span>
         </button>
-        <button className="header-action hot" onClick={() => navigate('/hot')} aria-label="인기 불만">
-          <Flame size={19} /><span>인기 불만</span>
+        <button className="header-action hot" onClick={() => navigate('/hot')} aria-label="인기 한마디">
+          <Flame size={19} /><span>인기 한마디</span>
         </button>
       </nav>
     </header>

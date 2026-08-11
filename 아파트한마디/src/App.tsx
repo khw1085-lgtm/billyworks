@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { apartments, seedPosts } from './data/sample'
-import type { Apartment, Category, MapBounds, Post, ReportReason } from './types'
+import type { Apartment, Category, MapBounds, Post, ReportReason, Sentiment } from './types'
 import { AppHeader } from './components/AppHeader'
 import { MapHome } from './components/MapHome'
 import { BoardScreen } from './components/BoardScreen'
@@ -30,8 +30,20 @@ export default function App() {
 
   const availableApartments = useMemo(() => {
     const merged = new Map(apartments.map((item) => [item.id, item]))
-    remoteApartments.forEach((item) => merged.set(item.id, { ...item, postCount: posts.filter((post) => post.apartmentId === item.id && post.status === 'visible').length }))
-    return [...merged.values()]
+    remoteApartments.forEach((item) => merged.set(item.id, item))
+    const ownCounts = new Map<string, { positive: number; negative: number }>()
+    posts.forEach((post) => {
+      if (!post.mine || post.status !== 'visible') return
+      const count = ownCounts.get(post.apartmentId) ?? { positive: 0, negative: 0 }
+      count[post.sentiment === 'positive' ? 'positive' : 'negative'] += 1
+      ownCounts.set(post.apartmentId, count)
+    })
+    return [...merged.values()].map((item) => {
+      const own = ownCounts.get(item.id)
+      const positiveCount = (item.positiveCount ?? 0) + (own?.positive ?? 0)
+      const negativeCount = (item.negativeCount ?? 0) + (own?.negative ?? 0)
+      return { ...item, positiveCount, negativeCount, postCount: positiveCount + negativeCount }
+    })
   }, [posts, remoteApartments])
 
   const loadMapBounds = useCallback((bounds: MapBounds) => {
@@ -53,14 +65,14 @@ export default function App() {
     if (!actionOnce(type, id)) return setToast('이미 반응을 남겼어요.')
     setPosts((items) => items.map((post) => post.id === id ? { ...post, [type === 'agree' ? 'agreeCount' : 'sameCount']: post[type === 'agree' ? 'agreeCount' : 'sameCount'] + 1 } : post))
   }
-  const submitPost = (apartment: Apartment, category: Category, content: string) => {
+  const submitPost = (apartment: Apartment, sentiment: Sentiment, category: Category, content: string) => {
     const sensitive = /(\d{2,4}-\d{3,4}-\d{4}|\d+동\s*\d+호|차량번호|죽여버|살해)/
     if (sensitive.test(content)) return '개인 식별 정보나 구체적인 협박으로 보이는 표현이 있어 등록할 수 없어요.'
     if (/https?:\/\//.test(content)) return '광고·도배 방지를 위해 링크가 포함된 글은 등록할 수 없어요.'
     const blocked = canSubmit(content, posts)
     if (blocked) return blocked
-    const post: Post = { id: `p${Date.now()}`, apartmentId: apartment.id, anonymousId: getAnonymousId(), category, content: content.trim(), agreeCount: 0, sameCount: 0, commentCount: 0, createdAt: '방금 전', status: 'visible', mine: true }
-    setPosts((items) => [post, ...items]); markSubmitted(); setWriting(undefined); setSelected(apartment); navigate(apartmentPath(apartment.id)); setToast('익명 한마디가 등록됐어요.'); return null
+    const post: Post = { id: `p${Date.now()}`, apartmentId: apartment.id, anonymousId: getAnonymousId(), sentiment, category, content: content.trim(), agreeCount: 0, sameCount: 0, commentCount: 0, createdAt: '방금 전', status: 'visible', mine: true }
+    setPosts((items) => [post, ...items]); markSubmitted(); setWriting(undefined); setSelected(apartment); navigate(apartmentPath(apartment.id)); setToast(`${sentiment === 'positive' ? '장점' : '불만'} 한마디가 등록됐어요.`); return null
   }
   const sharePost = async (post: Post) => {
     const apartment = availableApartments.find((item) => item.id === post.apartmentId)
@@ -79,7 +91,7 @@ export default function App() {
 
   return <div className="app-shell"><a className="skip-link" href="#main-content">본문으로 건너뛰기</a><AppHeader onLocate={() => { window.dispatchEvent(new Event('hanmadi:locate')); setToast('현재 위치 주변으로 지도를 이동합니다.') }} onSearch={() => navigate('/search')} />{renderPage()}
     {path === '/search' && <SearchOverlay apartments={availableApartments} onClose={() => navigate('/')} onSelect={(item) => { setSelected(item); navigate('/') }} />}
-    {writing && <WriteDialog apartment={writing} onClose={() => setWriting(undefined)} onSubmit={(category, content) => submitPost(writing, category, content)} />}
+    {writing && <WriteDialog apartment={writing} onClose={() => setWriting(undefined)} onSubmit={(sentiment, category, content) => submitPost(writing, sentiment, category, content)} />}
     {reporting && <ReportDialog onClose={() => setReporting(undefined)} onSubmit={(reason: ReportReason, detail) => { saveReport(reporting, reason, detail); setReporting(undefined); setToast('신고가 접수됐어요. 검토 전까지 바로 삭제되지는 않습니다.') }} />}
     {commenting && <CommentDialog onClose={() => setCommenting(undefined)} onSubmit={() => { setPosts((items) => items.map((post) => post.id === commenting ? { ...post, commentCount: post.commentCount + 1 } : post)); setCommenting(undefined); setToast('익명 댓글이 등록됐어요.') }} />}
     {toast && <div className="toast" role="status">{toast}</div>}

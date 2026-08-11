@@ -13,8 +13,8 @@ type Props = {
 export function PostFeed({ posts, onReact, onComment, onReport, onShare, onDelete }: Props) {
   if (!posts.length) return <div className="empty-state"><h2>아직 한마디가 없어요</h2><p>눈치 보지 말고 첫 번째 이야기를 남겨보세요.</p></div>
   return <div className="post-feed">{posts.map((post) => (
-    <article className="post-item" key={post.id} id={post.id}>
-      <header><strong>{post.anonymousId}</strong><time>{post.createdAt}</time><span>{post.category}</span></header>
+    <article className={`post-item sentiment-${post.sentiment}`} key={post.id} id={post.id}>
+      <header><strong>{post.anonymousId}</strong><time>{post.createdAt}</time><span className={`sentiment-badge ${post.sentiment}`}>{post.sentiment === 'positive' ? '장점' : '불만'}</span><span className="category-badge">{post.category}</span></header>
       <p>{post.content}</p>
       <footer>
         <button onClick={() => onReact(post.id, 'agree')} aria-label={`공감 ${post.agreeCount}`}><Heart size={18} /><span>공감</span><b>{post.agreeCount}</b></button>

@@ -16,7 +16,7 @@ export function getAnonymousId() {
 export function loadPosts(seed: Post[]) {
   try {
     const saved = JSON.parse(localStorage.getItem(POST_KEY) || '[]') as Post[]
-    return [...saved, ...seed]
+    return [...saved.map((post) => ({ ...post, sentiment: post.sentiment ?? 'negative' as const })), ...seed]
   } catch {
     return seed
   }

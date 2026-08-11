@@ -1,4 +1,6 @@
-export type Category = '층간소음' | '주차' | '관리비' | '엘리베이터' | '하자' | '냄새' | '교통' | '관리사무소' | '이웃' | '택배' | '기타'
+export type Sentiment = 'positive' | 'negative'
+
+export type Category = '층간소음' | '주차' | '관리비' | '엘리베이터' | '하자' | '냄새' | '교통' | '관리사무소' | '이웃' | '택배' | '조경' | '보안' | '편의시설' | '교육' | '구조' | '기타'
 
 export type Apartment = {
   id: string
@@ -11,6 +13,8 @@ export type Apartment = {
   y: number
   householdCount: number
   postCount: number
+  positiveCount?: number
+  negativeCount?: number
   trending?: boolean
   topics: Category[]
   source?: 'k-apt' | 'sample'
@@ -27,6 +31,7 @@ export type Post = {
   id: string
   apartmentId: string
   anonymousId: string
+  sentiment: Sentiment
   category: Category
   content: string
   agreeCount: number
