@@ -1,4 +1,4 @@
-import { Minus, Plus } from 'lucide-react'
+import { MapPin, Minus, Plus, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { getKakaoMaps, loadKakaoMaps } from '../lib/kakaoMaps'
 import { sentimentColor, sentimentCounts, sentimentLabel } from '../lib/sentiment'
@@ -45,16 +45,18 @@ function markerImage(maps: any, apartment: Apartment) {
 }
 
 function FallbackMap({ apartments, selectedId, zoom, onZoom, onSelect }: Props) {
+  const [clusterApartments, setClusterApartments] = useState<Apartment[]>([])
   const visible = zoom < 1.15 ? apartments.filter((_, index) => index % 2 === 0 || index < 3) : apartments
   const clusterCounts = visible.reduce((total, apartment) => ({ positive: total.positive + (apartment.positiveCount ?? 0), negative: total.negative + (apartment.negativeCount ?? 0) }), { positive: 0, negative: 0 })
   const clusterLabel = sentimentLabel(clusterCounts.positive, clusterCounts.negative)
   const fallbackClusterSize = zoom < 1 ? 76 : 60
   return <section className="map-canvas fallback-map" aria-label="서울·경기 샘플 아파트 지도">
     <div className="map-grid" style={{ transform: `scale(${zoom})` }} aria-hidden="true"><span className="river" /><span className="district d1">은평구</span><span className="district d2">마포구</span><span className="district d3">성동구</span><span className="district d4">송파구</span></div>
-    <div className="marker-layer">{visible.map((apartment) => { const { positive, negative } = sentimentCounts(apartment); const label = sentimentLabel(positive, negative); return <button key={apartment.id} className={`map-marker ${apartment.postCount >= 10 ? 'active' : ''} ${apartment.trending ? 'trending' : ''} ${selectedId === apartment.id ? 'selected' : ''}`} style={{ left: `${apartment.x}%`, top: `${apartment.y}%`, backgroundColor: sentimentColor(positive, negative) }} onClick={() => onSelect(apartment)} aria-label={`${apartment.name}, 장점 ${positive}개, 불만 ${negative}개, ${label}`}><b>{apartment.postCount || ''}</b></button> })}{zoom < 1.15 ? <button className="map-cluster sentiment-cluster cluster-enter" style={{ width: fallbackClusterSize, height: fallbackClusterSize, backgroundColor: translucentColor(sentimentColor(clusterCounts.positive, clusterCounts.negative)) }} onClick={() => onZoom(1.2)} aria-label={`숨겨진 단지 2개, ${clusterLabel}, 확대해서 보기`}><strong>2</strong></button> : null}</div>
+    <div className="marker-layer">{visible.map((apartment) => { const { positive, negative } = sentimentCounts(apartment); const label = sentimentLabel(positive, negative); return <button key={apartment.id} className={`map-marker ${apartment.postCount >= 10 ? 'active' : ''} ${apartment.trending ? 'trending' : ''} ${selectedId === apartment.id ? 'selected' : ''}`} style={{ left: `${apartment.x}%`, top: `${apartment.y}%`, backgroundColor: sentimentColor(positive, negative) }} onClick={() => onSelect(apartment)} aria-label={`${apartment.name}, 장점 ${positive}개, 불만 ${negative}개, ${label}`}><b>{apartment.postCount || ''}</b></button> })}{zoom < 1.15 ? <button className="map-cluster sentiment-cluster cluster-enter" style={{ width: fallbackClusterSize, height: fallbackClusterSize, backgroundColor: translucentColor(sentimentColor(clusterCounts.positive, clusterCounts.negative)) }} onClick={() => setClusterApartments(visible)} aria-label={`숨겨진 단지 ${visible.length}개, ${clusterLabel}, 목록 보기`}><strong>{visible.length}</strong></button> : null}</div>
     <ZoomControl onIn={() => onZoom(Math.min(1.35, zoom + .1))} onOut={() => onZoom(Math.max(.85, zoom - .1))} />
     <SentimentLegend />
     <p className="map-attribution">Kakao JavaScript 키를 연결하면 실제 지도가 표시됩니다</p>
+    {clusterApartments.length > 0 ? <ClusterApartmentList apartments={clusterApartments} onClose={() => setClusterApartments([])} onSelect={(apartment) => { setClusterApartments([]); onSelect(apartment) }} /> : null}
   </section>
 }
 
@@ -64,6 +66,21 @@ function SentimentLegend() {
 
 function ZoomControl({ onIn, onOut }: { onIn: () => void; onOut: () => void }) {
   return <div className="zoom-control" aria-label="지도 확대 축소"><button onClick={onIn} aria-label="지도 확대"><Plus size={18} /></button><button onClick={onOut} aria-label="지도 축소"><Minus size={18} /></button></div>
+}
+
+function ClusterApartmentList({ apartments, onClose, onSelect }: { apartments: Apartment[]; onClose: () => void; onSelect: (apartment: Apartment) => void }) {
+  const closeRef = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    closeRef.current?.focus()
+    const handleEscape = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handleEscape)
+    return () => window.removeEventListener('keydown', handleEscape)
+  }, [onClose])
+  return <aside className="cluster-list-panel" aria-label={`클러스터에 포함된 단지 ${apartments.length}개`}>
+    <span className="sheet-handle" aria-hidden="true" />
+    <header><div><span>선택한 지역</span><h2>단지 {apartments.length}개</h2></div><button ref={closeRef} onClick={onClose} aria-label="단지 목록 닫기"><X size={20} /></button></header>
+    <ul>{apartments.map((apartment) => { const { positive, negative } = sentimentCounts(apartment); return <li key={apartment.id}><button onClick={() => onSelect(apartment)}><span className="cluster-list-marker" style={{ background: translucentColor(sentimentColor(positive, negative), .92) }}><MapPin size={14} /></span><span><strong>{apartment.name}</strong><small>{apartment.address}</small></span><b>{apartment.postCount}</b></button></li> })}</ul>
+  </aside>
 }
 
 export function MapCanvas(props: Props) {
@@ -76,6 +93,7 @@ export function MapCanvas(props: Props) {
   const onBoundsChangeRef = useRef(props.onBoundsChange)
   const [sdkState, setSdkState] = useState<'loading' | 'ready' | 'fallback'>('loading')
   const [initialClustersReady, setInitialClustersReady] = useState(false)
+  const [clusterApartments, setClusterApartments] = useState<Apartment[]>([])
   const key = import.meta.env.VITE_KAKAO_MAP_JAVASCRIPT_KEY || ''
 
   useEffect(() => { onSelectRef.current = props.onSelect }, [props.onSelect])
@@ -110,7 +128,7 @@ export function MapCanvas(props: Props) {
       const map = new maps.Map(containerRef.current, { center: new maps.LatLng(37.5237, 126.9846), level: 9 })
       mapRef.current = map
       clustererRef.current = new maps.MarkerClusterer({
-        map, averageCenter: true, minLevel: 6, disableClickZoom: false,
+        map, averageCenter: true, minLevel: 6, disableClickZoom: true,
         calculator: (size: number) => size < 20 ? 0 : size < 100 ? 1 : size < 500 ? 2 : 3,
         styles: clusterSizes.map(clusterStyle),
       })
@@ -135,6 +153,10 @@ export function MapCanvas(props: Props) {
         })
         if (animateInitialClusters) hasAnimatedClustersRef.current = true
         if (clusters.length > 0) revealClusters()
+      })
+      maps.event.addListener(clustererRef.current, 'clusterclick', (cluster: any) => {
+        const apartments = cluster.getMarkers().map((marker: any) => marker.__apartment).filter(Boolean) as Apartment[]
+        setClusterApartments(apartments.sort((a, b) => b.postCount - a.postCount || a.name.localeCompare(b.name, 'ko')))
       })
       const updateBounds = () => {
         const bounds = map.getBounds()
@@ -161,6 +183,7 @@ export function MapCanvas(props: Props) {
     markersRef.current = props.apartments.map((apartment) => {
       const marker = new maps.Marker({ position: new maps.LatLng(apartment.latitude, apartment.longitude), image: markerImage(maps, apartment), title: apartment.name })
       marker.__sentiment = sentimentCounts(apartment)
+      marker.__apartment = apartment
       maps.event.addListener(marker, 'click', () => onSelectRef.current(apartment))
       return marker
     })
@@ -171,5 +194,5 @@ export function MapCanvas(props: Props) {
   const mapReady = sdkState === 'ready' && initialClustersReady
   const zoomIn = () => mapRef.current?.setLevel(Math.max(1, mapRef.current.getLevel() - 1))
   const zoomOut = () => mapRef.current?.setLevel(Math.min(14, mapRef.current.getLevel() + 1))
-  return <section className={`map-canvas kakao-map-shell ${mapReady ? '' : 'is-loading'}`} aria-label="Kakao 아파트 지도" aria-busy={!mapReady}><div className="kakao-map" ref={containerRef} />{!mapReady ? <div className="map-loading" role="status"><span>불러오는 중</span></div> : null}<ZoomControl onIn={zoomIn} onOut={zoomOut} /><SentimentLegend /><p className="map-attribution">© Kakao</p></section>
+  return <section className={`map-canvas kakao-map-shell ${mapReady ? '' : 'is-loading'}`} aria-label="Kakao 아파트 지도" aria-busy={!mapReady}><div className="kakao-map" ref={containerRef} />{!mapReady ? <div className="map-loading" role="status"><span>불러오는 중</span></div> : null}<ZoomControl onIn={zoomIn} onOut={zoomOut} /><SentimentLegend /><p className="map-attribution">© Kakao</p>{clusterApartments.length > 0 ? <ClusterApartmentList apartments={clusterApartments} onClose={() => setClusterApartments([])} onSelect={(apartment) => { setClusterApartments([]); props.onSelect(apartment) }} /> : null}</section>
 }
