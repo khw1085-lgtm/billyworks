@@ -75,6 +75,7 @@ export function MapCanvas(props: Props) {
   const onSelectRef = useRef(props.onSelect)
   const onBoundsChangeRef = useRef(props.onBoundsChange)
   const [sdkState, setSdkState] = useState<'loading' | 'ready' | 'fallback'>('loading')
+  const [initialClustersReady, setInitialClustersReady] = useState(false)
   const key = import.meta.env.VITE_KAKAO_MAP_JAVASCRIPT_KEY || ''
 
   useEffect(() => { onSelectRef.current = props.onSelect }, [props.onSelect])
@@ -83,6 +84,20 @@ export function MapCanvas(props: Props) {
   useEffect(() => {
     if (!key || !containerRef.current) { setSdkState('fallback'); return }
     let active = true
+    let revealTimer = 0
+    let safetyTimer = 0
+    let revealScheduled = false
+    const loadingStartedAt = performance.now()
+    setInitialClustersReady(false)
+    const revealClusters = () => {
+      if (revealScheduled) return
+      revealScheduled = true
+      const minimumLoadingTime = 650
+      const delay = Math.max(0, minimumLoadingTime - (performance.now() - loadingStartedAt))
+      revealTimer = window.setTimeout(() => {
+        if (active) setInitialClustersReady(true)
+      }, delay)
+    }
     const locate = () => navigator.geolocation?.getCurrentPosition(({ coords }) => {
       if (!active || !mapRef.current) return
       const maps = getKakaoMaps()
@@ -119,6 +134,7 @@ export function MapCanvas(props: Props) {
           }
         })
         if (animateInitialClusters) hasAnimatedClustersRef.current = true
+        if (clusters.length > 0) revealClusters()
       })
       const updateBounds = () => {
         const bounds = map.getBounds()
@@ -132,9 +148,10 @@ export function MapCanvas(props: Props) {
       maps.event.addListener(map, 'idle', updateBounds)
       window.addEventListener('hanmadi:locate', locate)
       setSdkState('ready')
+      safetyTimer = window.setTimeout(revealClusters, 5000)
       updateBounds()
     }).catch(() => active && setSdkState('fallback'))
-    return () => { active = false; clustererRef.current?.clear(); window.removeEventListener('hanmadi:locate', locate) }
+    return () => { active = false; window.clearTimeout(revealTimer); window.clearTimeout(safetyTimer); clustererRef.current?.clear(); window.removeEventListener('hanmadi:locate', locate) }
   }, [key])
 
   useEffect(() => {
@@ -151,7 +168,8 @@ export function MapCanvas(props: Props) {
   }, [props.apartments, sdkState])
 
   if (sdkState === 'fallback') return <FallbackMap {...props} />
+  const mapReady = sdkState === 'ready' && initialClustersReady
   const zoomIn = () => mapRef.current?.setLevel(Math.max(1, mapRef.current.getLevel() - 1))
   const zoomOut = () => mapRef.current?.setLevel(Math.min(14, mapRef.current.getLevel() + 1))
-  return <section className="map-canvas kakao-map-shell" aria-label="Kakao 아파트 지도"><div className="kakao-map" ref={containerRef} />{sdkState === 'loading' ? <div className="map-loading" role="status">카카오맵을 불러오는 중…</div> : null}<ZoomControl onIn={zoomIn} onOut={zoomOut} /><SentimentLegend /><p className="map-attribution">© Kakao</p></section>
+  return <section className={`map-canvas kakao-map-shell ${mapReady ? '' : 'is-loading'}`} aria-label="Kakao 아파트 지도" aria-busy={!mapReady}><div className="kakao-map" ref={containerRef} />{!mapReady ? <div className="map-loading" role="status"><span>불러오는 중</span></div> : null}<ZoomControl onIn={zoomIn} onOut={zoomOut} /><SentimentLegend /><p className="map-attribution">© Kakao</p></section>
 }
