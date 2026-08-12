@@ -15,6 +15,10 @@ type Props = {
 
 const clusterSizes = [48, 60, 76, 92]
 
+function clusterSizeForCount(count: number) {
+  return clusterSizes[count < 20 ? 0 : count < 100 ? 1 : count < 500 ? 2 : 3]
+}
+
 function translucentColor(color: string, alpha = .78) {
   if (color.startsWith('#')) {
     const value = color.slice(1)
@@ -39,7 +43,7 @@ function markerImage(maps: any, apartment: Apartment) {
   const size = active ? 42 : apartment.postCount ? 32 : 18
   const { positive, negative } = sentimentCounts(apartment)
   const fill = sentimentColor(positive, negative)
-  const label = apartment.postCount ? `<text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" fill="white" font-family="Arial,sans-serif" font-size="${active ? 13 : 11}" font-weight="700">${apartment.postCount}</text>` : ''
+  const label = apartment.postCount ? `<text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" fill="white" font-family="Pretendard,sans-serif" font-size="${active ? 13 : 11}" font-weight="700">${apartment.postCount}</text>` : ''
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - 2}" fill="${fill}" stroke="white" stroke-width="3"/>${label}</svg>`
   return new maps.MarkerImage(`data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`, new maps.Size(size, size))
 }
@@ -88,6 +92,11 @@ export function MapCanvas(props: Props) {
   const mapRef = useRef<any>(null)
   const clustererRef = useRef<any>(null)
   const markersRef = useRef<any[]>([])
+  const nameOverlaysRef = useRef<any[]>([])
+  const clusteredMarkersRef = useRef(new Set<any>())
+  const renderNameOverlaysRef = useRef<() => void>(() => {})
+  const clusterSkeletonsRef = useRef<any[]>([])
+  const clusterSnapshotsRef = useRef<Array<{ position: any; size: number }>>([])
   const hasAnimatedClustersRef = useRef(false)
   const onSelectRef = useRef(props.onSelect)
   const onBoundsChangeRef = useRef(props.onBoundsChange)
@@ -98,12 +107,16 @@ export function MapCanvas(props: Props) {
 
   useEffect(() => { onSelectRef.current = props.onSelect }, [props.onSelect])
   useEffect(() => { onBoundsChangeRef.current = props.onBoundsChange }, [props.onBoundsChange])
+  useEffect(() => { if (props.selectedId) setClusterApartments([]) }, [props.selectedId])
 
   useEffect(() => {
     if (!key || !containerRef.current) { setSdkState('fallback'); return }
     let active = true
     let revealTimer = 0
     let safetyTimer = 0
+    let skeletonTimer = 0
+    let skeletonShownAt = 0
+    let hiddenClusterContents: HTMLElement[] = []
     let revealScheduled = false
     const loadingStartedAt = performance.now()
     setInitialClustersReady(false)
@@ -127,15 +140,68 @@ export function MapCanvas(props: Props) {
       const maps = getKakaoMaps()
       const map = new maps.Map(containerRef.current, { center: new maps.LatLng(37.5237, 126.9846), level: 9 })
       mapRef.current = map
+      const clearClusterSkeletons = () => {
+        clusterSkeletonsRef.current.forEach((overlay) => overlay.setMap(null))
+        clusterSkeletonsRef.current = []
+        hiddenClusterContents.forEach((content) => { content.style.opacity = '' })
+        hiddenClusterContents = []
+      }
+      const showClusterSkeletons = () => {
+        clearClusterSkeletons()
+        clusterSkeletonsRef.current = clusterSnapshotsRef.current.slice(0, 100).map(({ position, size }) => {
+          const skeleton = document.createElement('div')
+          skeleton.className = 'cluster-skeleton'
+          skeleton.style.width = `${size}px`
+          skeleton.style.height = `${size}px`
+          skeleton.setAttribute('aria-hidden', 'true')
+          return new maps.CustomOverlay({ map, position, content: skeleton, xAnchor: .5, yAnchor: .5, zIndex: 4 })
+        })
+        if (clusterSkeletonsRef.current.length > 0) skeletonShownAt = performance.now()
+      }
+      maps.event.addListener(map, 'zoom_changed', () => {
+        window.clearTimeout(skeletonTimer)
+        showClusterSkeletons()
+      })
       clustererRef.current = new maps.MarkerClusterer({
         map, averageCenter: true, minLevel: 6, disableClickZoom: true,
         calculator: (size: number) => size < 20 ? 0 : size < 100 ? 1 : size < 500 ? 2 : 3,
         styles: clusterSizes.map(clusterStyle),
       })
+      const renderNameOverlays = () => {
+        nameOverlaysRef.current.forEach((overlay) => overlay.setMap(null))
+        const bounds = map.getBounds()
+        const clusteringDisabled = map.getLevel() < 6
+        const standaloneMarkers = markersRef.current
+          .filter((marker) => bounds.contain(marker.getPosition()) && (clusteringDisabled || !clusteredMarkersRef.current.has(marker)))
+          .slice(0, 80)
+        nameOverlaysRef.current = standaloneMarkers.map((marker) => {
+          const apartment = marker.__apartment as Apartment
+          const bubble = document.createElement('button')
+          bubble.type = 'button'
+          bubble.className = 'apartment-name-bubble'
+          bubble.setAttribute('aria-label', `${apartment.name} 단지 보기`)
+          const name = document.createElement('span')
+          name.textContent = apartment.name
+          bubble.append(name)
+          bubble.addEventListener('mousedown', (event) => event.stopPropagation())
+          bubble.addEventListener('touchstart', (event) => event.stopPropagation(), { passive: true })
+          bubble.addEventListener('click', (event) => {
+            event.stopPropagation()
+            setClusterApartments([])
+            onSelectRef.current(apartment)
+          })
+          return new maps.CustomOverlay({ map, position: marker.getPosition(), content: bubble, xAnchor: .5, yAnchor: 1.55, zIndex: 3 })
+        })
+      }
+      renderNameOverlaysRef.current = renderNameOverlays
       maps.event.addListener(clustererRef.current, 'clustered', (clusters: any[]) => {
+        window.clearTimeout(skeletonTimer)
         const animateInitialClusters = clusters.length > 0 && !hasAnimatedClustersRef.current
+        const clusteredMarkers = new Set<any>()
         clusters.forEach((cluster, index) => {
-          const counts = cluster.getMarkers().reduce((total: { positive: number; negative: number }, marker: any) => ({ positive: total.positive + (marker.__sentiment?.positive ?? 0), negative: total.negative + (marker.__sentiment?.negative ?? 0) }), { positive: 0, negative: 0 })
+          const markers = cluster.getMarkers()
+          markers.forEach((marker: any) => clusteredMarkers.add(marker))
+          const counts = markers.reduce((total: { positive: number; negative: number }, marker: any) => ({ positive: total.positive + (marker.__sentiment?.positive ?? 0), negative: total.negative + (marker.__sentiment?.negative ?? 0) }), { positive: 0, negative: 0 })
           const content = cluster.getClusterMarker().getContent()
           if (content instanceof HTMLElement) {
             const count = document.createElement('strong')
@@ -151,6 +217,17 @@ export function MapCanvas(props: Props) {
             content.setAttribute('aria-label', content.title)
           }
         })
+        clusteredMarkersRef.current = clusteredMarkers
+        clusterSnapshotsRef.current = clusters.map((cluster) => ({ position: cluster.getClusterMarker().getPosition(), size: clusterSizeForCount(cluster.getSize()) }))
+        if (clusterSkeletonsRef.current.length > 0) {
+          hiddenClusterContents = clusters
+            .map((cluster) => cluster.getClusterMarker().getContent())
+            .filter((content): content is HTMLElement => content instanceof HTMLElement)
+          hiddenClusterContents.forEach((content) => { content.style.opacity = '0' })
+          const remaining = Math.max(120, 260 - (performance.now() - skeletonShownAt))
+          skeletonTimer = window.setTimeout(clearClusterSkeletons, remaining)
+        }
+        renderNameOverlays()
         if (animateInitialClusters) hasAnimatedClustersRef.current = true
         if (clusters.length > 0) revealClusters()
       })
@@ -166,6 +243,8 @@ export function MapCanvas(props: Props) {
           north: bounds.getNorthEast().getLat(),
           east: bounds.getNorthEast().getLng(),
         })
+        window.setTimeout(renderNameOverlays, 0)
+        skeletonTimer = window.setTimeout(clearClusterSkeletons, 700)
       }
       maps.event.addListener(map, 'idle', updateBounds)
       window.addEventListener('hanmadi:locate', locate)
@@ -173,21 +252,24 @@ export function MapCanvas(props: Props) {
       safetyTimer = window.setTimeout(revealClusters, 5000)
       updateBounds()
     }).catch(() => active && setSdkState('fallback'))
-    return () => { active = false; window.clearTimeout(revealTimer); window.clearTimeout(safetyTimer); clustererRef.current?.clear(); window.removeEventListener('hanmadi:locate', locate) }
+    return () => { active = false; window.clearTimeout(revealTimer); window.clearTimeout(safetyTimer); window.clearTimeout(skeletonTimer); nameOverlaysRef.current.forEach((overlay) => overlay.setMap(null)); nameOverlaysRef.current = []; clusterSkeletonsRef.current.forEach((overlay) => overlay.setMap(null)); clusterSkeletonsRef.current = []; clusterSnapshotsRef.current = []; clusteredMarkersRef.current.clear(); renderNameOverlaysRef.current = () => {}; clustererRef.current?.clear(); window.removeEventListener('hanmadi:locate', locate) }
   }, [key])
 
   useEffect(() => {
     if (sdkState !== 'ready' || !clustererRef.current) return
     const maps = getKakaoMaps()
+    nameOverlaysRef.current.forEach((overlay) => overlay.setMap(null))
+    nameOverlaysRef.current = []
     clustererRef.current.clear()
     markersRef.current = props.apartments.map((apartment) => {
       const marker = new maps.Marker({ position: new maps.LatLng(apartment.latitude, apartment.longitude), image: markerImage(maps, apartment), title: apartment.name })
       marker.__sentiment = sentimentCounts(apartment)
       marker.__apartment = apartment
-      maps.event.addListener(marker, 'click', () => onSelectRef.current(apartment))
+      maps.event.addListener(marker, 'click', () => { setClusterApartments([]); onSelectRef.current(apartment) })
       return marker
     })
     clustererRef.current.addMarkers(markersRef.current)
+    window.setTimeout(() => renderNameOverlaysRef.current(), 0)
   }, [props.apartments, sdkState])
 
   if (sdkState === 'fallback') return <FallbackMap {...props} />
