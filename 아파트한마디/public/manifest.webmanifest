@@ -1,0 +1,19 @@
+{
+  "name": "아파트 한마디",
+  "short_name": "한마디",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f7f7f5",
+  "theme_color": "#f7f7f5",
+  "lang": "ko",
+  "categories": ["social", "lifestyle", "navigation"],
+  "description": "로그인 없이 전국 아파트의 장점과 불편을 함께 나누는 익명 지도",
+  "icons": [
+    { "src": "/icons/app-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
