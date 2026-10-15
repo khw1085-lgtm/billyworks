@@ -1,15 +1,1083 @@
 <!doctype html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Billyworks</title>
-    <meta http-equiv="refresh" content="0; url=./billywork.html" />
-    <script>
-      window.location.replace("./billywork.html");
-    </script>
-  </head>
-  <body>
-    <a href="./billywork.html">최신 Billyworks 화면 열기</a>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f4f2">
+  <meta name="description" content="BILLYWORKS — 인터랙티브 경험과 브랜드를 만드는 크리에이티브 스튜디오.">
+  <title>BILLYWORKS — About</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    :root {
+      --paper: #f4f4f2;
+      --ink: #050505;
+      --accent: #ff442e;
+      --muted: #b6b6b2;
+      --content-max-width: 1600px;
+      --page-gutter: clamp(24px, 2.8vw, 48px);
+      --edge: clamp(24px, 2.8cqw, 48px);
+      --pixel-plus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5'%3E%3Cg fill='black'%3E%3Crect x='2' y='0' width='.8' height='.8'/%3E%3Crect x='2' y='1' width='.8' height='.8'/%3E%3Crect x='0' y='2' width='.8' height='.8'/%3E%3Crect x='1' y='2' width='.8' height='.8'/%3E%3Crect x='2' y='2' width='.8' height='.8'/%3E%3Crect x='3' y='2' width='.8' height='.8'/%3E%3Crect x='4' y='2' width='.8' height='.8'/%3E%3Crect x='2' y='3' width='.8' height='.8'/%3E%3Crect x='2' y='4' width='.8' height='.8'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-width: 320px;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    html {
+      background: var(--paper);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Pretendard Variable", Pretendard, sans-serif;
+      font-weight: 700;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    body.has-project-detail {
+      overflow: hidden;
+    }
+
+    a,
+    button {
+      color: inherit;
+      font: inherit;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .about-page {
+      position: relative;
+      width: min(100%, calc(var(--content-max-width) + (var(--page-gutter) * 2)));
+      min-height: 100vh;
+      min-height: 100svh;
+      margin-inline: auto;
+      overflow: visible;
+      background: var(--paper);
+      container-type: inline-size;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      width: 100vw;
+      height: 80px;
+      align-items: center;
+      margin-left: calc(50% - 50vw);
+      background: var(--paper);
+    }
+
+    .header-inner {
+      display: grid;
+      grid-template-columns: minmax(64px, .7fr) 2.75fr 2fr;
+      align-items: center;
+      gap: 28px;
+      width: min(var(--content-max-width), 100vw);
+      margin-inline: auto;
+    }
+
+    .mark {
+      display: block;
+      width: clamp(76px, 7.5cqw, 120px);
+      line-height: 0;
+    }
+
+    .mark img {
+      display: block;
+      width: 100%;
+      height: auto;
+      transition: transform .3s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .mark:hover img,
+    .mark:focus-visible img {
+      transform: scale(1.04);
+    }
+
+    .primary-nav,
+    .secondary-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(24px, 3cqw, 48px);
+    }
+
+    .secondary-nav {
+      justify-content: flex-end;
+    }
+
+    .nav-link {
+      position: relative;
+      padding: 7px 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+      font-size: clamp(10px, .82cqw, 13px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      text-transform: uppercase;
+      transition: color .2s ease;
+    }
+
+    .nav-link::after {
+      position: absolute;
+      right: 0;
+      bottom: 2px;
+      left: 0;
+      height: 2px;
+      background: currentColor;
+      content: "";
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .3s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .nav-link:hover::after,
+    .nav-link:focus-visible::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .nav-link:focus-visible,
+    .mark:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 5px;
+    }
+
+    .nav-link.is-active {
+      color: var(--accent);
+    }
+
+    .hero-cluster {
+      position: relative;
+      z-index: 2;
+      margin-inline: var(--edge);
+      padding-top: max(32px, calc(18svh - 80px));
+    }
+
+    .hero-title {
+      max-width: 1480px;
+      margin: 0;
+      font-size: clamp(38px, 5.2cqw, 86px);
+      font-weight: 700;
+      letter-spacing: -.055em;
+      line-height: 1.06;
+    }
+
+    .featured-work {
+      scroll-margin-top: 100px;
+      margin: 150px var(--edge) 0;
+    }
+
+    .featured-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 38px;
+      font-size: clamp(20px, 2cqw, 28px);
+      letter-spacing: -.045em;
+      line-height: 1.1;
+    }
+
+    .featured-heading h2,
+    .featured-heading p {
+      margin: 0;
+      font: inherit;
+    }
+
+    .featured-heading .featured-years {
+      color: #858585;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(28px, 3.4cqw, 56px);
+      align-items: start;
+    }
+
+    .project-column {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(32px, 4cqw, 56px);
+    }
+
+    .project-card {
+      overflow: hidden;
+      border-radius: 16px;
+      background: #fff;
+      cursor: pointer;
+      transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 18px 42px rgb(0 0 0 / .08);
+    }
+
+    .project-card:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 5px;
+    }
+
+    .project-visual {
+      overflow: hidden;
+      aspect-ratio: 1.42;
+      background: #e7e8ea;
+    }
+
+    .project-card--portrait .project-visual {
+      aspect-ratio: 1.05;
+    }
+
+    .project-visual img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .65s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .project-card:hover .project-visual img {
+      transform: scale(1.035);
+    }
+
+    .project-caption {
+      padding: 24px 28px 28px;
+    }
+
+    .project-name,
+    .project-type {
+      margin: 0;
+      font-size: clamp(19px, 1.75cqw, 27px);
+      letter-spacing: -.04em;
+      line-height: 1.16;
+    }
+
+    .project-type {
+      margin-top: 5px;
+      color: #818181;
+    }
+
+    .about-section {
+      scroll-margin-top: 100px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      gap: clamp(40px, 6cqw, 96px);
+      margin: 150px var(--edge) 0;
+    }
+
+    .about-section h2 {
+      margin: 0;
+      font-size: clamp(28px, 2.4cqw, 40px);
+      letter-spacing: -.045em;
+      line-height: 1.1;
+    }
+
+    .about-copy {
+      display: grid;
+      gap: clamp(28px, 3cqw, 42px);
+    }
+
+    .about-lead,
+    .about-detail {
+      margin: 0;
+    }
+
+    .about-lead {
+      font-size: clamp(24px, 2.15cqw, 36px);
+      font-weight: 500;
+      letter-spacing: -.025em;
+      line-height: 1.42;
+    }
+
+    .about-detail {
+      color: #505050;
+      font-size: clamp(17px, 1.35cqw, 22px);
+      font-weight: 400;
+      letter-spacing: -.01em;
+      line-height: 1.52;
+    }
+
+    .about-image {
+      position: relative;
+      isolation: isolate;
+      width: 100vw;
+      height: clamp(300px, 29.3vw, 600px);
+      margin-top: 150px;
+      margin-left: calc(50% - 50vw);
+      overflow: hidden;
+      background: #000;
+    }
+
+    .about-image::after {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      content: "";
+      pointer-events: none;
+      background: linear-gradient(
+        90deg,
+        #000 0%,
+        rgb(0 0 0 / 0.76) 4%,
+        transparent 20%,
+        transparent 80%,
+        rgb(0 0 0 / 0.76) 96%,
+        #000 100%
+      );
+    }
+
+    .about-image img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 42%;
+    }
+
+    .experience-section {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      gap: clamp(40px, 6cqw, 96px);
+      margin: 150px var(--edge) 0;
+      padding-bottom: 0;
+    }
+
+    .experience-section h2 {
+      margin: 0;
+      font-size: clamp(28px, 2.4cqw, 40px);
+      letter-spacing: -.045em;
+      line-height: 1.1;
+    }
+
+    .experience-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .experience-item {
+      padding: 0 0 clamp(44px, 4.3cqw, 72px);
+    }
+
+    .experience-item + .experience-item {
+      padding-top: clamp(44px, 4.3cqw, 72px);
+      border-top: 1px solid #dededb;
+    }
+
+    .experience-company,
+    .experience-role,
+    .experience-dates {
+      margin: 0;
+      font-size: clamp(21px, 1.8cqw, 30px);
+      letter-spacing: -.035em;
+      line-height: 1.3;
+    }
+
+    .experience-role {
+      color: #626262;
+    }
+
+    .experience-dates {
+      margin-top: clamp(20px, 1.8cqw, 30px);
+      color: #888;
+      font-weight: 500;
+    }
+
+    .project-detail {
+      position: fixed;
+      z-index: 40;
+      inset: 0;
+      overflow-y: auto;
+      padding: 0;
+      background: var(--paper);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(28px);
+      transition: opacity .45s ease, transform .55s cubic-bezier(.2, .8, .2, 1), visibility .55s;
+    }
+
+    .project-detail.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+    }
+
+    .detail-header {
+      display: flex;
+      width: min(var(--content-max-width), 100%);
+      height: 80px;
+      align-items: center;
+      justify-content: space-between;
+      margin-inline: auto;
+      padding-inline: var(--page-gutter);
+    }
+
+    .detail-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .detail-back::before {
+      content: "←";
+      font-size: 22px;
+      line-height: 1;
+      transition: transform .2s ease;
+    }
+
+    .detail-back:hover::before {
+      transform: translateX(-4px);
+    }
+
+    .detail-intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, .95fr);
+      gap: clamp(48px, 7cqw, 112px);
+      width: min(var(--content-max-width), 100%);
+      margin: clamp(48px, 8vh, 110px) auto 100px;
+      padding-inline: var(--page-gutter);
+    }
+
+    .detail-title {
+      margin: 0;
+      font-size: clamp(46px, 5.2cqw, 84px);
+      letter-spacing: -.06em;
+      line-height: 1.02;
+    }
+
+    .detail-description {
+      max-width: 600px;
+      margin: 0;
+      color: #555;
+      font-size: clamp(17px, 1.2cqw, 20px);
+      font-weight: 500;
+      line-height: 1.55;
+    }
+
+    .detail-meta {
+      margin: 44px 0 0;
+    }
+
+    .detail-meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 17px 0;
+      border-bottom: 1px solid #dededb;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .detail-meta-row dt {
+      font-weight: 700;
+    }
+
+    .detail-meta-row dd {
+      margin: 0;
+      color: #777;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .detail-visual {
+      width: min(var(--content-max-width), calc(100% - (var(--page-gutter) * 2)));
+      margin: 0 auto 120px;
+      overflow: hidden;
+      background: #e6e7e8;
+    }
+
+    .detail-visual img {
+      display: block;
+      width: 100%;
+      max-height: 76vh;
+      object-fit: cover;
+    }
+
+    .detail-outcome {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      gap: clamp(48px, 7cqw, 112px);
+      width: min(var(--content-max-width), 100%);
+      margin: 150px auto;
+      padding-inline: var(--page-gutter);
+    }
+
+    .detail-outcome h2 {
+      margin: 0;
+      font-size: clamp(28px, 2.4cqw, 40px);
+      letter-spacing: -.045em;
+      line-height: 1.1;
+    }
+
+    .detail-outcome p {
+      margin: 0;
+      color: #555;
+      font-size: clamp(21px, 2cqw, 32px);
+      font-weight: 500;
+      letter-spacing: -.02em;
+      line-height: 1.38;
+    }
+
+    .services-projects {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(48px, 5cqw, 80px);
+      margin: 150px var(--edge) 120px;
+    }
+
+    .services-projects h2 {
+      margin: 0 0 clamp(38px, 4cqw, 64px);
+      font-size: clamp(28px, 2.4cqw, 40px);
+      letter-spacing: -.045em;
+      line-height: 1.1;
+    }
+
+    .services-projects ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .services-projects li {
+      padding: clamp(18px, 1.5cqw, 24px) 0;
+      border-bottom: 1px solid #dededb;
+      font-size: clamp(19px, 1.6cqw, 26px);
+      letter-spacing: -.035em;
+      line-height: 1.3;
+    }
+
+    .services-projects li:first-child {
+      padding-top: 0;
+    }
+
+    .js .site-header,
+    .js .hero-cluster {
+      opacity: 0;
+    }
+
+    .js .about-page.is-ready .site-header {
+      opacity: 1;
+      transition: opacity .55s ease .05s;
+    }
+
+    .js .about-page.is-ready .hero-cluster {
+      opacity: 1;
+      animation: title-in .85s cubic-bezier(.16, 1, .3, 1) .08s both;
+    }
+
+    @keyframes title-in {
+      from { opacity: 0; transform: translateY(80px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        overflow-y: auto;
+      }
+
+      .about-page {
+        min-height: 820px;
+      }
+
+      .header-inner {
+        grid-template-columns: auto 1fr auto;
+      }
+
+      .primary-nav {
+        justify-content: center;
+      }
+
+      .secondary-nav {
+        display: flex;
+      }
+
+      .hero-cluster {
+        padding-top: max(32px, calc(21svh - 80px));
+      }
+
+      .hero-title {
+        font-size: clamp(36px, 7.2vw, 68px);
+      }
+
+      .detail-intro {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        margin-top: 48px;
+      }
+
+      .detail-title {
+        font-size: clamp(42px, 10vw, 72px);
+      }
+
+      .detail-outcome {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .detail-outcome p {
+        font-size: 22px;
+      }
+
+    }
+
+    @media (max-width: 560px) {
+      .about-page {
+        min-height: 760px;
+      }
+
+      .site-header {
+        display: flex;
+      }
+
+      .header-inner {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .primary-nav {
+        gap: 18px;
+      }
+
+      .hero-cluster {
+        padding-top: max(32px, calc(24svh - 80px));
+      }
+
+      .hero-title {
+        font-size: clamp(32px, 9vw, 48px);
+        line-height: 1.04;
+      }
+
+      .detail-intro {
+        margin-bottom: 64px;
+      }
+
+      .detail-meta {
+        margin-top: 30px;
+      }
+
+      .detail-visual {
+        width: calc(100% - 48px);
+        margin-bottom: 64px;
+      }
+
+      .featured-work {
+        margin-top: 150px;
+      }
+
+      .featured-heading {
+        gap: 9px;
+        margin-bottom: 24px;
+        font-size: 19px;
+      }
+
+      .project-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .project-column {
+        display: contents;
+      }
+
+      .project-column:first-child .project-card:first-child {
+        order: 1;
+      }
+
+      .project-column:nth-child(2) .project-card:first-child {
+        order: 2;
+      }
+
+      .project-column:first-child .project-card:last-child {
+        order: 3;
+      }
+
+      .project-column:nth-child(2) .project-card:last-child {
+        order: 4;
+      }
+
+      .project-caption {
+        padding: 20px 22px 22px;
+      }
+
+      .project-name,
+      .project-type {
+        font-size: 22px;
+      }
+
+      .about-section {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        margin-top: 150px;
+      }
+
+      .about-section h2 {
+        font-size: 28px;
+      }
+
+      .about-lead {
+        font-size: 24px;
+      }
+
+      .about-detail {
+        font-size: 17px;
+      }
+
+      .about-image {
+        height: 300px;
+        margin-top: 150px;
+      }
+
+      .experience-section {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        margin-top: 150px;
+        padding-bottom: 0;
+      }
+
+      .experience-section h2 {
+        font-size: 28px;
+      }
+
+      .experience-company,
+      .experience-role,
+      .experience-dates {
+        font-size: 20px;
+      }
+
+      .services-projects {
+        grid-template-columns: 1fr;
+        gap: 64px;
+        margin-top: 150px;
+      }
+
+      .services-projects h2 {
+        margin-bottom: 32px;
+        font-size: 28px;
+      }
+
+      .services-projects li {
+        padding-block: 18px;
+        font-size: 19px;
+      }
+
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="about-page" id="about">
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="mark" href="#about" aria-label="HWS 홈">
+          <img src="assets/hws-logo.svg" alt="HWS">
+        </a>
+
+        <nav class="primary-nav" aria-label="주요 메뉴">
+          <a class="nav-link" href="#projects">Projects</a>
+          <a class="nav-link" href="#about-me">About</a>
+        </nav>
+
+        <nav class="secondary-nav" aria-label="스튜디오 메뉴">
+          <a class="nav-link" href="mailto:hello@billyworks.kr">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <section class="hero-cluster" aria-labelledby="about-title">
+      <h1 class="hero-title" id="about-title">
+        I am Billy.<br>
+        A senior product designer
+      </h1>
+    </section>
+
+    <section class="featured-work" id="projects" aria-labelledby="featured-title">
+      <div class="featured-heading">
+        <h2 id="featured-title">Featured work</h2>
+        <span aria-hidden="true">·</span>
+        <p class="featured-years">2018–2025</p>
+      </div>
+
+      <div class="project-grid">
+        <div class="project-column">
+          <article class="project-card" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Relation 프로젝트 상세 보기" data-project="relation">
+            <div class="project-visual">
+              <img src="assets/relation-thumbnail.png" alt="민트와 피치 톤의 조형물, 구리색 링이 교차하는 3D 비주얼">
+            </div>
+            <div class="project-caption">
+              <h3 class="project-name">Relation</h3>
+              <p class="project-type">Visual Identity</p>
+            </div>
+          </article>
+
+          <article class="project-card" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Soft Form 프로젝트 상세 보기" data-project="soft-form">
+            <div class="project-visual">
+              <img src="assets/soft-form-thumbnail.png" alt="부드러운 흰색과 라벤더 색상의 유려한 표면을 담은 3D 비주얼">
+            </div>
+            <div class="project-caption">
+              <h3 class="project-name">Soft Form</h3>
+              <p class="project-type">Art Direction</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="project-column">
+          <article class="project-card project-card--portrait" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Buy Hej 프로젝트 상세 보기" data-project="buy-hej">
+            <div class="project-visual">
+              <img src="assets/buy-hej-thumbnail.png" alt="코발트 블루 조형물과 구리색 오브제가 놓인 제품 렌더링">
+            </div>
+            <div class="project-caption">
+              <h3 class="project-name">Buy Hej</h3>
+              <p class="project-type">Product Design</p>
+            </div>
+          </article>
+
+          <article class="project-card" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Quiet Matter 프로젝트 상세 보기" data-project="quiet-matter">
+            <div class="project-visual">
+              <img src="assets/quiet-matter-thumbnail.png" alt="크롬 구와 곡면 금속 구조물의 모노크롬 3D 비주얼">
+            </div>
+            <div class="project-caption">
+              <h3 class="project-name">Quiet Matter</h3>
+              <p class="project-type">Digital Experience</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="about-me" aria-labelledby="about-me-title">
+      <h2 id="about-me-title">About me</h2>
+      <div class="about-copy">
+        <p class="about-lead">I’m Billy, a senior product designer who cares about making digital products feel clear, useful, and intuitive. I’m especially drawn to projects with the potential to make a positive impact.</p>
+        <p class="about-detail">My approach to design is grounded in curiosity, research, and collaboration. I work to understand what people need, then shape those insights into thoughtful experiences.</p>
+        <p class="about-detail">From early ideas to refined interfaces, I bring together product thinking and visual craft to create work that feels simple, considered, and effective.</p>
+      </div>
+    </section>
+
+    <div class="about-image">
+      <img src="assets/about-banner-placeholder.png" alt="스튜디오에서 작업 중인 디자이너의 와이드 포트레이트" loading="lazy">
+    </div>
+
+    <section class="experience-section" aria-labelledby="experience-title">
+      <h2 id="experience-title">Experience</h2>
+      <ul class="experience-list">
+        <li class="experience-item">
+          <h3 class="experience-company">Silent Yes</h3>
+          <p class="experience-role">Senior Product Designer</p>
+          <p class="experience-dates">August 2021–today</p>
+        </li>
+        <li class="experience-item">
+          <h3 class="experience-company">Meadow</h3>
+          <p class="experience-role">Product Designer</p>
+          <p class="experience-dates">January 2020–July 2021</p>
+        </li>
+        <li class="experience-item">
+          <h3 class="experience-company">Low Shade</h3>
+          <p class="experience-role">Product Designer</p>
+          <p class="experience-dates">March 2017–December 2019</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="services-projects" aria-label="Services and project names">
+      <div>
+        <h2>Services</h2>
+        <ul>
+          <li>Design systems</li>
+          <li>Product design</li>
+          <li>UX design and research</li>
+          <li>Design strategy</li>
+          <li>Websites and mobile app design</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Project names</h2>
+        <ul>
+          <li>Veja</li>
+          <li>Polestar</li>
+          <li>Allbirds</li>
+          <li>Oatly</li>
+          <li>Bang &amp; Olufsen</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="project-detail" id="project-detail" role="dialog" aria-modal="true" aria-labelledby="detail-title" aria-hidden="true" inert>
+    <div class="detail-header">
+      <button class="detail-back" type="button">Back to projects</button>
+      <span class="nav-link">BILLYWORKS</span>
+    </div>
+    <div class="detail-intro">
+      <h1 class="detail-title" id="detail-title"></h1>
+      <div>
+        <div class="detail-description" id="detail-description"></div>
+        <dl class="detail-meta">
+          <div class="detail-meta-row"><dt>Client</dt><dd id="detail-client"></dd></div>
+          <div class="detail-meta-row"><dt>Type</dt><dd id="detail-type"></dd></div>
+          <div class="detail-meta-row"><dt>Year</dt><dd id="detail-year"></dd></div>
+        </dl>
+      </div>
+    </div>
+    <figure class="detail-visual">
+      <img id="detail-image" src="" alt="">
+    </figure>
+    <section class="detail-outcome" aria-labelledby="detail-outcome-title">
+      <h2 id="detail-outcome-title">Outcome</h2>
+      <p id="detail-outcome-copy"></p>
+    </section>
+  </section>
+
+  <script>
+    const page = document.querySelector('.about-page');
+    const detail = document.querySelector('.project-detail');
+    const detailBack = document.querySelector('.detail-back');
+    const projectDetails = {
+      relation: {
+        title: 'Relation',
+        client: 'Client',
+        type: 'Visual Identity',
+        year: '2023',
+        description: 'In this project case study, I will be sharing my experience developing a health monitoring app for a healthcare start-up. The goal was to create an app that enabled users to track their health metrics, set wellness goals, and receive personalised health advice.',
+        outcome: 'Users could easily track their health metrics, set wellness goals, and receive personalised health advice, all within a seamless and intuitive app experience.'
+      },
+      'buy-hej': {
+        title: 'Buy Hej',
+        client: 'Client',
+        type: 'Product Design',
+        year: '2024',
+        description: 'A product experience shaped around clarity and ease. The work brings product strategy and visual design together to make everyday decisions feel more intuitive.',
+        outcome: 'A clear, cohesive experience helps people move from discovery to decision with less friction and more confidence.'
+      },
+      'soft-form': {
+        title: 'Soft Form',
+        client: 'Client',
+        type: 'Art Direction',
+        year: '2022',
+        description: 'An exploration of softness, material, and light translated into a flexible visual language for a thoughtful digital experience.',
+        outcome: 'The resulting visual language creates a consistent and memorable expression across the project’s key touchpoints.'
+      },
+      'quiet-matter': {
+        title: 'Quiet Matter',
+        client: 'Client',
+        type: 'Digital Experience',
+        year: '2021',
+        description: 'A calm digital experience built through restrained interactions, tactile visual details, and a considered approach to information.',
+        outcome: 'A focused interface gives the content room to breathe and makes the core experience feel calm and effortless.'
+      }
+    };
+
+    let previouslyFocusedProject = null;
+
+    function closeProjectDetail() {
+      if (!detail.classList.contains('is-open')) return;
+      detail.classList.remove('is-open');
+      detail.setAttribute('aria-hidden', 'true');
+      detail.inert = true;
+      page.inert = false;
+      document.body.classList.remove('has-project-detail');
+      window.setTimeout(() => {
+        if (!detail.classList.contains('is-open')) detail.hidden = true;
+        previouslyFocusedProject?.focus();
+      }, 560);
+    }
+
+    function openProjectDetail(card) {
+      const project = projectDetails[card.dataset.project];
+      if (!project) return;
+
+      previouslyFocusedProject = card;
+      document.querySelector('#detail-title').textContent = project.title;
+      document.querySelector('#detail-description').textContent = project.description;
+      document.querySelector('#detail-client').textContent = project.client;
+      document.querySelector('#detail-type').textContent = project.type;
+      document.querySelector('#detail-year').textContent = project.year;
+      document.querySelector('#detail-outcome-copy').textContent = project.outcome;
+
+      const sourceImage = card.querySelector('.project-visual img');
+      const detailImage = document.querySelector('#detail-image');
+      detailImage.src = sourceImage.src;
+      detailImage.alt = sourceImage.alt;
+
+      detail.hidden = false;
+      detail.inert = false;
+      page.inert = true;
+      detail.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('has-project-detail');
+      requestAnimationFrame(() => detail.classList.add('is-open'));
+      detailBack.focus({ preventScroll: true });
+      detail.scrollTop = 0;
+    }
+
+    document.querySelectorAll('.project-card[data-project]').forEach((card) => {
+      card.addEventListener('click', () => openProjectDetail(card));
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openProjectDetail(card);
+        }
+      });
+    });
+
+    detailBack.addEventListener('click', closeProjectDetail);
+    detail.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeProjectDetail();
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        detailBack.focus();
+      }
+    });
+
+    requestAnimationFrame(() => page.classList.add('is-ready'));
+  </script>
+</body>
 </html>
